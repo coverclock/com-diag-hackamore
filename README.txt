@@ -1,4 +1,4 @@
-Copyright 2013 Digital Aggregates Corporation, Colorado, USA.
+Copyright 2014 Digital Aggregates Corporation, Colorado, USA.
 
 ----------------------------------------------------------------------
 
@@ -42,16 +42,19 @@ License along with this library; if not, contact
 ABSTRACT
 
 This is the Digital Aggregates Corporation Hackamore package. Hackamore is an
-application that maintains a dynamic model of the state of multiple Asterisk
-PBXes through the Asterisk Management Interface (AMI).
+application written in Python that maintains a dynamic model of the states of
+multiple interconnected Asterisk PBXes using the Asterisk Management Interface
+(AMI). It is useful for the functional testing of such systems.
 
 This software is an original work of its author(s).
 
-Contact:
+----------------------------------------------------------------------
 
-    Chip Overclock
-    Digital Aggregates Corporation
-    3440 Youngfield Street, Suite 209
-    Wheat Ridge CO 80033 USA
-    http://www.diag.com
-    mailto:coverclock@diag.com
+CONTACT
+
+Chip Overclock
+mailto:coverclock@diag.com
+Digital Aggregates Corporation
+3440 Youngfield Street, Suite 209
+Wheat Ridge CO 80033 USA
+http://www.diag.com
