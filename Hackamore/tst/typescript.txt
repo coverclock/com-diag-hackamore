@@ -1,6 +1,3 @@
-Script started on Fri Jan 17 20:21:24 2014
-resource-manager# socat TCP:localhost:5038 -
-Asterisk Call Manager/1.3
 Action: Login
 Username: admin
 Secret: pw123
@@ -3035,7 +3032,3 @@ AccountCode:
 Cause: 16
 Cause-txt: Normal Clearing
 
-resource-manager# exit
-exit
-
-Script done on Fri Jan 17 20:23:29 2014

@@ -56,7 +56,7 @@ class Test(unittest.TestCase):
             self.assertTrue(line[-2] == '\r')
             logging.debug(line[0:-2])
             lines = lines + 1
-        self.assertTrue(lines == 3041)
+        self.assertTrue(lines == 3034)
         source.close()
 
     def test4(self):
@@ -68,13 +68,14 @@ class Test(unittest.TestCase):
             event = source.get()
             if event == None:
                 continue
+            events = events + 1
+            self.assertTrue(len(event) > 0)
+            self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
             if com.diag.hackamore.Source.END in event:
                 break
+            self.assertTrue(com.diag.hackamore.Source.TIME in event)
             logging.debug(event)
-            #self.assertFalse(event == None)
-            #self.assertTrue(len(event) > 0)
-            events = events + 1
-        #self.assertTrue(events = 362)
+        self.assertTrue(events == 358) # 1 response, 356 events, 1 end
         source.close()
 
 if __name__ == "__main__":
