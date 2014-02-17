@@ -91,7 +91,12 @@ class Source:
             self.event[SOURCE] = self.name
         else:
             data = line.split(": ", 1)
-            self.event[data[0]] = data[1][0:-2]
+            if len(data) == 0:
+                pass
+            elif len(data) == 1:
+                self.event[data[0]] = ""
+            else:
+                self.event[data[0]] = data[1][0:-2]
         return event
 
     def put(self, command):
