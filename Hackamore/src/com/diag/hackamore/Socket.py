@@ -81,3 +81,19 @@ class Socket(Source):
         if (self.socket == None) or (self.file == None):
             self.open()
         return Source.fileno(self)
+
+    def get(self):
+        event = Source.get(self)
+        if event == None:
+            pass
+        elif not "Response" in event:
+            pass
+        elif not "Message" in event:
+            pass
+        elif event["Response"] != "Success":
+            pass
+        elif event["Message"] != "Authentication accepted":
+            pass
+        else:
+            logging.info("Socket:get: AUTHENTICATED. " + str(self))
+        return event
