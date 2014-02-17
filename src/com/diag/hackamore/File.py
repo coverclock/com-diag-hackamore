@@ -4,7 +4,7 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import sys
+import logging
 
 from Source import Source
 
@@ -25,9 +25,10 @@ class File(Source):
         try:
             self.file = open(self.path, "rb")
         except Exception as exception:
-            sys.stderr.write("File.open: \"" + str(self.path) + "\" failed! \"" + str(exception) + "\"\n")
+            logging.error("File.open: FAILED! " + str(self) + " " + str(exception))
             self.close()
         else:
+            logging.info("File.open: OPENED. " + str(self))
             Source.open(self)
         finally:
             pass
@@ -38,12 +39,12 @@ class File(Source):
             try:
                 self.file.close()
             except Exception as exception:
-                sys.stderr.write("File.close: failed! error=\"" + str(exception) + "\"\n")
+                logging.error("File.close: FAILED! " + str(self) + " " + str(exception))
             else:
-                pass
+                logging.info("File.close: CLOSED. " + str(self))
             finally:
                 self.file = None
-        Source.close(self)
+                Source.close(self)
  
     def fileno(self):
         if (self.file == None) and (not self.eof):

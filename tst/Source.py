@@ -5,6 +5,7 @@ Licensed under the terms in the README.txt file.
 """
 
 import unittest
+import logging
 
 import com.diag.hackamore.Source
 import com.diag.hackamore.Multiplex
@@ -12,12 +13,12 @@ import com.diag.hackamore.Multiplex
 class Test(unittest.TestCase):
 
     def setUp(self):
-        pass
+        logging.basicConfig(level=logging.DEBUG)
 
     def tearDown(self):
         pass
 
-    def testOne(self):
+    def test1(self):
         name = "PBXSOURCE1"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Source.Source(name)
@@ -26,9 +27,15 @@ class Test(unittest.TestCase):
         self.assertTrue(source.name == name)
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.file == None)
+        self.assertTrue(len(source.event) == 1)
+        self.assertTrue(com.diag.hackamore.Source.SOURCE in source.event)
         source.open()
         self.assertTrue(source.file == None)
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(source.read() == None)
+        self.assertFalse(source.write(""))
+        self.assertTrue(source.get() == None)
+        self.assertFalse(source.put((())))
         source.close()
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
 
