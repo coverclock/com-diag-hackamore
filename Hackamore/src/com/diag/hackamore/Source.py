@@ -4,7 +4,7 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import sys
+import logging
 import time
 
 import Multiplex
@@ -23,7 +23,7 @@ class Source:
         self.event[SOURCE] = self.name
         
     def __del__(self):
-        self.close()
+        pass
 
     def __repr__(self):
         return "Source(\"" + str(self.name) + "\")"
@@ -31,13 +31,12 @@ class Source:
     def open(self):
         if self.file != None:
             Multiplex.sources[self.name] = self
-            sys.stderr.write("Source: " + self.name + " open.\n")
+        logging.info("Source.open: OPENED. " + str(self))
 
     def close(self):
         if self.name in Multiplex.sources:
             del Multiplex.sources[self.name]
-        if self.file == None:
-            sys.stderr.write("Source: " + self.name + " closed.\n")
+        logging.info("Source.close: CLOSED. " + str(self))
 
     def fileno(self):
         return self.file.fileno() if self.file != None else None
@@ -48,7 +47,7 @@ class Source:
             try:
                 line = self.file.readline(READLINE)
             except Exception as exception:
-                sys.stderr.write("Source.read: failed! \"" + str(exception) + "\"\n")
+                logging.error("Source.read: FAILED! " + str(self) + " " + str(exception))
             else:
                 pass
             finally:
@@ -63,7 +62,7 @@ class Source:
                 self.file.write("\r\n")
                 self.file.flush()
             except Exception as exception:
-                sys.stderr.write("Source.write: failed! \"" + str(exception) + "\"\n")
+                logging.error("Source.write: FAILED! " + str(self) + " " + str(exception))
             else:
                 result = True
             finally:
@@ -75,17 +74,17 @@ class Source:
         line = self.read()
         if line == None:
             pass
-        elif line.length() == 0:
+        elif len(line) == 0:
             self.close()
             self.event[END] = time.time()
             event = self.event
             self.event = { }
             self.event[SOURCE] = self.name        
-        elif line.length() < 2: 
+        elif len(line) < 2: 
             pass
         elif (line[-1] != '\n') and (line[-2] != '\r'):
             pass
-        elif line.length() == 2:
+        elif len(line) == 2:
             self.event[TIME] = time.time()
             event = self.event
             self.event = { }

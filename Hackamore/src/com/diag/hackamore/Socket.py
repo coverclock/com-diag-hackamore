@@ -4,7 +4,7 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import sys
+import logging
 import socket
 
 from Source import Source
@@ -33,36 +33,49 @@ class Socket(Source):
     def open(self):
         try:
             self.socket = socket.create_connection((self.host, self.port), CONNECT)
-            self.file = self.socket.makefile("rwb", MAKEFILE)
         except Exception as exception:
-            sys.stderr.write("Socket.open: \"" + str(self.host) + "\" " + str(self.port) + " failed! \"" + str(exception) + "\"\n")
+            logging.error("Socket.open: FAILED!" + str(self) + " " + str(exception))
             self.close()
         else:
-            Source.open(self)
-            self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
+            logging.info("Socket.open: CONNECTED. " + str(self))
+            try:
+                self.file = self.socket.makefile("rwb", MAKEFILE)
+            except Exception as exception:
+                logging.error("Socket.open: FAILED!" + str(self) + " " + str(exception))
+                self.close()
+            else:
+                logging.info("Socket.open: OPENED. " + str(self))
+                self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
+                Source.open(self)
+            finally:
+                pass
         finally:
             pass
-                
+
     def close(self):
-        if self.socket != None:
-            try:
-                self.socket.close()
-            except Exception as exception:
-                sys.stderr.write("Socket.close: failed! error=\"" + str(exception) + "\"\n")
-            else:
-                pass
-            finally:
-                self.socket = None
+        closed = False
         if self.file != None:
             try:
                 self.file.close()
             except Exception as exception:
-                sys.stderr.write("Socket.close: failed! error=\"" + str(exception) + "\"\n")
+                logging.error("Socket.close: FAILED! " + str(self) + " " + str(exception))
             else:
-                pass
+                logging.info("Socket.close: CLOSED. " + str(self))
+                closed = True
             finally:
                 self.file = None
-        Source.close(self)
+        if self.socket != None:
+            try:
+                self.socket.close()
+            except Exception as exception:
+                logging.error("Socket.close: FAILED! " + str(self) + " " + str(exception))
+            else:
+                logging.info("Socket.close: DISCONNECTED. " + str(self))
+                closed = True
+            finally:
+                self.socket = None
+        if closed:
+            Source.close(self)
  
     def fileno(self):
         if (self.socket == None) or (self.file == None):
