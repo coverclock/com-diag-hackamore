@@ -13,7 +13,6 @@ READLINE = 512
 SOURCE = "SOURCE"
 TIME = "TIME"
 END = "END"
-RESPONSE = "Response"
 
 class Source:
 

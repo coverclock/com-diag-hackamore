@@ -112,7 +112,7 @@ class Test(unittest.TestCase):
                 break
             self.assertTrue(com.diag.hackamore.Source.TIME in event)
             logging.debug(event)
-            if com.diag.hackamore.Source.RESPONSE in event:
+            if "Response" in event:
                 break
         self.assertTrue(events == 1) # 1 response
         source.close()
