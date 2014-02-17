@@ -10,7 +10,7 @@ import logging
 import com.diag.hackamore.File
 import com.diag.hackamore.Multiplex
 
-PATH = "./tst/typescript.txt"
+PATH = "./typescript.txt"
 
 class Test(unittest.TestCase):
 
