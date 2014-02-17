@@ -54,9 +54,27 @@ class Test(unittest.TestCase):
             self.assertFalse(len(line) < 2)
             self.assertTrue(line[-1] == '\n')
             self.assertTrue(line[-2] == '\r')
-            # print line[0:-2]
+            logging.debug(line[0:-2])
             lines = lines + 1
         self.assertTrue(lines == 3041)
+        source.close()
+
+    def test4(self):
+        name = "PBXFILE4"
+        source = com.diag.hackamore.File.File(name, PATH)
+        source.open()
+        events = 0
+        while True:
+            event = source.get()
+            if event == None:
+                continue
+            if com.diag.hackamore.Source.END in event:
+                break
+            logging.debug(event)
+            #self.assertFalse(event == None)
+            #self.assertTrue(len(event) > 0)
+            events = events + 1
+        #self.assertTrue(events = 362)
         source.close()
 
 if __name__ == "__main__":
