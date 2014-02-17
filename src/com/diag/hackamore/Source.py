@@ -6,21 +6,13 @@ Licensed under the terms in the README.txt file.
 
 import sys
 import time
-import select
+
+import Multiplex
 
 READLINE = 512
 SOURCE = "SOURCE"
 TIME = "TIME"
 END = "END"
-SELECT = 0.0
-
-sources = { }
-
-def get():
-    for source in select.select(sources.values(), None, None, SELECT)[0]:
-        event = source.get()
-        if event != None:
-            yield event
 
 class Source:
 
@@ -38,14 +30,14 @@ class Source:
 
     def open(self):
         if self.file != None:
-            sources[self.name] = self
-            sys.stderr.write("Source: " + super.name + " open.\n")
+            Multiplex.sources[self.name] = self
+            sys.stderr.write("Source: " + self.name + " open.\n")
 
     def close(self):
-        if self.name in sources:
-            del sources[self.name]
+        if self.name in Multiplex.sources:
+            del Multiplex.sources[self.name]
         if self.file == None:
-            sys.stderr.write("Source: " + super.name + " closed.\n")
+            sys.stderr.write("Source: " + self.name + " closed.\n")
 
     def fileno(self):
         return self.file.fileno() if self.file != None else None

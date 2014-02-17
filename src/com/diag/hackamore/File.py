@@ -5,12 +5,13 @@ Licensed under the terms in the README.txt file.
 """
 
 import sys
-import Source
+
+from Source import Source
 
 class File(Source):
 
     def __init__(self, name, path):
-        super.__init__(name)
+        Source.__init__(self, name)
         self.path = path
         self.eof = False
 
@@ -18,7 +19,7 @@ class File(Source):
         self.close()
 
     def __repr__(self):
-        return super.__repr__() + ".File(\"" + str(self.path) + "\")"
+        return Source.__repr__(self) + ".File(\"" + str(self.path) + "\")"
 
     def open(self):
         try:
@@ -27,7 +28,7 @@ class File(Source):
             sys.stderr.write("File.open: \"" + str(self.path) + "\" failed! \"" + str(exception) + "\"\n")
             self.close()
         else:
-            super.open()
+            Source.open(self)
         finally:
             pass
                 
@@ -42,9 +43,9 @@ class File(Source):
                 pass
             finally:
                 self.file = None
-        super.close()
+        Source.close(self)
  
     def fileno(self):
         if (self.file == None) and (not self.eof):
             self.open()
-        return super.fileno()
+        return Source.fileno(self)

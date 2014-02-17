@@ -6,7 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import sys
 import socket
-import Source
+
+from Source import Source
 
 HOST = "127.0.0.1"
 PORT = 5038
@@ -16,7 +17,7 @@ MAKEFILE = 1024
 class Socket(Source):
 
     def __init__(self, name, host, port, username, secret):
-        super.__init__(name)
+        Source.__init__(self, name)
         self.host = host
         self.port = port
         self.username = username
@@ -27,7 +28,7 @@ class Socket(Source):
         self.close()
 
     def __repr__(self):
-        return super.__repr__() + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
+        return Source.__repr__(self) + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
 
     def open(self):
         try:
@@ -37,7 +38,7 @@ class Socket(Source):
             sys.stderr.write("Socket.open: \"" + str(self.host) + "\" " + str(self.port) + " failed! \"" + str(exception) + "\"\n")
             self.close()
         else:
-            super.open()
+            Source.open(self)
             self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
         finally:
             pass
@@ -61,9 +62,9 @@ class Socket(Source):
                 pass
             finally:
                 self.file = None
-        super.close()
+        Source.close(self)
  
     def fileno(self):
         if (self.socket == None) or (self.file == None):
             self.open()
-        return super.fileno()
+        return Source.fileno(self)
