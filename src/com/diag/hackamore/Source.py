@@ -13,6 +13,7 @@ READLINE = 512
 SOURCE = "SOURCE"
 TIME = "TIME"
 END = "END"
+RESPONSE = "Response"
 
 class Source:
 
@@ -94,7 +95,7 @@ class Source:
             if len(data) == 0:
                 pass
             elif len(data) == 1:
-                self.event[data[0]] = ""
+                self.event[data[0][0:-2]] = ""
             else:
                 self.event[data[0]] = data[1][0:-2]
         return event
