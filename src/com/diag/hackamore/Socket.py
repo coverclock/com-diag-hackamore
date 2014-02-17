@@ -11,7 +11,7 @@ from Source import Source
 
 HOST = "127.0.0.1"
 PORT = 5038
-CONNECT = 0.0
+CONNECT = 5.0
 MAKEFILE = 1024
 
 class Socket(Source):
@@ -34,14 +34,14 @@ class Socket(Source):
         try:
             self.socket = socket.create_connection((self.host, self.port), CONNECT)
         except Exception as exception:
-            logging.error("Socket.open: FAILED!" + str(self) + " " + str(exception))
+            logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
             self.close()
         else:
             logging.info("Socket.open: CONNECTED. " + str(self))
             try:
                 self.file = self.socket.makefile("rwb", MAKEFILE)
             except Exception as exception:
-                logging.error("Socket.open: FAILED!" + str(self) + " " + str(exception))
+                logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
                 self.close()
             else:
                 logging.info("Socket.open: OPENED. " + str(self))
