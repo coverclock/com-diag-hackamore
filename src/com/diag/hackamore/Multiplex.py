@@ -10,7 +10,17 @@ SELECT = 0.0
 
 sources = { }
 
-def get():
+def register(source):
+    global sources
+    if source.file != None:
+        sources[source.name] = source
+
+def unregister(source):
+    global sources
+    if source.name in sources:
+        del sources[source.name]
+
+def multiplex():
     global sources
     for source in select.select(sources.values(), None, None, SELECT)[0]:
         event = source.get()

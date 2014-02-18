@@ -29,13 +29,11 @@ class Source:
         return "Source(\"" + str(self.name) + "\")"
 
     def open(self):
-        if self.file != None:
-            Multiplex.sources[self.name] = self
+        Multiplex.register(self)
         logging.info("Source.open: OPENED. " + str(self))
 
     def close(self):
-        if self.name in Multiplex.sources:
-            del Multiplex.sources[self.name]
+        Multiplex.unregister(self)
         logging.info("Source.close: CLOSED. " + str(self))
 
     def fileno(self):
