@@ -208,7 +208,6 @@ class Test(unittest.TestCase):
                     pass
                 else:
                     self.assertTrue(source.logout())
-        logging.debug(str(events))
         self.assertTrue(events == 4) # 2 responses, 1 events, 1 end
         source.close()
 
