@@ -173,15 +173,20 @@ class Test(unittest.TestCase):
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         source.open()
         events = 0
-        while True:
+        eof = False
+        while not eof:
             for event in com.diag.hackamore.Multiplex.multiplex():
                 events = events + 1
                 self.assertTrue(len(event) > 0)
+                logging.debug(event)
                 self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
                 if com.diag.hackamore.Source.END in event:
+                    self.assertTrue(len(event[com.diag.hackamore.Source.END]) > 0)
+                    eof = True
                     break
                 self.assertTrue(com.diag.hackamore.Source.TIME in event)
-                logging.debug(event)
+                self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
         self.assertTrue(events == 358) # 1 response, 356 events, 1 end
         source.close()
 
