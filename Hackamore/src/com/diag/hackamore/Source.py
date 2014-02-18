@@ -39,11 +39,11 @@ class Source:
     def fileno(self):
         return self.file.fileno() if self.file != None else None
 
-    def read(self):
+    def read(self, size = READLINE):
         line = None
         if self.file != None:
             try:
-                line = self.file.readline(READLINE)
+                line = self.file.readline(size)
             except Exception as exception:
                 logging.error("Source.read: FAILED! " + str(self) + " " + str(exception))
             else:
@@ -57,6 +57,7 @@ class Source:
         if self.file != None:
             try:
                 self.file.write(line)
+                #print(line)
                 self.file.write("\r\n")
                 self.file.flush()
             except Exception as exception:
@@ -99,6 +100,7 @@ class Source:
 
     def put(self, command):
         result = False
+        # print command
         for pair in command:
             line = pair[0] + ": " + pair[1]
             if not self.write(line):
