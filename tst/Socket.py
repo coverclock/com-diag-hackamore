@@ -180,5 +180,37 @@ class Test(unittest.TestCase):
         self.test7()
         self.test7()
 
+    def test9(self):
+        name = "PBXSOCKET9"
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
+        source.open()
+        events = 0
+        eof = False
+        while not eof:
+            for event in com.diag.hackamore.Multiplex.multiplex():
+                events = events + 1
+                self.assertTrue(len(event) > 0)
+                logging.debug(event)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                if com.diag.hackamore.Source.END in event:
+                    self.assertTrue(len(event[com.diag.hackamore.Source.END]) > 0)
+                    eof = True
+                    break
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+                if not "Response" in event:
+                    pass
+                elif event["Response"] != "Success":
+                    pass
+                elif not "Message" in event:
+                    pass
+                elif event["Message"] != "Authentication accepted":
+                    pass
+                else:
+                    self.assertTrue(source.logout())
+        logging.debug(str(events))
+        self.assertTrue(events == 4) # 2 responses, 1 events, 1 end
+        source.close()
+
 if __name__ == "__main__":
     unittest.main()
