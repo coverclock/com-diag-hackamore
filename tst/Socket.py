@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
     def test3(self):
         name = "PBXSOCKET3"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
-        source = com.diag.hackamore.Socket.Socket(name, HOST, PORT, USERNAME, SECRET)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
         self.assertTrue(source.name == name)
@@ -58,7 +58,7 @@ class Test(unittest.TestCase):
     def test4(self):
         name = "PBXSOCKET4"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
-        source = com.diag.hackamore.Socket.Socket(name, HOST, REFUSED, USERNAME, SECRET)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, REFUSED)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
         self.assertTrue(source.name == name)
@@ -80,7 +80,7 @@ class Test(unittest.TestCase):
 
     def test5(self):
         name = "PBXSOCKET5"
-        source = com.diag.hackamore.Socket.Socket(name, HOST, PORT, USERNAME, SECRET)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
         source.open()
         lines = 0
         while True:
@@ -98,7 +98,7 @@ class Test(unittest.TestCase):
 
     def test6(self):
         name = "PBXSOCKET6"
-        source = com.diag.hackamore.Socket.Socket(name, HOST, PORT, USERNAME, SECRET)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
         source.open()
         events = 0
         while True:
@@ -107,15 +107,78 @@ class Test(unittest.TestCase):
                 continue
             events = events + 1
             self.assertTrue(len(event) > 0)
+            logging.debug(event)
             self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+            self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
             if com.diag.hackamore.Source.END in event:
                 break
             self.assertTrue(com.diag.hackamore.Source.TIME in event)
-            logging.debug(event)
+            self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
             if "Response" in event:
                 break
         self.assertTrue(events == 1) # 1 response
         source.close()
+
+    def test7(self):
+        name = "PBXSOCKET7"
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
+        source.open()
+        while True:
+            event = source.get()
+            if event != None:
+                break       
+        self.assertTrue(len(event) > 0)
+        logging.debug(event)
+        self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+        self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+        self.assertTrue(com.diag.hackamore.Source.TIME in event)
+        self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+        self.assertTrue("Response" in event)
+        self.assertTrue(event["Response"] == "Success")
+        self.assertTrue("Message" in event)
+        self.assertTrue(event["Message"] == "Authentication accepted")
+        while True:
+            event = source.get()
+            if event != None:
+                break
+        self.assertTrue(len(event) > 0)
+        logging.debug(event)
+        self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+        self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+        self.assertTrue(com.diag.hackamore.Source.TIME in event)
+        self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+        self.assertTrue("Event" in event)
+        self.assertTrue(event["Event"] == "FullyBooted")
+        self.assertTrue("Status" in event)
+        self.assertTrue(event["Status"] == "Fully Booted")
+        self.assertTrue(source.logout())
+        while True:
+            event = source.get()
+            if event != None:
+                break
+        self.assertTrue(len(event) > 0)
+        logging.debug(event)
+        self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+        self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+        self.assertTrue(com.diag.hackamore.Source.TIME in event)
+        self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+        self.assertTrue("Response" in event)
+        self.assertTrue(event["Response"] == "Goodbye")
+        while True:
+            event = source.get()
+            if event != None:
+                break
+        self.assertTrue(len(event) > 0)
+        logging.debug(event)
+        self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+        self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+        self.assertTrue(com.diag.hackamore.Source.END in event)
+        self.assertTrue(len(event[com.diag.hackamore.Source.END]) > 0)
+        source.close()
+
+    def test8(self):
+        self.test7()
+        self.test7()
 
 if __name__ == "__main__":
     unittest.main()

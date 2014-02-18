@@ -6,7 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import select
 
-SELECT = 0.0
+SELECT = 1.0
+EMPTY = ( )
 
 sources = { }
 
@@ -20,9 +21,9 @@ def unregister(source):
     if source.name in sources:
         del sources[source.name]
 
-def multiplex():
+def multiplex(timeout = SELECT):
     global sources
-    for source in select.select(sources.values(), None, None, SELECT)[0]:
+    for source in select.select(sources.values(), EMPTY, EMPTY, timeout)[0]:
         event = source.get()
         if event != None:
             yield event

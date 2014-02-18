@@ -16,12 +16,12 @@ MAKEFILE = 1024
 
 class Socket(Source):
 
-    def __init__(self, name, host, port, username, secret):
+    def __init__(self, name, username, secret, host = HOST, port = PORT):
         Source.__init__(self, name)
-        self.host = host
-        self.port = port
         self.username = username
         self.secret = secret
+        self.host = host
+        self.port = port
         self.socket = None
         
     def __del__(self):
@@ -29,6 +29,12 @@ class Socket(Source):
 
     def __repr__(self):
         return Source.__repr__(self) + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
+
+    def login(self):
+        return self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
+
+    def logout(self):
+        return self.put( ( ("Action", "Logoff"), ) )
 
     def open(self):
         try:
@@ -45,7 +51,7 @@ class Socket(Source):
                 self.close()
             else:
                 logging.info("Socket.open: OPENED. " + str(self))
-                self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
+                self.login()
                 Source.open(self)
             finally:
                 pass
@@ -88,9 +94,9 @@ class Socket(Source):
             pass
         elif not "Response" in event:
             pass
-        elif not "Message" in event:
-            pass
         elif event["Response"] != "Success":
+            pass
+        elif not "Message" in event:
             pass
         elif event["Message"] != "Authentication accepted":
             pass
