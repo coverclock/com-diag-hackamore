@@ -1,13 +1,13 @@
-OneOne: 11 
-OneTwo: 12 
-OneThree: 13
+OneOne: AlphaAlpha
+OneTwo: AlphaBeta
+OneThree: AlphaGamma
 
-TwoOne: 21
-TwoTwo: 22
+TwoOne: BetaAlpha
+TwoTwo: BetaBeta
 
-ThreeOne: 31 
-ThreeTwo: 32
-ThreeThree: 33
+ThreeOne: GammaAlpha
+ThreeTwo: GammaBeta
+ThreeThree: GammaGamma
 
-FourOne: 41
+FourOne: DeltaAlpha
 

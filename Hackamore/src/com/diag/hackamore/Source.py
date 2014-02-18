@@ -74,7 +74,7 @@ class Source:
             pass
         elif len(line) == 0:
             self.close()
-            self.event[END] = time.time()
+            self.event[END] = str(time.time())
             event = self.event
             self.event = { }
             self.event[SOURCE] = self.name        
@@ -83,7 +83,7 @@ class Source:
         elif (line[-1] != '\n') and (line[-2] != '\r'):
             pass
         elif len(line) == 2:
-            self.event[TIME] = time.time()
+            self.event[TIME] = str(time.time())
             event = self.event
             self.event = { }
             self.event[SOURCE] = self.name
