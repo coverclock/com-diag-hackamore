@@ -86,12 +86,12 @@ class Test(unittest.TestCase):
         while True:
             line = source.read()
             self.assertFalse(line == None)
+            logging.debug(line)
             if line == "\r\n":
                 break
             self.assertFalse(len(line) < 2)
             self.assertTrue(line[-1] == '\n')
             self.assertTrue(line[-2] == '\r')
-            logging.debug(line[0:-2])
             lines = lines + 1
         self.assertTrue(lines == 3)
         source.close()
@@ -110,10 +110,9 @@ class Test(unittest.TestCase):
             logging.debug(event)
             self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
             self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-            if com.diag.hackamore.Source.END in event:
-                break
             self.assertTrue(com.diag.hackamore.Source.TIME in event)
             self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+            self.assertFalse(com.diag.hackamore.Source.END in event)
             if "Response" in event:
                 break
         self.assertTrue(events == 1) # 1 response
@@ -173,15 +172,11 @@ class Test(unittest.TestCase):
         self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
         self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
         self.assertTrue(com.diag.hackamore.Source.END in event)
-        self.assertTrue(len(event[com.diag.hackamore.Source.END]) > 0)
+        self.assertTrue(event[com.diag.hackamore.Source.END] == str(4))
         source.close()
 
     def test8(self):
-        self.test7()
-        self.test7()
-
-    def test9(self):
-        name = "PBXSOCKET9"
+        name = "PBXSOCKET8"
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, HOST, PORT)
         source.open()
         events = 0
@@ -192,12 +187,13 @@ class Test(unittest.TestCase):
                 self.assertTrue(len(event) > 0)
                 logging.debug(event)
                 self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                if com.diag.hackamore.Source.END in event:
-                    self.assertTrue(len(event[com.diag.hackamore.Source.END]) > 0)
-                    eof = True
-                    break
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
                 self.assertTrue(com.diag.hackamore.Source.TIME in event)
                 self.assertTrue(len(event[com.diag.hackamore.Source.TIME]) > 0)
+                if com.diag.hackamore.Source.END in event:
+                    self.assertTrue(event[com.diag.hackamore.Source.END] == str(events))
+                    eof = True
+                    break
                 if not "Response" in event:
                     pass
                 elif event["Response"] != "Success":
