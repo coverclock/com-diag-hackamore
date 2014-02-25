@@ -9,7 +9,6 @@ import time
 
 import Multiplex
 
-READLINE = 512
 SOURCE = "SOURCE"
 TIME = "TIME"
 END = "END"
@@ -18,58 +17,40 @@ class Source:
 
     def __init__(self, name):
         self.name = name
-        self.file = None
         self.count = 0
         self.event = { }
         self.event[SOURCE] = self.name
+        self.state = False
         
     def __del__(self):
-        if self.file != None:
+        if self.state:
             self.close()
-            self.file = None
+            self.state = False
 
     def __repr__(self):
         return "Source(\"" + str(self.name) + "\")"
 
     def open(self):
-        self.count = 0
-        Multiplex.register(self)
-        logging.info("Source.open: OPENED. " + str(self))
+        if not self.state:
+            self.count = 0
+            Multiplex.register(self)
+            logging.info("Source.open: OPENED. " + str(self))
+            self.state = True
 
     def close(self):
-        Multiplex.unregister(self)
-        logging.info("Source.close: CLOSED. " + str(self))
+        if self.state:
+            Multiplex.unregister(self)
+            logging.info("Source.close: CLOSED. " + str(self))
+            self.state = False
 
     def fileno(self):
-        return self.file.fileno() if self.file != None else None
+        pass
 
-    def read(self, size = READLINE):
-        line = None
-        if self.file != None:
-            try:
-                line = self.file.readline(size)
-            except Exception as exception:
-                logging.error("Source.read: FAILED! " + str(self) + " " + str(exception))
-            else:
-                pass
-            finally:
-                pass
-        return line
+    def read(self):
+        pass
 
     def write(self, line):
-        result = False
-        if self.file != None:
-            try:
-                self.file.write(line)
-                self.file.write("\r\n")
-                self.file.flush()
-            except Exception as exception:
-                logging.error("Source.write: FAILED! " + str(self) + " " + str(exception))
-            else:
-                result = True
-            finally:
-                pass
-        return result
+        pass
 
     def get(self):
         event = None
