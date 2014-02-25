@@ -19,16 +19,20 @@ class Source:
     def __init__(self, name):
         self.name = name
         self.file = None
+        self.count = 0
         self.event = { }
         self.event[SOURCE] = self.name
         
     def __del__(self):
-        pass
+        if self.file != None:
+            self.close()
+            self.file = None
 
     def __repr__(self):
         return "Source(\"" + str(self.name) + "\")"
 
     def open(self):
+        self.count = 0
         Multiplex.register(self)
         logging.info("Source.open: OPENED. " + str(self))
 
@@ -57,7 +61,6 @@ class Source:
         if self.file != None:
             try:
                 self.file.write(line)
-                #print(line)
                 self.file.write("\r\n")
                 self.file.flush()
             except Exception as exception:
@@ -75,7 +78,9 @@ class Source:
             pass
         elif len(line) == 0:
             self.close()
-            self.event[END] = str(time.time())
+            self.count = self.count + 1
+            self.event[TIME] = str(time.time())
+            self.event[END] = str(self.count)
             event = self.event
             self.event = { }
             self.event[SOURCE] = self.name        
@@ -84,6 +89,7 @@ class Source:
         elif (line[-1] != '\n') and (line[-2] != '\r'):
             pass
         elif len(line) == 2:
+            self.count = self.count + 1
             self.event[TIME] = str(time.time())
             event = self.event
             self.event = { }
@@ -100,7 +106,6 @@ class Source:
 
     def put(self, command):
         result = False
-        # print command
         for pair in command:
             line = pair[0] + ": " + pair[1]
             if not self.write(line):
