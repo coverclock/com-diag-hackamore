@@ -21,14 +21,14 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
      
-    def test1(self):
+    def test010(self):
         self.assertFalse(open(SAMPLE, "r") == None)
    
-    def test2(self):
+    def test020(self):
         self.assertFalse(open(TYPESCRIPT, "r") == None)
 
-    def test3(self):
-        name = "PBXFILE3"
+    def test030(self):
+        name = "PBXFILE030"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         self.assertTrue(source != None)
@@ -45,8 +45,8 @@ class Test(unittest.TestCase):
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.file == None)
 
-    def test4(self):
-        name = "PBXFILE4"
+    def test040(self):
+        name = "PBXFILE040"
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         source.open()
         lines = 0
@@ -63,8 +63,8 @@ class Test(unittest.TestCase):
         self.assertTrue(lines == 3034)
         source.close()
 
-    def test5(self):
-        name = "PBXFILE5"
+    def test050(self):
+        name = "PBXFILE050"
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         source.open()
         events = 0
@@ -80,8 +80,8 @@ class Test(unittest.TestCase):
         self.assertTrue(events == 358) # 1 response, 356 events, 1 end
         source.close()
 
-    def test6(self):
-        name = "PBXFILE6"
+    def test060(self):
+        name = "PBXFILE060"
         source = com.diag.hackamore.File.File(name, SAMPLE)
         source.open()        
         event = source.get()
@@ -168,8 +168,8 @@ class Test(unittest.TestCase):
         self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
         source.close()
 
-    def test7(self):
-        name = "PBXFILE7"
+    def test070(self):
+        name = "PBXFILE070"
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         source.open()
         events = 0
@@ -190,8 +190,8 @@ class Test(unittest.TestCase):
         self.assertTrue(events == 358) # 1 response, 356 events, 1 end
         source.close()
 
-    def test8(self):
-        name = "PBXFILE8"
+    def test080(self):
+        name = "PBXFILE080"
         source = com.diag.hackamore.File.File(name, SAMPLE)
         source.open()
         events = 0
