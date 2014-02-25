@@ -16,12 +16,14 @@ MAKEFILE = 1024
 
 class Socket(Source):
 
-    def __init__(self, name, username, secret, host = HOST, port = PORT):
+    def __init__(self, name, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = MAKEFILE):
         Source.__init__(self, name)
         self.username = username
         self.secret = secret
         self.host = host
         self.port = port
+        self.timeout = timeout
+        self.bufsize = bufsize
         self.socket = None
         
     def __del__(self):
@@ -38,14 +40,14 @@ class Socket(Source):
 
     def open(self):
         try:
-            self.socket = socket.create_connection((self.host, self.port), CONNECT)
+            self.socket = socket.create_connection((self.host, self.port), self.timeout)
         except Exception as exception:
             logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
             self.close()
         else:
             logging.info("Socket.open: CONNECTED. " + str(self))
             try:
-                self.file = self.socket.makefile("rwb", MAKEFILE)
+                self.file = self.socket.makefile("rwb", self.bufsize)
             except Exception as exception:
                 logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
                 self.close()

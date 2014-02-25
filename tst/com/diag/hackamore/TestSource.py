@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test1(self):
+    def test010(self):
         name = "PBXSOURCE1"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Source.Source(name)
