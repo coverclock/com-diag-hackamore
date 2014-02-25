@@ -8,7 +8,6 @@ import unittest
 import logging
 import socket
 import threading
-import select
 
 import com.diag.hackamore.Socket
 import com.diag.hackamore.Multiplex
@@ -37,16 +36,14 @@ class Refuser(threading.Thread):
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.bind(("", 0))
-        ready.acquire()
-        address, port = sock.getsockname()
-        logging.debug("Refuser=" + str(port))
-        sock.close()
-        ready.notify()
-        ready.release()
-        done.acquire()
-        while not complete:
-            done.wait()
-        done.release()
+        with ready:
+            address, port = sock.getsockname()
+            logging.debug("Refuser=" + str(port))
+            sock.close()
+            ready.notifyAll()
+        with done:
+            while not complete:
+                done.wait()
 
 class Tardier(threading.Thread):
     
@@ -58,15 +55,13 @@ class Tardier(threading.Thread):
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.bind(("", 0))
-        ready.acquire()
-        address, port = sock.getsockname()
-        logging.debug("Tardier=" + str(port))
-        ready.notify()
-        ready.release()
-        done.acquire()
-        while not complete:
-            done.wait()
-        done.release()
+        with ready:
+            address, port = sock.getsockname()
+            logging.debug("Tardier=" + str(port))
+            ready.notifyAll()
+        with done:
+            while not complete:
+                done.wait()
 
 class Nonproducer(threading.Thread):
     
@@ -79,16 +74,14 @@ class Nonproducer(threading.Thread):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        ready.acquire()
-        address, port = sock.getsockname()
-        logging.debug("Nonproducer=" + str(port))
-        ready.notify()
-        ready.release()
+        with ready:
+            address, port = sock.getsockname()
+            logging.debug("Nonproducer=" + str(port))
+            ready.notifyAll()
         sock.accept()
-        done.acquire()
-        while not complete:
-            done.wait()
-        done.release()
+        with done:
+            while not complete:
+                done.wait()
 
 class Test(unittest.TestCase):
 
@@ -98,6 +91,50 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
     
+    def test002(self):
+        source = com.diag.hackamore.Socket.Socket("", "", "", "", 0)
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 0)
+        self.assertTrue(len(source.queue) == 0)
+        source.assemble("OneOne: ")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 1)
+        self.assertTrue(len(source.queue) == 0)
+        source.assemble("AlphaAlpha")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 2)
+        self.assertTrue(len(source.queue) == 0)
+        source.assemble("\r\n")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 1)
+        self.assertTrue(len(source.queue) == 1)
+        source.assemble("OneTwo: ")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 2)
+        self.assertTrue(len(source.queue) == 1)
+        source.assemble("AlphaBeta\r\n")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 1)
+        self.assertTrue(len(source.queue) == 2)
+        source.assemble("OneThree: AlphaGamma\r\n")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 1)
+        self.assertTrue(len(source.queue) == 3)
+        source.assemble("\r\n")
+        logging.debug("PARTIAL=" + str(source.partial))
+        logging.debug("QUEUE=" + str(source.queue))
+        self.assertTrue(len(source.partial) == 1)
+        self.assertTrue(len(source.queue) == 4)
+        event = source.get()
+        logging.debug("EVENT=" + str(event))
+"""    
     def test010(self):
         self.assertFalse(socket.create_connection((ADDRESS, PORT)) == None)
     
@@ -131,10 +168,9 @@ class Test(unittest.TestCase):
         complete = False
         thread = Refuser()
         thread.start()
-        ready.acquire()
-        while port == 0:
-            ready.wait()
-        ready.release()
+        with ready:
+            while port == 0:
+                ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
@@ -154,10 +190,9 @@ class Test(unittest.TestCase):
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.file == None)
         self.assertTrue(source.socket == None)
-        done.acquire()
-        complete = True
-        done.notify()
-        done.release()
+        with done:
+            complete = True
+            done.notifyAll()
         thread.join()
         
     def test034(self):
@@ -172,10 +207,9 @@ class Test(unittest.TestCase):
         complete = False
         thread = Tardier()
         thread.start()
-        ready.acquire()
-        while port == 0:
-            ready.wait()
-        ready.release()
+        with ready:
+            while port == 0:
+                ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
@@ -195,10 +229,9 @@ class Test(unittest.TestCase):
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.file == None)
         self.assertTrue(source.socket == None)
-        done.acquire()
-        complete = True
-        done.notify()
-        done.release()
+        with done:
+            complete = True
+            done.notifyAll()
         thread.join()
 
     def test036(self):
@@ -213,10 +246,9 @@ class Test(unittest.TestCase):
         complete = False
         thread = Nonproducer()
         thread.start()
-        ready.acquire()
-        while port == 0:
-            ready.wait()
-        ready.release()
+        with ready:
+            while port == 0:
+                ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
@@ -239,12 +271,11 @@ class Test(unittest.TestCase):
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.file == None)
         self.assertTrue(source.socket == None)
-        done.acquire()
-        complete = True
-        done.notify()
-        done.release()
+        with done:
+            complete = True
+            done.notifyAll()
         thread.join()
-"""        
+
     def test036(self):
         name = "PBXSOCKET036"
         try:

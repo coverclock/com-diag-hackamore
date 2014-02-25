@@ -8,12 +8,16 @@ import logging
 
 from Source import Source
 
+READLINE = 512
+
 class File(Source):
 
-    def __init__(self, name, path):
+    def __init__(self, name, path, bufsize = READLINE):
         Source.__init__(self, name)
         self.path = path
         self.eof = False
+        self.file = None
+        self.bufsize = bufsize
 
     def __del__(self):
         self.close()
@@ -49,4 +53,32 @@ class File(Source):
     def fileno(self):
         if (self.file == None) and (not self.eof):
             self.open()
-        return Source.fileno(self)
+        return self.file.fileno()
+
+    def read(self):
+        line = None
+        if self.file != None:
+            try:
+                line = self.file.readline(self.bufsize)
+            except Exception as exception:
+                logging.error("File.read: FAILED! " + str(self) + " " + str(exception))
+            else:
+                pass
+            finally:
+                pass
+        return line
+
+    def write(self, line):
+        result = False
+        if self.file != None:
+            try:
+                self.file.write(line)
+                self.file.write("\r\n")
+                self.file.flush()
+            except Exception as exception:
+                logging.error("File.write: FAILED! " + str(self) + " " + str(exception))
+            else:
+                result = True
+            finally:
+                pass
+        return result
