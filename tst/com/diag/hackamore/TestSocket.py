@@ -567,9 +567,10 @@ class Test(unittest.TestCase):
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
                 self.assertTrue(com.diag.hackamore.Source.END in event)
                 self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
-                eof = True
             else:
                 self.assertTrue(0 < events < 6)
+            if com.diag.hackamore.Source.END in event:
+                eof = True
         self.assertTrue(events == 5)
         source.close()
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
@@ -669,9 +670,10 @@ class Test(unittest.TestCase):
                     self.assertTrue(event[com.diag.hackamore.Source.TIME])
                     self.assertTrue(com.diag.hackamore.Source.END in event)
                     self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
-                    eof = True
                 else:
                     self.assertTrue(0 < events < 6)
+                if com.diag.hackamore.Source.END in event:
+                    eof = True
         self.assertTrue(events == 5)
         source.close()
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
@@ -758,48 +760,15 @@ class Test(unittest.TestCase):
         source.open()
         self.assertFalse(source.socket == None)
         self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
-        events = 0
         eof = False
         while not eof:
             for event in com.diag.hackamore.Multiplex.multiplex():
                 self.assertFalse(event == None)
-                events = events + 1
                 self.assertTrue(event)
-                if events == 1:
-                    self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                    self.assertTrue(com.diag.hackamore.Source.TIME in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                    self.assertTrue("Response" in event)
-                    self.assertTrue(event["Response"] == "Success")
-                    self.assertTrue("Message" in event)
-                    self.assertTrue(event["Message"] == "Authentication accepted")
-                elif events == 2:
-                    self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                    self.assertTrue(com.diag.hackamore.Source.TIME in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                    self.assertTrue("Event" in event)
-                    self.assertTrue(event["Event"] == "FullyBooted")
-                    self.assertTrue("Status" in event)
-                    self.assertTrue(event["Status"] == "Fully Booted")
-                    self.assertTrue(source.logout())
-                elif events == 3:
-                    self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                    self.assertTrue(com.diag.hackamore.Source.TIME in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                    self.assertTrue("Response" in event)
-                    self.assertTrue(event["Response"] == "Goodbye")
-                elif events == 4:
-                    self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                    self.assertTrue(com.diag.hackamore.Source.END in event)
-                    self.assertTrue(event[com.diag.hackamore.Source.END] == str(4))
+                if ("Response" in event) and (event["Response"] == "Success"):
+                    source.logout()
+                if com.diag.hackamore.Source.END in event:
                     eof = True
-                else:
-                    self.assertTrue(0 < events < 5)
-        self.assertTrue(events == 4)
         source.close()
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.socket == None)

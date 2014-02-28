@@ -87,35 +87,42 @@ class Socket(Source):
                 self.queue.append(piece) 
         else:
             self.partial.append(fragment)
-        #logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
-        #logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
+        logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
+        logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
 
-    def read(self):
-        line = None
-        if self.socket != None:
-            if not self.eof:
-                try:
-                    fragment = self.socket.recv(self.bufsize)
-                except Exception as exception:
-                    logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
-                else:
-                    if fragment == None:
-                        pass
-                    elif not fragment:
-                        self.eof = True
-                        logging.info("Socket.read: END. " + str(self))
-                    else:
-                        self.assemble(fragment)
-                finally:
-                    pass
-            if self.queue:
-                line = self.queue.pop(0)
-                logging.debug("Socket.read: \"" + str(line) + "\"")
-            elif self.eof:
-                exception = End
-                raise exception
+    def service(self):
+        if self.socket == None:
+            pass
+        elif self.eof:
+            pass
+        else:
+            try:
+                fragment = self.socket.recv(self.bufsize)
+            except Exception as exception:
+                logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
             else:
+                if fragment == None:
+                    pass
+                elif not fragment:
+                    self.eof = True
+                    logging.info("Socket.read: END. " + str(self))
+                else:
+                    self.assemble(fragment)
+            finally:
                 pass
+
+    def read(self, multiplexing = False):
+        if not multiplexing:
+            self.service()
+        line = None
+        if self.queue:
+            line = self.queue.pop(0)
+            logging.debug("Socket.read: \"" + str(line) + "\"")
+        elif self.eof:
+            exception = End
+            raise exception
+        else:
+            pass
         return line
 
     def write(self, line):
@@ -133,8 +140,8 @@ class Socket(Source):
                 pass
         return result
 
-    def get(self):
-        event = Source.get(self)
+    def get(self, multiplexing = False):
+        event = Source.get(self, multiplexing)
         if event == None:
             pass
         else:

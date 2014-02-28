@@ -45,23 +45,27 @@ class Source:
 
     def fileno(self):
         return -1
+    
+    def service(self):
+        pass
 
-    def read(self):
+    def read(self, multiplexing = False):
         pass
 
     def write(self, line):
         pass
 
-    def get(self):
+    def get(self, multiplexing = False):
         event = None
         try:
-            line = self.read()
+            line = self.read(multiplexing)
         except Exception:
             self.close()
             self.count = self.count + 1
             self.event[TIME] = str(time.time())
             self.event[END] = str(self.count)
             event = self.event
+            logging.debug("Source.get: " + str(event))
             self.event = { }
             self.event[SOURCE] = self.name                    
         else:

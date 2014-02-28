@@ -56,7 +56,7 @@ class File(Source):
             self.open()
         return self.file.fileno()
 
-    def read(self):
+    def read(self, multiplexing = False):
         line = None
         if self.file != None:
             try:
