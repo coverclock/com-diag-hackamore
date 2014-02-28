@@ -47,11 +47,11 @@ distribution:
 
 .PHONY:	backup
 
-backup:	../$(PROJECT).bak.tgz
-	mv $(MVFLAGS) ../$(PROJECT).bak.tgz ../$(PROJECT).$(TIMESTAMP).tgz
+backup:	../$(PROJECT)-backup.tgz
+	mv $(MVFLAGS) ../$(PROJECT)-backup.tgz ../$(PROJECT)-$(TIMESTAMP).tgz
 
-../$(PROJECT).bak.tgz:
-	tar cvzf - . > $@
+../$(PROJECT)-backup.tgz:
+	tar --exclude-vcs -cvzf - . > $@
 
 ########## Documentation
 
@@ -93,7 +93,7 @@ test:
 commit:
 	git commit .
 
-archive:
+dcommit:
 	git svn dcommit
 
 push:
