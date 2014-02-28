@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
             didtry = True
             failer()
         except Exception as exception:
-            self.assertTrue(isinstance(exception, com.diag.hackamore.End.End))
+            self.assertIsInstance(exception, com.diag.hackamore.End.End)
             didexcept = True
         else:
             self.fail()
