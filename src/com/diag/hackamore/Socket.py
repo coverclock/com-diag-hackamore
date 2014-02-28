@@ -8,6 +8,7 @@ import logging
 import socket
 
 from Source import Source
+from End import End
 
 HOST = "127.0.0.1"
 PORT = 5038
@@ -87,9 +88,11 @@ class Socket(Source):
                 fragment = self.socket.recv(self.bufsize)
             except Exception as exception:
                 logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
+                raise exception
             else:
                 if len(fragment) == 0:
-                    pass
+                    exception = End
+                    raise exception
                 else:
                     self.assemble(fragment)
             finally:

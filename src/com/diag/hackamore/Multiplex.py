@@ -13,7 +13,7 @@ sources = { }
 
 def register(source):
     global sources
-    if source.file != None:
+    if source.fileno() >= 0:
         sources[source.name] = source
 
 def unregister(source):

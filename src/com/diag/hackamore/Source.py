@@ -44,7 +44,7 @@ class Source:
             self.state = False
 
     def fileno(self):
-        pass
+        return -1
 
     def read(self):
         pass
@@ -54,35 +54,35 @@ class Source:
 
     def get(self):
         event = None
-        line = self.read()
-        if line == None:
-            pass
-        elif len(line) == 0:
+        try:
+            line = self.read()
+        except Exception:
             self.close()
             self.count = self.count + 1
             self.event[TIME] = str(time.time())
             self.event[END] = str(self.count)
             event = self.event
             self.event = { }
-            self.event[SOURCE] = self.name        
-        elif len(line) < 2: 
-            pass
-        elif (line[-1] != '\n') and (line[-2] != '\r'):
-            pass
-        elif len(line) == 2:
-            self.count = self.count + 1
-            self.event[TIME] = str(time.time())
-            event = self.event
-            self.event = { }
-            self.event[SOURCE] = self.name
+            self.event[SOURCE] = self.name                    
         else:
-            data = line.split(": ", 1)
-            if len(data) == 0:
+            if line == None:
                 pass
-            elif len(data) == 1:
-                self.event[data[0][0:-2]] = ""
+            elif len(line) == 0:
+                self.count = self.count + 1
+                self.event[TIME] = str(time.time())
+                event = self.event
+                self.event = { }
+                self.event[SOURCE] = self.name
             else:
-                self.event[data[0]] = data[1][0:-2]
+                data = line.split(": ", 1)
+                if len(data) == 0:
+                    pass
+                elif len(data) == 1:
+                    self.event[data[0]] = ""
+                else:
+                    self.event[data[0]] = data[1]
+        finally:
+            pass
         return event
 
     def put(self, command):
