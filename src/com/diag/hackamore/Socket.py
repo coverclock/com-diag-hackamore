@@ -4,7 +4,6 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import logging
 import socket
 
 from Source import Source
@@ -17,8 +16,8 @@ RECV = 512
 
 class Socket(Source):
 
-    def __init__(self, name, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV):
-        Source.__init__(self, name, username, secret)
+    def __init__(self, name, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV, logger = None):
+        Source.__init__(self, name, username, secret, logger = logger)
         self.host = host
         self.port = port
         self.timeout = timeout
@@ -39,10 +38,10 @@ class Socket(Source):
             try:
                 self.socket = socket.create_connection((self.host, self.port), self.timeout)
             except Exception as exception:
-                logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("Socket.open: FAILED! %s %s", str(self), str(exception))
             else:
                 self.eof = False
-                logging.info("Socket.open: CONNECTED. " + str(self))
+                self.logger.info("Socket.open: CONNECTED. %s", str(self))
                 self.login()
                 Source.open(self)
             finally:
@@ -53,9 +52,9 @@ class Socket(Source):
             try:
                 self.socket.close()
             except Exception as exception:
-                logging.error("Socket.close: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("Socket.close: FAILED! %s %s", str(self), str(exception))
             else:
-                logging.info("Socket.close: DISCONNECTED. " + str(self))
+                self.logger.info("Socket.close: DISCONNECTED. %s", str(self))
             finally:
                 self.socket = None
                 Source.close(self)
@@ -73,8 +72,8 @@ class Socket(Source):
                 self.queue.append(piece) 
         else:
             self.partial.append(fragment)
-        #logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
-        #logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
+        #self.logger.debug("Socket.assemble:PARTIAL=" + str(self.partial))
+        #self.logger.debug("Socket.assemble:QUEUE=" + str(self.queue))
 
     def service(self):
         if self.socket == None:
@@ -85,13 +84,13 @@ class Socket(Source):
             try:
                 fragment = self.socket.recv(self.bufsize)
             except Exception as exception:
-                logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("Socket.read: FAILED! %s %s", str(self), str(exception))
             else:
                 if fragment == None:
                     pass
                 elif not fragment:
                     self.eof = True
-                    logging.info("Socket.read: END. " + str(self))
+                    self.logger.info("Socket.read: END. %s", str(self))
                 else:
                     self.assemble(fragment)
             finally:
@@ -103,7 +102,7 @@ class Socket(Source):
         line = None
         if self.queue:
             line = self.queue.pop(0)
-            logging.debug("Socket.read: \"" + str(line) + "\"")
+            self.logger.debug("Socket.read: \"%s\"", str(line))
         elif self.eof:
             exception = End
             raise exception
@@ -118,10 +117,10 @@ class Socket(Source):
                 self.socket.sendall(line)
                 self.socket.sendall("\r\n")
             except Exception as exception:
-                logging.error("Socket.write: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("Socket.write: FAILED! %s %s", str(self), str(exception))
             else:
                 result = True
-                logging.debug("Socket.write: \"" + str(line) + "\"")
+                self.logger.debug("Socket.write: \"%s\"", str(line))
             finally:
                 pass
         return result

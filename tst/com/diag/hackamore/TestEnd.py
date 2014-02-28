@@ -7,6 +7,7 @@ Licensed under the terms in the README.txt file.
 import unittest
 import logging
 
+import com.diag.hackamore.Logger
 import com.diag.hackamore.End
 
 def succeeder():
@@ -19,7 +20,7 @@ def failer():
 class Test(unittest.TestCase):
 
     def setUp(self):
-        pass
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
 
     def tearDown(self):
         pass

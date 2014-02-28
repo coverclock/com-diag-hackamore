@@ -4,27 +4,27 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import logging
 import time
 
+import Logger
 import Multiplex
-import End
+
+from AMI import SOURCE
+from AMI import TIME
+from AMI import END
+from AMI import RESPONSE
+from AMI import MESSAGE
+from AMI import SUCCESS
+from AMI import GOODBYE
+from AMI import AUTHENTICATEDACCEPTED
 
 USERNAME = ""
 SECRET = ""
 
-SOURCE = "SOURCE"
-TIME = "TIME"
-END = "END"
-RESPONSE = "Response"
-MESSAGE = "Message"
-SUCCESS = "Success"
-GOODBYE = "Goodbye"
-ACCEPTED = "Authentication accepted"
-
 class Source:
 
-    def __init__(self, name, username = USERNAME, secret = SECRET):
+    def __init__(self, name, username = USERNAME, secret = SECRET, logger = None):
+        self.logger = Logger.logger() if logger == None else logger
         self.name = name
         self.username = username
         self.secret = secret
@@ -45,14 +45,14 @@ class Source:
         if not self.state:
             self.count = 0
             Multiplex.register(self)
-            logging.info("Source.open: OPENED. " + str(self))
+            self.logger.info("Source.open: OPENED. %s", str(self))
             self.state = True
             self.authenticated = False
 
     def close(self):
         if self.state:
             Multiplex.unregister(self)
-            logging.info("Source.close: CLOSED. " + str(self))
+            self.logger.info("Source.close: CLOSED. %s", str(self))
             self.state = False
 
     def fileno(self):
@@ -75,17 +75,17 @@ class Source:
                 pass
             elif not MESSAGE in event:
                 pass
-            elif event[MESSAGE] != ACCEPTED:
+            elif event[MESSAGE] != AUTHENTICATEDACCEPTED:
                 pass
             else:
                 self.authenticated = True
-                logging.info("Source:authentication: AUTHENTICATED. " + str(self))
+                self.logger.info("Source:authentication: AUTHENTICATED. %s", str(self))
         else:
             if event[RESPONSE] != GOODBYE:
                 pass
             else:
                 self.authenticated = False
-                logging.info("Source:authentication: DEAUTHENTICATED. " + str(self))
+                self.logger.info("Source:authentication: DEAUTHENTICATED. %s", str(self))
 
     def get(self, multiplexing = False):
         event = None
@@ -118,7 +118,7 @@ class Source:
                     self.event[data[0]] = data[1]
         finally:
             if event != None:
-                logging.debug("Source.get: EVENT " + str(event))
+                self.logger.debug("Source.get: %s", str(event))
                 self.authentication(event)
         return event
 
