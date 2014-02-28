@@ -52,8 +52,6 @@ class File(Source):
                 Source.close(self)
  
     def fileno(self):
-        if (self.file == None) and (not self.eof):
-            self.open()
         return self.file.fileno()
 
     def read(self, multiplexing = False):
@@ -86,20 +84,3 @@ class File(Source):
             finally:
                 pass
         return line
-
-    def write(self, line):
-        result = False
-        if self.file != None:
-            try:
-                self.file.write(str(line))
-                self.file.write("\r\n")
-                self.file.flush()
-            except Exception as exception:
-                logging.error("File.write: FAILED! " + str(self) + " " + str(exception))
-                raise exception
-            else:
-                result = True
-                logging.debug("File.write: \"" + str(line) + "\"")
-            finally:
-                pass
-        return result

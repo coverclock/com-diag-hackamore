@@ -8,24 +8,35 @@ import logging
 import time
 
 import Multiplex
+import End
+
+USERNAME = ""
+SECRET = ""
 
 SOURCE = "SOURCE"
 TIME = "TIME"
 END = "END"
+RESPONSE = "Response"
+MESSAGE = "Message"
+SUCCESS = "Success"
+GOODBYE = "Goodbye"
+ACCEPTED = "Authentication accepted"
 
 class Source:
 
-    def __init__(self, name):
+    def __init__(self, name, username = USERNAME, secret = SECRET):
         self.name = name
+        self.username = username
+        self.secret = secret
         self.count = 0
         self.event = { }
         self.event[SOURCE] = self.name
         self.state = False
+        self.authenticated = False
         
     def __del__(self):
         if self.state:
             self.close()
-            self.state = False
 
     def __repr__(self):
         return "Source(\"" + str(self.name) + "\")"
@@ -36,6 +47,7 @@ class Source:
             Multiplex.register(self)
             logging.info("Source.open: OPENED. " + str(self))
             self.state = True
+            self.authenticated = False
 
     def close(self):
         if self.state:
@@ -54,6 +66,26 @@ class Source:
 
     def write(self, line):
         pass
+    
+    def authentication(self, event):
+        if not RESPONSE in event:
+            pass
+        elif not self.authenticated:
+            if event[RESPONSE] != SUCCESS:
+                pass
+            elif not MESSAGE in event:
+                pass
+            elif event[MESSAGE] != ACCEPTED:
+                pass
+            else:
+                self.authenticated = True
+                logging.info("Source:authentication: AUTHENTICATED. " + str(self))
+        else:
+            if event[RESPONSE] != GOODBYE:
+                pass
+            else:
+                self.authenticated = False
+                logging.info("Source:authentication: DEAUTHENTICATED. " + str(self))
 
     def get(self, multiplexing = False):
         event = None
@@ -65,9 +97,8 @@ class Source:
             self.event[TIME] = str(time.time())
             self.event[END] = str(self.count)
             event = self.event
-            logging.debug("Source.get: " + str(event))
             self.event = { }
-            self.event[SOURCE] = self.name                    
+            self.event[SOURCE] = self.name          
         else:
             if line == None:
                 pass
@@ -75,7 +106,6 @@ class Source:
                 self.count = self.count + 1
                 self.event[TIME] = str(time.time())
                 event = self.event
-                logging.debug("Source.get: " + str(event))
                 self.event = { }
                 self.event[SOURCE] = self.name
             else:
@@ -87,7 +117,9 @@ class Source:
                 else:
                     self.event[data[0]] = data[1]
         finally:
-            pass
+            if event != None:
+                logging.debug("Source.get: EVENT " + str(event))
+                self.authentication(event)
         return event
 
     def put(self, command):
@@ -101,3 +133,9 @@ class Source:
         if not self.write(""):
             result = False
         return result
+
+    def login(self):
+        return self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
+
+    def logout(self):
+        return self.put( ( ("Action", "Logoff"), ) )
