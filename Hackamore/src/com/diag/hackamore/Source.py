@@ -67,7 +67,7 @@ class Source:
         else:
             if line == None:
                 pass
-            elif len(line) == 0:
+            elif not line:
                 self.count = self.count + 1
                 self.event[TIME] = str(time.time())
                 event = self.event
@@ -75,7 +75,7 @@ class Source:
                 self.event[SOURCE] = self.name
             else:
                 data = line.split(": ", 1)
-                if len(data) == 0:
+                if not data:
                     pass
                 elif len(data) == 1:
                     self.event[data[0]] = ""
