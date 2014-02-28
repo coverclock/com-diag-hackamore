@@ -1138,7 +1138,7 @@ class Test(unittest.TestCase):
         for event in com.diag.hackamore.Multiplex.multiplex():
             self.assertIsNotNone(event)
             self.assertTrue(event)
-            if ("Response" in event) and (event["Response"] == "Success"):
+            if (com.diag.hackamore.Event.RESPONSE in event) and (event[com.diag.hackamore.Event.RESPONSE] == com.diag.hackamore.Event.SUCCESS):
                 source.logout()
             if com.diag.hackamore.Event.END in event:
                 break
