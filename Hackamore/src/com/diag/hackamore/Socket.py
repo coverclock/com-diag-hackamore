@@ -23,6 +23,7 @@ class Socket(Source):
         self.timeout = timeout
         self.bufsize = bufsize
         self.eof = False
+        self.prefix = ""
         self.partial = [ ]
         self.queue = [ ]
         self.socket = None
@@ -69,13 +70,24 @@ class Socket(Source):
         return self.socket.fileno()
     
     def assemble(self, fragment):
-        if "\r\n" in fragment:
+        # This is really inefficient. When I finally move from Python 2.7.6
+        # I'll replace this with something like memory views. But for now,
+        # fragments that split the "\r\n" pair don't happen that often.
+        if fragment[0] == "\n":
+            fragment = self.prefix + fragment
+            self.prefix = ""
+        if fragment[-1] == "\r":
+            self.prefix = self.prefix + fragment
+            fragment = None
+        if fragment == None:
+            pass
+        elif "\r\n" in fragment:
             sequence = fragment.split("\r\n")
             self.partial.append(sequence.pop(0))
             self.queue.append("".join(self.partial))
             self.partial = [ sequence.pop(-1) ]
             for piece in sequence:
-                self.queue.append(piece) 
+                self.queue.append(piece)
         else:
             self.partial.append(fragment)
         #self.logger.debug("Socket.assemble:PARTIAL=" + str(self.partial))
