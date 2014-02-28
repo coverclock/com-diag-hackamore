@@ -86,15 +86,16 @@ class Socket(Source):
                 self.queue.append(piece) 
         else:
             self.partial.append(fragment)
-        #logging.debug("PARTIAL=" + str(self.partial))
-        #logging.debug("QUEUE=" + str(self.queue))
+        #logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
+        #logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
 
     def read(self):
+        line = None
         if self.socket != None:
             try:
                 fragment = self.socket.recv(self.bufsize)
-            except Exception as self.exception:
-                logging.error("Socket.read: FAILED! " + str(self) + " " + str(self.exception))
+            except Exception as exception:
+                logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
             else:
                 if fragment == None:
                     pass
@@ -106,11 +107,13 @@ class Socket(Source):
             finally:
                 pass
             if self.queue:
-                return self.queue.pop(0)
+                line = self.queue.pop(0)
+                logging.debug("Socket.read: \"" + str(line) + "\"")
             elif self.exception:
                 raise self.exception
             else:
                 pass
+        return line
 
     def write(self, line):
         result = False
@@ -122,6 +125,7 @@ class Socket(Source):
                 logging.error("Socket.write: FAILED! " + str(self) + " " + str(exception))
             else:
                 result = True
+                logging.debug("Socket.write: \"" + str(line) + "\"")
             finally:
                 pass
         return result
@@ -130,17 +134,21 @@ class Socket(Source):
         event = Source.get(self)
         if event == None:
             pass
-        elif self.authenticated:
-            pass
-        elif not "Response" in event:
-            pass
-        elif event["Response"] != "Success":
-            pass
-        elif not "Message" in event:
-            pass
-        elif event["Message"] != "Authentication accepted":
-            pass
         else:
-            self.authenticated = True
-            logging.info("Socket:get: AUTHENTICATED. " + str(self))
+            if not self.authenticated:
+                if not "Response" in event:
+                    pass
+                elif event["Response"] != "Success":
+                    pass
+                else:
+                    self.authenticated = True
+                    logging.info("Socket:get: AUTHENTICATED. " + str(self))
+            else:
+                if not "Response" in event:
+                    pass
+                elif event["Response"] != "Goodbye":
+                    pass
+                else:
+                    self.authenticated = False
+                    logging.info("Socket:get: UNAUTHENTICATED. " + str(self))
         return event

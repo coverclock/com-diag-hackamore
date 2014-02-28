@@ -7,13 +7,13 @@ Licensed under the terms in the README.txt file.
 import unittest
 import logging
 
-from com.diag.hackamore.End import End
+import com.diag.hackamore.End
 
 def succeeder():
     pass
     
 def failer():
-    exception = End()
+    exception = com.diag.hackamore.End.End()
     raise exception
 
 class Test(unittest.TestCase):
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010(self):
+    def test010NoException(self):
         didtry = False
         didelse = False
         didfinally = False
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         self.assertTrue(didelse)
         self.assertTrue(didfinally)
 
-    def test020(self):
+    def test020Exception(self):
         didtry = False
         didexcept = False
         didfinally = False
@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
             didtry = True
             failer()
         except Exception as exception:
-            self.assertTrue(isinstance(exception, End))
+            self.assertTrue(isinstance(exception, com.diag.hackamore.End.End))
             didexcept = True
         else:
             self.fail()

@@ -82,6 +82,7 @@ class File(Source):
                     line = None
                 else:
                     line = line[0:-2]
+                    logging.debug("File.read: \"" + str(line) + "\"")
             finally:
                 pass
         return line
@@ -90,7 +91,7 @@ class File(Source):
         result = False
         if self.file != None:
             try:
-                self.file.write(line)
+                self.file.write(str(line))
                 self.file.write("\r\n")
                 self.file.flush()
             except Exception as exception:
@@ -98,6 +99,7 @@ class File(Source):
                 raise exception
             else:
                 result = True
+                logging.debug("File.write: \"" + str(line) + "\"")
             finally:
                 pass
         return result
