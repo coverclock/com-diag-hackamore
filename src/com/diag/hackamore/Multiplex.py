@@ -35,10 +35,10 @@ def multiplex(timeout = SELECT):
     global sources
     candidates = sources.values()
     delay = 0.0
-    active = False
     while True:
         for source in select.select(candidates, EMPTY, EMPTY, delay)[0]:
             source.service()
+        active = False
         for source in candidates:
             event = source.get(True)
             if event != None:
