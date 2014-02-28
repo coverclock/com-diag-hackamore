@@ -27,19 +27,18 @@ class File(Source):
         return Source.__repr__(self) + ".File(\"" + str(self.path) + "\")"
 
     def open(self):
-        try:
-            self.file = open(self.path, "rb")
-        except Exception as exception:
-            logging.error("File.open: FAILED! " + str(self) + " " + str(exception))
-            self.close()
-        else:
-            logging.info("File.open: OPENED. " + str(self))
-            Source.open(self)
-        finally:
-            pass
+        if self.file == None:
+            try:
+                self.file = open(self.path, "rb")
+            except Exception as exception:
+                logging.error("File.open: FAILED! " + str(self) + " " + str(exception))
+            else:
+                logging.info("File.open: OPENED. " + str(self))
+                Source.open(self)
+            finally:
+                pass
                 
     def close(self):
-        self.eof = True
         if self.file != None:
             try:
                 self.file.close()
@@ -48,6 +47,7 @@ class File(Source):
             else:
                 logging.info("File.close: CLOSED. " + str(self))
             finally:
+                self.eof = True
                 self.file = None
                 Source.close(self)
  
@@ -72,11 +72,14 @@ class File(Source):
                     exception = End
                     raise exception
                 elif len(line) < 2:
-                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                    logging.warning("File.read: SHORT? " + str(self) + " \"" + str(line) + "\"")
+                    line = None
                 elif line[-1] != '\n':
-                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                    logging.warning("File.read: LINEFEED? " + str(self) + " \"" + str(line) + "\"")
+                    line = None
                 elif line[-2] != '\r':
-                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                    logging.warning("File.read: CARRIAGERETURN? " + str(self) + " \"" + str(line) + "\"")
+                    line = None
                 else:
                     line = line[0:-2]
             finally:
