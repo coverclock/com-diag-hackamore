@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
         pass
 
     def test010Construction(self):
-        name = "PBXFILE010"
+        name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
         self.assertTrue(source.file == None)
 
     def test020Read(self):
-        name = "PBXFILE020"
+        name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
@@ -98,7 +98,7 @@ class Test(unittest.TestCase):
         source.close()
  
     def test030Get(self):
-        name = "PBXFILE030"
+        name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
@@ -173,7 +173,7 @@ class Test(unittest.TestCase):
         source.close()
 
     def test040Multiplexer(self):
-        name = "PBXFILE040"
+        name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
@@ -247,7 +247,7 @@ class Test(unittest.TestCase):
         source.close()
  
     def test050Typescript(self):
-        name = "PBXFILE050"
+        name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)

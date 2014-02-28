@@ -28,9 +28,14 @@ def deregister():
 def multiplex(timeout = SELECT):
     global sources
     candidates = sources.values()
-    for source in select.select(candidates, EMPTY, EMPTY, timeout)[0]:
+    active = False
+    for source in select.select(candidates, EMPTY, EMPTY, 0.0)[0]:
         source.service()
     for source in candidates:
         event = source.get(True)
         if event != None:
+            active = True
             yield event
+    if not active:
+        for source in select.select(candidates, EMPTY, EMPTY, timeout)[0]:
+            source.service()
