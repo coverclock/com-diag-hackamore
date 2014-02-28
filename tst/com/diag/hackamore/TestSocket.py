@@ -1066,7 +1066,7 @@ class Test(unittest.TestCase):
         global done
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
         thread = Producer(TYPESCRIPT)
@@ -1075,35 +1075,35 @@ class Test(unittest.TestCase):
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         self.assertTrue(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         events = 0
         for event in com.diag.hackamore.Multiplex.multiplex():
-            self.assertFalse(event == None)
+            self.assertIsNotNone(event)
             events = events + 1
             self.assertTrue(event)
-            self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-            self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-            self.assertTrue(com.diag.hackamore.Source.TIME in event)
+            self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+            self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+            self.assertIn(com.diag.hackamore.Source.TIME, event)
             self.assertTrue(event[com.diag.hackamore.Source.TIME])
             #del event[com.diag.hackamore.Source.TIME]; sorted(event, key=event.get); print("EVENT " + str(events) + " " + str(event))
             if com.diag.hackamore.Source.END in event:
-                self.assertTrue(event[com.diag.hackamore.Source.END] == str(events))
+                self.assertEquals(event[com.diag.hackamore.Source.END], str(events))
                 break
-        self.assertTrue(events == 358) # 1 response, 356 events, 1 end
+        self.assertEquals(events, 358) # 1 response, 356 events, 1 end
         self.assertTrue(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         with done:
             complete = True
             done.notifyAll()
@@ -1120,30 +1120,30 @@ class Test(unittest.TestCase):
         global done
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == SERVER)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == PORT)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name, None)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host, None)
+        self.assertEquals(source.host, SERVER)
+        self.assertIsNotNone(source.port, None)
+        self.assertEquals(source.port, PORT)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         self.assertTrue(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         for event in com.diag.hackamore.Multiplex.multiplex():
-            self.assertFalse(event == None)
+            self.assertIsNotNone(event)
             self.assertTrue(event)
             if ("Response" in event) and (event["Response"] == "Success"):
                 source.logout()
             if com.diag.hackamore.Source.END in event:
                 break
         self.assertTrue(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
 
 if __name__ == "__main__":
     unittest.main()
