@@ -4,6 +4,7 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+import logging
 import time
 
 import Logger
@@ -118,7 +119,8 @@ class Source:
                     self.event[data[0]] = data[1]
         finally:
             if event != None:
-                self.logger.debug("Source.get: %s", str(event))
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug("Source.get: %s", str(event))
                 self.authentication(event)
         return event
 
