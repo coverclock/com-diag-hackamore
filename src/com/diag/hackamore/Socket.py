@@ -90,7 +90,8 @@ class Socket(Source):
                 logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
                 raise exception
             else:
-                if len(fragment) == 0:
+                if not fragment:
+                    logging.info("Socket.read: END. " + str(self))
                     exception = End
                     raise exception
                 else:
@@ -99,7 +100,7 @@ class Socket(Source):
                 pass
         else:
             pass
-        return self.queue.pop(0) if len(self.queue) > 0 else None
+        return self.queue.pop(0) if self.queue else None
 
     def write(self, line):
         result = False

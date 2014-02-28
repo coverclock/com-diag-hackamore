@@ -67,7 +67,8 @@ class File(Source):
             else:
                 if line == None:
                     pass
-                elif len(line) == 0:
+                elif not line:
+                    logging.info("File.read: END. " + str(self))
                     exception = End
                     raise exception
                 elif len(line) < 2:
