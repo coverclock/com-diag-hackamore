@@ -625,6 +625,111 @@ class Test(unittest.TestCase):
             complete = True
             done.notifyAll()
         thread.join()
+        
+    def test085Service(self):
+        global address
+        global port
+        global ready
+        global complete
+        global done
+        name = self.id()
+        com.diag.hackamore.Multiplex.deregister()
+        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        port = 0
+        complete = False
+        thread = Producer(SAMPLE)
+        thread.start()
+        with ready:
+            while port == 0:
+                ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        self.assertTrue(source != None)
+        self.assertTrue(source.name != None)
+        self.assertTrue(source.name == name)
+        self.assertTrue(source.host != None)
+        self.assertTrue(source.host == LOCALHOST)
+        self.assertTrue(source.port != None)
+        self.assertTrue(source.port == port)
+        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(source.socket == None)
+        self.assertTrue(source.open())
+        self.assertFalse(source.socket == None)
+        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        events = 0
+        eof = False
+        while not eof:
+            com.diag.hackamore.Multiplex.service()
+            event = source.get(True)
+            if event == None:
+                continue
+            events = events + 1
+            self.assertTrue(event)
+            if events == 1:
+                self.assertTrue(len(event) == 5)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertTrue("OneOne" in event)
+                self.assertTrue(event["OneOne"] == "AlphaAlpha")
+                self.assertTrue("OneTwo" in event)
+                self.assertTrue(event["OneTwo"] == "AlphaBeta")
+                self.assertTrue("OneThree" in event)
+                self.assertTrue(event["OneThree"] == "AlphaGamma")
+            elif events == 2:
+                self.assertTrue(len(event) == 4)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertTrue("TwoOne" in event)
+                self.assertTrue(event["TwoOne"] == "BetaAlpha")
+                self.assertTrue("TwoTwo" in event)
+                self.assertTrue(event["TwoTwo"] == "BetaBeta")
+            elif events == 3:
+                self.assertTrue(len(event) == 5)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertTrue("ThreeOne" in event)
+                self.assertTrue(event["ThreeOne"] == "GammaAlpha")
+                self.assertTrue("ThreeTwo" in event)
+                self.assertTrue(event["ThreeTwo"] == "GammaBeta")
+                self.assertTrue("ThreeThree" in event)
+                self.assertTrue(event["ThreeThree"] == "GammaGamma")
+            elif events == 4:
+                self.assertTrue(len(event) == 3)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertTrue("FourOne" in event)
+                self.assertTrue(event["FourOne"] == "DeltaAlpha")
+            elif events == 5:
+                self.assertTrue(len(event) == 3)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                self.assertTrue(com.diag.hackamore.Source.END in event)
+                self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
+            else:
+                self.assertTrue(0 < events < 6)
+            if com.diag.hackamore.Source.END in event:
+                eof = True
+        self.assertTrue(events == 5)
+        self.assertTrue(source.close())
+        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(source.socket == None)
+        with done:
+            complete = True
+            done.notifyAll()
+        thread.join()
     
     def test090Multiplex(self):
         global address
