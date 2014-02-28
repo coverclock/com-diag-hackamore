@@ -7,6 +7,7 @@ Licensed under the terms in the README.txt file.
 import logging
 
 from Source import Source
+from End import End
 
 READLINE = 512
 
@@ -62,8 +63,21 @@ class File(Source):
                 line = self.file.readline(self.bufsize)
             except Exception as exception:
                 logging.error("File.read: FAILED! " + str(self) + " " + str(exception))
+                raise exception
             else:
-                pass
+                if line == None:
+                    pass
+                elif len(line) == 0:
+                    exception = End
+                    raise exception
+                elif len(line) < 2:
+                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                elif line[-1] != '\n':
+                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                elif line[-2] != '\r':
+                    logging.warning("File.read: UNEXPECTED? " + str(self) + " \"" + str(line) + "\"")
+                else:
+                    line = line[0:-2]
             finally:
                 pass
         return line
@@ -77,6 +91,7 @@ class File(Source):
                 self.file.flush()
             except Exception as exception:
                 logging.error("File.write: FAILED! " + str(self) + " " + str(exception))
+                raise exception
             else:
                 result = True
             finally:

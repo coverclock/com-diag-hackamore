@@ -19,18 +19,16 @@ class Test(unittest.TestCase):
         pass
 
     def test010(self):
-        name = "PBXSOURCE1"
+        name = "PBXSOURCE010"
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Source.Source(name)
         self.assertTrue(source != None)
         self.assertTrue(source.name != None)
         self.assertTrue(source.name == name)
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.file == None)
         self.assertTrue(len(source.event) == 1)
         self.assertTrue(com.diag.hackamore.Source.SOURCE in source.event)
         source.open()
-        self.assertTrue(source.file == None)
         self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.read() == None)
         self.assertFalse(source.write(""))

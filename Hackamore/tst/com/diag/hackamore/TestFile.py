@@ -9,6 +9,7 @@ import logging
 
 import com.diag.hackamore.File
 import com.diag.hackamore.Multiplex
+import com.diag.hackamore.End
 
 SAMPLE = "./sample.txt"
 TYPESCRIPT = "./typescript.txt"
@@ -51,15 +52,18 @@ class Test(unittest.TestCase):
         source.open()
         lines = 0
         while True:
-            line = source.read()
-            self.assertFalse(line == None)
-            if line == "":
+            try:
+                line = source.read()
+            except Exception as exception:
+                print exception
+                self.assertTrue(isinstance(exception, com.diag.hackamore.End.End))
                 break
-            self.assertFalse(len(line) < 2)
-            self.assertTrue(line[-1] == '\n')
-            self.assertTrue(line[-2] == '\r')
-            logging.debug(line[0:-2])
-            lines = lines + 1
+            else:
+                self.assertFalse(line == None)
+                logging.debug(line)
+                lines = lines + 1
+            finally:
+                pass
         self.assertTrue(lines == 3034)
         source.close()
 
