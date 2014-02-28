@@ -8,16 +8,8 @@ import logging
 import time
 
 import Logger
+import Event
 import Multiplex
-
-from AMI import SOURCE
-from AMI import TIME
-from AMI import END
-from AMI import RESPONSE
-from AMI import MESSAGE
-from AMI import SUCCESS
-from AMI import GOODBYE
-from AMI import AUTHENTICATEDACCEPTED
 
 USERNAME = ""
 SECRET = ""
@@ -31,7 +23,7 @@ class Source:
         self.secret = secret
         self.count = 0
         self.event = { }
-        self.event[SOURCE] = self.name
+        self.event[Event.SOURCE] = self.name
         self.state = False
         self.authenticated = False
         
@@ -75,20 +67,20 @@ class Source:
         pass
     
     def authentication(self, event):
-        if not RESPONSE in event:
+        if not Event.RESPONSE in event:
             pass
         elif not self.authenticated:
-            if event[RESPONSE] != SUCCESS:
+            if event[Event.RESPONSE] != Event.SUCCESS:
                 pass
-            elif not MESSAGE in event:
+            elif not Event.MESSAGE in event:
                 pass
-            elif event[MESSAGE] != AUTHENTICATEDACCEPTED:
+            elif event[Event.MESSAGE] != Event.AUTHENTICATEDACCEPTED:
                 pass
             else:
                 self.authenticated = True
                 self.logger.info("Source:authentication: AUTHENTICATED. %s", str(self))
         else:
-            if event[RESPONSE] != GOODBYE:
+            if event[Event.RESPONSE] != Event.GOODBYE:
                 pass
             else:
                 self.authenticated = False
@@ -101,20 +93,20 @@ class Source:
                 line = self.read(multiplexing)
             except Exception:
                 self.count = self.count + 1
-                self.event[TIME] = str(time.time())
-                self.event[END] = str(self.count)
+                self.event[Event.TIME] = str(time.time())
+                self.event[Event.END] = str(self.count)
                 event = self.event
                 self.event = { }
-                self.event[SOURCE] = self.name          
+                self.event[Event.SOURCE] = self.name          
             else:
                 if line == None:
                     break
                 elif not line:
                     self.count = self.count + 1
-                    self.event[TIME] = str(time.time())
+                    self.event[Event.TIME] = str(time.time())
                     event = self.event
                     self.event = { }
-                    self.event[SOURCE] = self.name
+                    self.event[Event.SOURCE] = self.name
                 else:
                     data = line.split(": ", 1)
                     if not data:

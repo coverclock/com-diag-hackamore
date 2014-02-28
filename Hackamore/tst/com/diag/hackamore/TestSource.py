@@ -8,6 +8,7 @@ import unittest
 import logging
 
 import com.diag.hackamore.Logger
+import com.diag.hackamore.Event
 import com.diag.hackamore.Source
 import com.diag.hackamore.Multiplex
 
@@ -28,7 +29,7 @@ class Test(unittest.TestCase):
         self.assertEquals(source.name, name)
         self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertEqual(len(source.event), 1)
-        self.assertTrue(com.diag.hackamore.Source.SOURCE in source.event)
+        self.assertTrue(com.diag.hackamore.Event.SOURCE in source.event)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
         self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
