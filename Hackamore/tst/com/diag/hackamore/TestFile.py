@@ -7,17 +7,18 @@ Licensed under the terms in the README.txt file.
 import unittest
 import logging
 
+import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Multiplex
 import com.diag.hackamore.End
 
-SAMPLE = "./sample.txt"
-TYPESCRIPT = "./typescript.txt"
+from Parameters import SAMPLE
+from Parameters import TYPESCRIPT
 
 class Test(unittest.TestCase):
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
 
     def tearDown(self):
         pass

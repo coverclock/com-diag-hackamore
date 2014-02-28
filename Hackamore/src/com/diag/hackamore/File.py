@@ -4,17 +4,16 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import logging
-
 from Source import Source
 from End import End
 
 READLINE = 512
+OPEN = "rb"
 
 class File(Source):
 
-    def __init__(self, name, path, bufsize = READLINE):
-        Source.__init__(self, name)
+    def __init__(self, name, path, bufsize = READLINE, logger = None):
+        Source.__init__(self, name, logger = logger)
         self.path = path
         self.eof = False
         self.file = None
@@ -29,11 +28,11 @@ class File(Source):
     def open(self):
         if self.file == None:
             try:
-                self.file = open(self.path, "rb")
+                self.file = open(self.path, OPEN)
             except Exception as exception:
-                logging.error("File.open: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("File.open: FAILED! %s %s", str(self), str(exception))
             else:
-                logging.info("File.open: OPENED. " + str(self))
+                self.logger.info("File.open: OPENED. %s", str(self))
                 Source.open(self)
             finally:
                 pass
@@ -43,9 +42,9 @@ class File(Source):
             try:
                 self.file.close()
             except Exception as exception:
-                logging.error("File.close: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("File.close: FAILED! %s %s", str(self), str(exception))
             else:
-                logging.info("File.close: CLOSED. " + str(self))
+                self.logger.info("File.close: CLOSED. %s", str(self))
             finally:
                 self.eof = True
                 self.file = None
@@ -60,27 +59,27 @@ class File(Source):
             try:
                 line = self.file.readline(self.bufsize)
             except Exception as exception:
-                logging.error("File.read: FAILED! " + str(self) + " " + str(exception))
+                self.logger.error("File.read: FAILED! %s %s", str(self), str(exception))
                 raise exception
             else:
                 if line == None:
                     pass
                 elif not line:
-                    logging.info("File.read: END. " + str(self))
+                    self.logger.info("File.read: END. %s", str(self))
                     exception = End
                     raise exception
                 elif len(line) < 2:
-                    logging.warning("File.read: SHORT? " + str(self) + " \"" + str(line) + "\"")
+                    self.logger.warning("File.read: SHORT? %s", str(self))
                     line = None
                 elif line[-1] != '\n':
-                    logging.warning("File.read: LINEFEED? " + str(self) + " \"" + str(line) + "\"")
+                    self.logger.warning("File.read: LINEFEED? %s", str(self))
                     line = None
                 elif line[-2] != '\r':
-                    logging.warning("File.read: CARRIAGERETURN? " + str(self) + " \"" + str(line) + "\"")
+                    self.logger.warning("File.read: CARRIAGERETURN? %s", str(self))
                     line = None
                 else:
                     line = line[0:-2]
-                    logging.debug("File.read: \"" + str(line) + "\"")
+                    self.logger.debug("File.read: \"%s\"", str(line))
             finally:
                 pass
         return line

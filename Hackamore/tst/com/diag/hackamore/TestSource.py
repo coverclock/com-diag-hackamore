@@ -7,13 +7,14 @@ Licensed under the terms in the README.txt file.
 import unittest
 import logging
 
+import com.diag.hackamore.Logger
 import com.diag.hackamore.Source
 import com.diag.hackamore.Multiplex
 
 class Test(unittest.TestCase):
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
 
     def tearDown(self):
         pass

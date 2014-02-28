@@ -9,17 +9,18 @@ import logging
 import socket
 import threading
 
+import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
 import com.diag.hackamore.End
 import com.diag.hackamore.Multiplex
 
-SERVER = "192.168.1.220"
-PORT = com.diag.hackamore.Socket.PORT
-USERNAME = "admin"
-SECRET = "85t3r15k"
-LOCALHOST = "127.0.0.1"
-SAMPLE = "./sample.txt"
-TYPESCRIPT = "./typescript.txt"
+from Parameters import SERVER
+from Parameters import PORT
+from Parameters import USERNAME
+from Parameters import SECRET
+from Parameters import LOCALHOST
+from Parameters import SAMPLE
+from Parameters import TYPESCRIPT
 
 address = ""
 port = 0
@@ -154,7 +155,7 @@ class Producer(threading.Thread):
 class Test(unittest.TestCase):
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
 
     def tearDown(self):
         pass
@@ -723,6 +724,7 @@ class Test(unittest.TestCase):
                 self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
                 self.assertTrue(com.diag.hackamore.Source.TIME in event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                del event[com.diag.hackamore.Source.TIME]; sorted(event, key=event.get); print("EVENT " + str(events) + " " + str(event))
                 if com.diag.hackamore.Source.END in event:
                     self.assertTrue(event[com.diag.hackamore.Source.END] == str(events))
                     eof = True
@@ -737,7 +739,7 @@ class Test(unittest.TestCase):
     
     def test110Server(self):
         if not SERVER:
-            logging.info("Bypassing test with live server.")
+            print("Bypassing test with live server.")
             return
         global address
         global port
