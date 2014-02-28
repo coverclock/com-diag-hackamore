@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Machine(self):
+    def test010Loop(self):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
@@ -29,7 +29,7 @@ class Test(unittest.TestCase):
         self.assertTrue(source.open())
         self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(com.diag.hackamore.Multiplex.active())
-        com.diag.hackamore.Machine.machine()
+        com.diag.hackamore.Machine.loop()
 
 if __name__ == "__main__":
     unittest.main()
