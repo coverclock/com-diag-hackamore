@@ -21,9 +21,11 @@ BUILD				=	0
 TIMESTAMP			=	$(shell date -u +%Y%m%d%H%M%S%N%Z)
 DATESTAMP			=	$(shell date +%Y%m%d)
 
-SVNURL				=	svn://graphite/$(PROJECT)/trunk/$(TITLE)
-HTTPURL				=	http://www.diag.com/navigation/downloads/$(TITLE).html
-GITURL				=	https://github.com/coverclock/com-diag-$(PROJECT)
+########## Locators
+
+SVN_URL				=	svn://graphite/$(PROJECT)/trunk/$(TITLE)
+HTTP_URL			=	http://www.diag.com/navigation/downloads/$(TITLE).html
+GIT_URL				=	https://github.com/coverclock/com-diag-$(PROJECT)
 
 ########## Directories
 
@@ -85,3 +87,17 @@ test:
 			( cd $$D; python $$B; ) \
 		done; \
 	done
+
+########## Housekeeping
+
+commit:
+	git commit .
+
+archive:
+	git svn dcommit
+
+push:
+	git push origin master
+
+origin:
+	git remote add origin $(GIT_URL)
