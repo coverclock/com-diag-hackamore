@@ -26,7 +26,12 @@ class File(Source):
         return Source.__repr__(self) + ".File(\"" + str(self.path) + "\")"
 
     def open(self):
-        if self.file == None:
+        result = False
+        if self.eof:
+            pass
+        elif self.file != None:
+            pass
+        else:
             try:
                 self.file = open(self.path, OPEN)
             except Exception as exception:
@@ -34,10 +39,13 @@ class File(Source):
             else:
                 self.logger.info("File.open: OPENED. %s", str(self))
                 Source.open(self)
+                result = True
             finally:
                 pass
+        return result
                 
     def close(self):
+        result = False
         if self.file != None:
             try:
                 self.file.close()
@@ -49,6 +57,8 @@ class File(Source):
                 self.eof = True
                 self.file = None
                 Source.close(self)
+                result = True
+        return result
  
     def fileno(self):
         return self.file.fileno()

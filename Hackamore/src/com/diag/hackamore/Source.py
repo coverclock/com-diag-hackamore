@@ -43,18 +43,24 @@ class Source:
         return "Source(\"" + str(self.name) + "\")"
 
     def open(self):
+        result = False
         if not self.state:
             self.count = 0
             Multiplex.register(self)
             self.logger.info("Source.open: OPENED. %s", str(self))
             self.state = True
             self.authenticated = False
+            result = True
+        return result
 
     def close(self):
+        result = False
         if self.state:
             Multiplex.unregister(self)
             self.logger.info("Source.close: CLOSED. %s", str(self))
             self.state = False
+            result = True
+        return result
 
     def fileno(self):
         return -1
@@ -93,7 +99,6 @@ class Source:
         try:
             line = self.read(multiplexing)
         except Exception:
-            self.close()
             self.count = self.count + 1
             self.event[TIME] = str(time.time())
             self.event[END] = str(self.count)

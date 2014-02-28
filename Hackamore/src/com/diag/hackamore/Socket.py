@@ -34,6 +34,7 @@ class Socket(Source):
         return Source.__repr__(self) + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
 
     def open(self):
+        result = False
         if self.socket == None:
             try:
                 self.socket = socket.create_connection((self.host, self.port), self.timeout)
@@ -44,10 +45,13 @@ class Socket(Source):
                 self.logger.info("Socket.open: CONNECTED. %s", str(self))
                 self.login()
                 Source.open(self)
+                result = True
             finally:
                 pass
+        return result
 
     def close(self):
+        result = False
         if self.socket != None:
             try:
                 self.socket.close()
@@ -58,6 +62,8 @@ class Socket(Source):
             finally:
                 self.socket = None
                 Source.close(self)
+                result = True
+        return result
  
     def fileno(self):
         return self.socket.fileno()
