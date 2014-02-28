@@ -30,7 +30,8 @@ class Test(unittest.TestCase):
         self.assertTrue(source.open())
         self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(com.diag.hackamore.Multiplex.active())
-        for event in com.diag.hackamore.Multiplex.multiplex():
+        events = com.diag.hackamore.Multiplex.multiplex()
+        for event in events:
             self.assertIsNotNone(event)
             self.assertTrue(event)
             self.assertIn(com.diag.hackamore.Event.SOURCE, event)
@@ -41,8 +42,8 @@ class Test(unittest.TestCase):
                 self.assertIsNotNone(temporary)
                 self.assertTrue(temporary.close())
                 self.assertFalse(temporary.open())
-                if not com.diag.hackamore.Multiplex.active():
-                    break
+                self.assertFalse(com.diag.hackamore.Multiplex.active())
+                events.close()
             elif com.diag.hackamore.Event.EVENT in event:
                 if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.DIAL:
                     if not com.diag.hackamore.Event.SUBEVENT in event:
