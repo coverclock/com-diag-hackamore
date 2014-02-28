@@ -25,6 +25,8 @@ class Socket(Source):
         self.port = port
         self.timeout = timeout
         self.bufsize = bufsize
+        self.authenticated = False
+        self.exception = None
         self.partial = [ ]
         self.queue = [ ]
         self.socket = None
@@ -39,20 +41,22 @@ class Socket(Source):
         return self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
 
     def logout(self):
+        self.authenticated = False
         return self.put( ( ("Action", "Logoff"), ) )
 
     def open(self):
-        try:
-            self.socket = socket.create_connection((self.host, self.port), self.timeout)
-        except Exception as exception:
-            logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
-            self.close()
-        else:
-            logging.info("Socket.open: CONNECTED. " + str(self))
-            self.login()
-            Source.open(self)
-        finally:
-            pass
+        if self.socket == None:
+            try:
+                self.socket = socket.create_connection((self.host, self.port), self.timeout)
+            except Exception as exception:
+                logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
+            else:
+                self.exception = None
+                logging.info("Socket.open: CONNECTED. " + str(self))
+                self.login()
+                Source.open(self)
+            finally:
+                pass
 
     def close(self):
         if self.socket != None:
@@ -62,9 +66,10 @@ class Socket(Source):
                 logging.error("Socket.close: FAILED! " + str(self) + " " + str(exception))
             else:
                 logging.info("Socket.close: DISCONNECTED. " + str(self))
-                Source.close(self)
             finally:
+                self.authenticated = False
                 self.socket = None
+                Source.close(self)
  
     def fileno(self):
         if self.socket == None:
@@ -81,26 +86,31 @@ class Socket(Source):
                 self.queue.append(piece) 
         else:
             self.partial.append(fragment)
+        #logging.debug("PARTIAL=" + str(self.partial))
+        #logging.debug("QUEUE=" + str(self.queue))
 
     def read(self):
         if self.socket != None:
             try:
                 fragment = self.socket.recv(self.bufsize)
-            except Exception as exception:
-                logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
-                raise exception
+            except Exception as self.exception:
+                logging.error("Socket.read: FAILED! " + str(self) + " " + str(self.exception))
             else:
-                if not fragment:
+                if fragment == None:
+                    pass
+                elif not fragment:
                     logging.info("Socket.read: END. " + str(self))
-                    exception = End
-                    raise exception
+                    self.exception = End
                 else:
                     self.assemble(fragment)
             finally:
                 pass
-        else:
-            pass
-        return self.queue.pop(0) if self.queue else None
+            if self.queue:
+                return self.queue.pop(0)
+            elif self.exception:
+                raise self.exception
+            else:
+                pass
 
     def write(self, line):
         result = False
@@ -120,6 +130,8 @@ class Socket(Source):
         event = Source.get(self)
         if event == None:
             pass
+        elif self.authenticated:
+            pass
         elif not "Response" in event:
             pass
         elif event["Response"] != "Success":
@@ -129,5 +141,6 @@ class Socket(Source):
         elif event["Message"] != "Authentication accepted":
             pass
         else:
+            self.authenticated = True
             logging.info("Socket:get: AUTHENTICATED. " + str(self))
         return event
