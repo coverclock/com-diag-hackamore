@@ -96,37 +96,39 @@ class Source:
 
     def get(self, multiplexing = False):
         event = None
-        try:
-            line = self.read(multiplexing)
-        except Exception:
-            self.count = self.count + 1
-            self.event[TIME] = str(time.time())
-            self.event[END] = str(self.count)
-            event = self.event
-            self.event = { }
-            self.event[SOURCE] = self.name          
-        else:
-            if line == None:
-                pass
-            elif not line:
+        while event == None:
+            try:
+                line = self.read(multiplexing)
+            except Exception:
                 self.count = self.count + 1
                 self.event[TIME] = str(time.time())
+                self.event[END] = str(self.count)
                 event = self.event
                 self.event = { }
-                self.event[SOURCE] = self.name
+                self.event[SOURCE] = self.name          
             else:
-                data = line.split(": ", 1)
-                if not data:
-                    pass
-                elif len(data) == 1:
-                    self.event[data[0]] = ""
+                if line == None:
+                    break
+                elif not line:
+                    self.count = self.count + 1
+                    self.event[TIME] = str(time.time())
+                    event = self.event
+                    self.event = { }
+                    self.event[SOURCE] = self.name
                 else:
-                    self.event[data[0]] = data[1]
-        finally:
-            if event != None:
-                if self.logger.isEnabledFor(logging.DEBUG):
-                    self.logger.debug("Source.get: %s", str(event))
-                self.authentication(event)
+                    data = line.split(": ", 1)
+                    if not data:
+                        pass
+                    elif len(data) == 1:
+                        self.event[data[0]] = ""
+                    else:
+                        self.event[data[0]] = data[1]
+            finally:
+                pass
+        if event != None:
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug("Source.get: %s", str(event))
+            self.authentication(event)
         return event
 
     def put(self, command):
