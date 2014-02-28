@@ -26,10 +26,23 @@ class Test(unittest.TestCase):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
-        source.open()
+        self.assertIsNotNone(source)
+        self.assertTrue(source.open())
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(com.diag.hackamore.Multiplex.active())
         for event in com.diag.hackamore.Multiplex.multiplex():
+            self.assertIsNotNone(event)
+            self.assertTrue(event)
+            self.assertIn(com.diag.hackamore.Event.SOURCE, event)
+            name = event[com.diag.hackamore.Event.SOURCE]
             if com.diag.hackamore.Event.END in event:
-                break
+                temporary = com.diag.hackamore.Multiplex.query(name)
+                self.assertEquals(temporary.name, name)
+                self.assertIsNotNone(temporary)
+                self.assertTrue(temporary.close())
+                self.assertFalse(temporary.open())
+                if not com.diag.hackamore.Multiplex.active():
+                    break
             elif com.diag.hackamore.Event.EVENT in event:
                 if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.DIAL:
                     if not com.diag.hackamore.Event.SUBEVENT in event:
@@ -45,14 +58,20 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEIDUC in event:
                         pass
                     else:
-                        print("DIAL=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        destination = event[com.diag.hackamore.Event.DESTINATION]
+                        destuniqueid = ( name, event[com.diag.hackamore.Event.DESTUNIQUEID] )
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDUC] )
+                        print(com.diag.hackamore.Event.DIAL, channel, destination, destuniqueid, uniqueid)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.HANGUP:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
                     elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     else:
-                        print("HANGUP=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.HANGUP, channel, uniqueid)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.LOCALBRIDGE:
                     if not com.diag.hackamore.Event.CHANNEL1 in event:
                         pass
@@ -63,7 +82,11 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEID2 in event:
                         pass
                     else:
-                        print("LOCALBRIDGE=" + str(event))
+                        channel1 = event[com.diag.hackamore.Event.CHANNEL1]
+                        channel2 = event[com.diag.hackamore.Event.CHANNEL2]
+                        uniqueid1 = ( name, event[com.diag.hackamore.Event.UNIQUEID1] )
+                        uniqueid2 = ( name, event[com.diag.hackamore.Event.UNIQUEID2] )
+                        print(com.diag.hackamore.Event.LOCALBRIDGE, channel1, channel2, uniqueid1, uniqueid2)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWCHANNEL:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -74,7 +97,11 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     else:
-                        print("NEWCHANNEL=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        channelstate = event[com.diag.hackamore.Event.CHANNELSTATE]
+                        channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.NEWCHANNEL, channel, channelstate, channelstatedesc, uniqueid)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWSTATE:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -85,7 +112,11 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     else:
-                        print("NEWSTATE=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        channelstate = event[com.diag.hackamore.Event.CHANNELSTATE]
+                        channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.NEWSTATE, channel, channelstate, channelstatedesc, uniqueid)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.RENAME:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -94,22 +125,32 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     else:
-                        print("RENAME=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        newname = event[com.diag.hackamore.Event.NEWNAME]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.RENAME, channel, newname, destuniqueid, uniqueid)
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.VARSET:
                     if not com.diag.hackamore.Event.VARIABLE in event:
+                        pass
+                    elif event[com.diag.hackamore.Event.VARIABLE] != com.diag.hackamore.Event.SIPCALLID:
+                        pass
+                    elif not com.diag.hackamore.Event.CHANNEL not in event:
+                        pass
+                    elif not com.diag.hackamore.Event.UNIQUEIDLC not in event:
                         pass
                     elif not com.diag.hackamore.Event.VALUE in event:
                         pass
                     else:
-                        if not event[com.diag.hackamore.Event.VARIABLE] == com.diag.hackamore.Event.SIPCALLID:
-                            pass
-                        else:
-                            print("SIPCALLID=" + str(event))
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        value = event[com.diag.hackamore.Event.VALUE]
+                        print(com.diag.hackamore.Event.SIPCALLID, channel, uniqueid, value)
                 else:
                     pass
             else:
                 pass
-        source.close()
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertFalse(com.diag.hackamore.Multiplex.active())
 
 if __name__ == "__main__":
     unittest.main()
