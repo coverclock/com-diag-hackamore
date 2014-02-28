@@ -70,7 +70,7 @@ class Socket(Source):
         return self.socket.fileno()
     
     def assemble(self, fragment):
-        # This is really inefficient. When I finally move from Python 2.7.6
+        # This is really inefficient. When I finally move from Python 2.7
         # I'll replace this with something like memory views. But for now,
         # fragments that split the "\r\n" pair don't happen that often.
         if fragment[0] == "\n":
