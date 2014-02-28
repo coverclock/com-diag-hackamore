@@ -12,7 +12,7 @@ import Multiplex
 
 complete = False
 
-def machine(logger = None):
+def loop(logger = None):
     global complete
     logger = Logger.logger() if logger == None else logger
     while not complete:
@@ -48,7 +48,7 @@ def machine(logger = None):
                         destuniqueid = ( name, event[Event.DESTUNIQUEID] )
                         uniqueid = ( name, event[Event.UNIQUEIDUC] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s %s", Event.DIAL, str(uniqueid), channel, str(destuniqueid), destination)
+                            logger.debug("Machine.loop: %s %s %s %s %s", Event.DIAL, str(uniqueid), channel, str(destuniqueid), destination)
                 elif event[Event.EVENT] == Event.HANGUP:
                     if not Event.CHANNEL in event:
                         pass
@@ -58,7 +58,7 @@ def machine(logger = None):
                         channel = event[Event.CHANNEL]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s", Event.HANGUP, str(uniqueid), channel)
+                            logger.debug("Machine.loop: %s %s %s", Event.HANGUP, str(uniqueid), channel)
                 elif event[Event.EVENT] == Event.LOCALBRIDGE:
                     if not Event.CHANNEL1 in event:
                         pass
@@ -74,7 +74,7 @@ def machine(logger = None):
                         uniqueid1 = ( name, event[Event.UNIQUEID1] )
                         uniqueid2 = ( name, event[Event.UNIQUEID2] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s %s", Event.LOCALBRIDGE, str(uniqueid1), channel1, str(uniqueid2), channel2)
+                            logger.debug("Machine.loop: %s %s %s %s %s", Event.LOCALBRIDGE, str(uniqueid1), channel1, str(uniqueid2), channel2)
                 elif event[Event.EVENT] == Event.NEWCHANNEL:
                     if not Event.CHANNEL in event:
                         pass
@@ -90,7 +90,7 @@ def machine(logger = None):
                         channelstatedesc = event[Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s %s", Event.NEWCHANNEL, str(uniqueid), channel, channelstate, channelstatedesc)
+                            logger.debug("Machine.loop: %s %s %s %s %s", Event.NEWCHANNEL, str(uniqueid), channel, channelstate, channelstatedesc)
                 elif event[Event.EVENT] == Event.NEWSTATE:
                     if not Event.CHANNEL in event:
                         pass
@@ -106,7 +106,7 @@ def machine(logger = None):
                         channelstatedesc = event[Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s %s", Event.NEWSTATE, str(uniqueid), channel, channelstate, channelstatedesc)
+                            logger.debug("Machine.loop: %s %s %s %s %s", Event.NEWSTATE, str(uniqueid), channel, channelstate, channelstatedesc)
                 elif event[Event.EVENT] == Event.RENAME:
                     if not Event.CHANNEL in event:
                         pass
@@ -119,7 +119,7 @@ def machine(logger = None):
                         newname = event[Event.NEWNAME]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s", Event.RENAME, str(uniqueid), channel, newname)
+                            logger.debug("Machine.loop: %s %s %s %s", Event.RENAME, str(uniqueid), channel, newname)
                 elif event[Event.EVENT] == Event.VARSET:
                     if not Event.VARIABLE in event:
                         pass
@@ -136,7 +136,7 @@ def machine(logger = None):
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         value = event[Event.VALUE]
                         if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Machine.machine: %s %s %s %s", Event.SIPCALLID, str(uniqueid), channel, value)
+                            logger.debug("Machine.loop: %s %s %s %s", Event.SIPCALLID, str(uniqueid), channel, value)
                 else:
                     pass
             else:
