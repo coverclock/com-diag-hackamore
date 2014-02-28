@@ -338,11 +338,11 @@ class Test(unittest.TestCase):
         self.assertFalse(source.socket == None)
         self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
         try:
-            source.read()
+            line = source.read()
         except Exception:
             pass
         else:
-            self.fail()
+            self.assertTrue(line == None)
         finally:
             pass
         source.close()
@@ -383,11 +383,11 @@ class Test(unittest.TestCase):
         self.assertFalse(source.socket == None)
         self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
         try:
-            source.read()
+            line = source.read()
         except Exception:
             pass
         else:
-            self.fail()
+            self.assertTrue(line == None)
         finally:
             pass
         source.close()

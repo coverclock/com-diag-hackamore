@@ -18,14 +18,11 @@ RECV = 512
 class Socket(Source):
 
     def __init__(self, name, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV):
-        Source.__init__(self, name)
-        self.username = username
-        self.secret = secret
+        Source.__init__(self, name, username, secret)
         self.host = host
         self.port = port
         self.timeout = timeout
         self.bufsize = bufsize
-        self.authenticated = False
         self.eof = False
         self.partial = [ ]
         self.queue = [ ]
@@ -37,13 +34,6 @@ class Socket(Source):
     def __repr__(self):
         return Source.__repr__(self) + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
 
-    def login(self):
-        return self.put( ( ("Action", "Login"), ("Username", str(self.username)), ("Secret", str(self.secret)) ) )
-
-    def logout(self):
-        self.authenticated = False
-        return self.put( ( ("Action", "Logoff"), ) )
-
     def open(self):
         if self.socket == None:
             try:
@@ -51,7 +41,6 @@ class Socket(Source):
             except Exception as exception:
                 logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
             else:
-                self.authenticated = False
                 self.eof = False
                 logging.info("Socket.open: CONNECTED. " + str(self))
                 self.login()
@@ -68,13 +57,10 @@ class Socket(Source):
             else:
                 logging.info("Socket.close: DISCONNECTED. " + str(self))
             finally:
-                self.authenticated = False
                 self.socket = None
                 Source.close(self)
  
     def fileno(self):
-        if self.socket == None:
-            self.open()
         return self.socket.fileno()
     
     def assemble(self, fragment):
@@ -87,8 +73,8 @@ class Socket(Source):
                 self.queue.append(piece) 
         else:
             self.partial.append(fragment)
-        logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
-        logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
+        #logging.debug("Socket.assemble:PARTIAL=" + str(self.partial))
+        #logging.debug("Socket.assemble:QUEUE=" + str(self.queue))
 
     def service(self):
         if self.socket == None:
@@ -139,26 +125,3 @@ class Socket(Source):
             finally:
                 pass
         return result
-
-    def get(self, multiplexing = False):
-        event = Source.get(self, multiplexing)
-        if event == None:
-            pass
-        else:
-            if not self.authenticated:
-                if not "Response" in event:
-                    pass
-                elif event["Response"] != "Success":
-                    pass
-                else:
-                    self.authenticated = True
-                    logging.info("Socket:get: AUTHENTICATED. " + str(self))
-            else:
-                if not "Response" in event:
-                    pass
-                elif event["Response"] != "Goodbye":
-                    pass
-                else:
-                    self.authenticated = False
-                    logging.info("Socket:get: UNAUTHENTICATED. " + str(self))
-        return event
