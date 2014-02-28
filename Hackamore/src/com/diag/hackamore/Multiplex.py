@@ -24,6 +24,14 @@ def unregister(source):
 def deregister():
     global sources
     sources = { }
+
+def active():
+    return True if sources else False
+
+def query(name):
+    global sources
+    if name in sources:
+        return sources[name]
     
 def service(timeout = SELECT):
     global sources
@@ -35,7 +43,7 @@ def multiplex(timeout = SELECT):
     global sources
     candidates = sources.values()
     delay = 0.0
-    while True:
+    while candidates:
         for source in select.select(candidates, EMPTY, EMPTY, delay)[0]:
             source.service()
         active = False
