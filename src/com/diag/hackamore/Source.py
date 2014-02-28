@@ -71,6 +71,7 @@ class Source:
                 self.count = self.count + 1
                 self.event[TIME] = str(time.time())
                 event = self.event
+                logging.debug("Source.get: " + str(event))
                 self.event = { }
                 self.event[SOURCE] = self.name
             else:
