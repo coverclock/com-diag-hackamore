@@ -365,27 +365,27 @@ class Test(unittest.TestCase):
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.name)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host, None)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port, None)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket, None)
         self.assertFalse(source.open())
-        self.assertTrue(source.socket == None)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket, None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         try:
             line = source.read()
         except Exception:
             self.fail()
         else:
-            self.assertTrue(line == None)
+            self.assertIsNone(line)
         finally:
             pass
         self.assertFalse(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket, None)
         with done:
             complete = True
             done.notifyAll()
@@ -399,7 +399,7 @@ class Test(unittest.TestCase):
         global done
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
         thread = Listener()
@@ -408,19 +408,19 @@ class Test(unittest.TestCase):
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source, None)
+        self.assertIsNotNone(source.name, None)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host, None)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port, None)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket, None)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         try:
             line = source.read()
         except Exception:
@@ -431,8 +431,8 @@ class Test(unittest.TestCase):
             pass
         self.assertTrue(source.close())
         self.assertFalse(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         with done:
             complete = True
             done.notifyAll()
@@ -455,19 +455,19 @@ class Test(unittest.TestCase):
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         try:
             line = source.read()
         except Exception:
@@ -478,8 +478,8 @@ class Test(unittest.TestCase):
             pass
         self.assertTrue(source.close())
         self.assertFalse(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         with done:
             complete = True
             done.notifyAll()
@@ -493,7 +493,7 @@ class Test(unittest.TestCase):
         global done
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
         thread = Producer(SAMPLE)
@@ -502,18 +502,18 @@ class Test(unittest.TestCase):
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         self.assertTrue(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         lines = 0
         eof = False
         while not eof:
@@ -526,38 +526,38 @@ class Test(unittest.TestCase):
                     continue
                 lines = lines + 1
                 if lines == 1:
-                    self.assertTrue(line == "OneOne: AlphaAlpha")
+                    self.assertEquals(line, "OneOne: AlphaAlpha")
                 elif lines == 2:
-                    self.assertTrue(line == "OneTwo: AlphaBeta")
+                    self.assertEquals(line, "OneTwo: AlphaBeta")
                 elif lines == 3:
-                    self.assertTrue(line == "OneThree: AlphaGamma")
+                    self.assertEquals(line, "OneThree: AlphaGamma")
                 elif lines == 4:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 5:
-                    self.assertTrue(line == "TwoOne: BetaAlpha")
+                    self.assertEquals(line, "TwoOne: BetaAlpha")
                 elif lines == 6:
-                    self.assertTrue(line == "TwoTwo: BetaBeta")
+                    self.assertEquals(line, "TwoTwo: BetaBeta")
                 elif lines == 7:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 8:
-                    self.assertTrue(line == "ThreeOne: GammaAlpha")
+                    self.assertEquals(line, "ThreeOne: GammaAlpha")
                 elif lines == 9:
-                    self.assertTrue(line == "ThreeTwo: GammaBeta")
+                    self.assertEquals(line, "ThreeTwo: GammaBeta")
                 elif lines == 10:
-                    self.assertTrue(line == "ThreeThree: GammaGamma")
+                    self.assertEquals(line, "ThreeThree: GammaGamma")
                 elif lines == 11:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 12:
-                    self.assertTrue(line == "FourOne: DeltaAlpha")
+                    self.assertEquals(line, "FourOne: DeltaAlpha")
                 elif lines == 13:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 else:
-                    self.assertTrue(0 < lines < 13)
+                    self.assertTrue(0 < lines < 14)
             finally:
                 pass
         self.assertTrue(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         with done:
             complete = True
             done.notifyAll()
@@ -571,7 +571,7 @@ class Test(unittest.TestCase):
         global done
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
         thread = Producer(SAMPLE)
@@ -580,18 +580,18 @@ class Test(unittest.TestCase):
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.host != None)
-        self.assertTrue(source.host == LOCALHOST)
-        self.assertTrue(source.port != None)
-        self.assertTrue(source.port == port)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.host)
+        self.assertEquals(source.host, LOCALHOST)
+        self.assertIsNotNone(source.port)
+        self.assertEquals(source.port, port)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         self.assertTrue(source.open())
-        self.assertFalse(source.socket == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.socket)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         events = 0
         eof = False
         while not eof:
@@ -601,12 +601,12 @@ class Test(unittest.TestCase):
             events = events + 1
             self.assertTrue(event)
             if events == 1:
-                self.assertTrue(len(event) == 5)
-                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertEquals(len(event), 5)
+                self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+                self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+                self.assertIn(com.diag.hackamore.Source.TIME, event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertNotIn(com.diag.hackamore.Source.END, event)
                 self.assertTrue("OneOne" in event)
                 self.assertTrue(event["OneOne"] == "AlphaAlpha")
                 self.assertTrue("OneTwo" in event)
@@ -614,23 +614,23 @@ class Test(unittest.TestCase):
                 self.assertTrue("OneThree" in event)
                 self.assertTrue(event["OneThree"] == "AlphaGamma")
             elif events == 2:
-                self.assertTrue(len(event) == 4)
-                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertEquals(len(event), 4)
+                self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+                self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+                self.assertIn(com.diag.hackamore.Source.TIME, event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertNotIn(com.diag.hackamore.Source.END, event)
                 self.assertTrue("TwoOne" in event)
                 self.assertTrue(event["TwoOne"] == "BetaAlpha")
                 self.assertTrue("TwoTwo" in event)
                 self.assertTrue(event["TwoTwo"] == "BetaBeta")
             elif events == 3:
-                self.assertTrue(len(event) == 5)
-                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertEquals(len(event), 5)
+                self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+                self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+                self.assertIn(com.diag.hackamore.Source.TIME, event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertNotIn(com.diag.hackamore.Source.END, event)
                 self.assertTrue("ThreeOne" in event)
                 self.assertTrue(event["ThreeOne"] == "GammaAlpha")
                 self.assertTrue("ThreeTwo" in event)
@@ -638,30 +638,30 @@ class Test(unittest.TestCase):
                 self.assertTrue("ThreeThree" in event)
                 self.assertTrue(event["ThreeThree"] == "GammaGamma")
             elif events == 4:
-                self.assertTrue(len(event) == 3)
-                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertEquals(len(event), 3)
+                self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+                self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+                self.assertIn(com.diag.hackamore.Source.TIME, event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                self.assertFalse(com.diag.hackamore.Source.END in event)
+                self.assertNotIn(com.diag.hackamore.Source.END, event)
                 self.assertTrue("FourOne" in event)
                 self.assertTrue(event["FourOne"] == "DeltaAlpha")
             elif events == 5:
-                self.assertTrue(len(event) == 3)
-                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertEquals(len(event), 3)
+                self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+                self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+                self.assertIn(com.diag.hackamore.Source.TIME, event)
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
-                self.assertTrue(com.diag.hackamore.Source.END in event)
-                self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
+                self.assertIn(com.diag.hackamore.Source.END, event)
+                self.assertEquals(event[com.diag.hackamore.Source.END], str(5))
             else:
                 self.assertTrue(0 < events < 6)
             if com.diag.hackamore.Source.END in event:
                 eof = True
-        self.assertTrue(events == 5)
+        self.assertEquals(events, 5)
         self.assertTrue(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.socket == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.socket)
         with done:
             complete = True
             done.notifyAll()
