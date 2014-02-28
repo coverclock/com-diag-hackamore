@@ -159,9 +159,10 @@ class Test(unittest.TestCase):
                 self.assertTrue(event[com.diag.hackamore.Source.TIME])
                 self.assertTrue(com.diag.hackamore.Source.END in event)
                 self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
-                eof = True
             else:
                 self.assertTrue(0 < events < 6)
+            if com.diag.hackamore.Source.END in event:
+                eof = True
         self.assertTrue(events == 5)
         source.close()
 
@@ -232,9 +233,10 @@ class Test(unittest.TestCase):
                     self.assertTrue(event[com.diag.hackamore.Source.TIME])
                     self.assertTrue(com.diag.hackamore.Source.END in event)
                     self.assertTrue(event[com.diag.hackamore.Source.END] == str(5))
-                    eof = True
                 else:
                     self.assertTrue(0 < events < 6)
+                if com.diag.hackamore.Source.END in event:
+                    eof = True
         self.assertTrue(events == 5)
         source.close()
  

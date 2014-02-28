@@ -27,7 +27,10 @@ def deregister():
 
 def multiplex(timeout = SELECT):
     global sources
-    for source in select.select(sources.values(), EMPTY, EMPTY, timeout)[0]:
-        event = source.get()
+    candidates = sources.values()
+    for source in select.select(candidates, EMPTY, EMPTY, timeout)[0]:
+        source.service()
+    for source in candidates:
+        event = source.get(True)
         if event != None:
             yield event
