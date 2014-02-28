@@ -26,31 +26,31 @@ class Test(unittest.TestCase):
     def test010Construction(self):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
-        self.assertTrue(source != None)
-        self.assertTrue(source.name != None)
-        self.assertTrue(source.name == name)
-        self.assertTrue(source.path != None)
-        self.assertTrue(source.path == SAMPLE)
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.file == None)
+        self.assertIsNotNone(source)
+        self.assertIsNotNone(source.name)
+        self.assertEquals(source.name, name)
+        self.assertIsNotNone(source.path)
+        self.assertEquals(source.path, SAMPLE)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.file)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
-        self.assertFalse(source.file == None)
-        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertIsNotNone(source.file)
+        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.close())
         self.assertFalse(source.close())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.file == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.file)
         self.assertFalse(source.open())
-        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(source.file == None)
+        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
+        self.assertIsNone(source.file)
 
     def test020Read(self):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
         self.assertTrue(source.open())
         lines = 0
@@ -65,31 +65,31 @@ class Test(unittest.TestCase):
                     continue
                 lines = lines + 1
                 if lines == 1:
-                    self.assertTrue(line == "OneOne: AlphaAlpha")
+                    self.assertEquals(line, "OneOne: AlphaAlpha")
                 elif lines == 2:
-                    self.assertTrue(line == "OneTwo: AlphaBeta")
+                    self.assertEquals(line, "OneTwo: AlphaBeta")
                 elif lines == 3:
-                    self.assertTrue(line == "OneThree: AlphaGamma")
+                    self.assertEquals(line, "OneThree: AlphaGamma")
                 elif lines == 4:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 5:
-                    self.assertTrue(line == "TwoOne: BetaAlpha")
+                    self.assertEquals(line, "TwoOne: BetaAlpha")
                 elif lines == 6:
-                    self.assertTrue(line == "TwoTwo: BetaBeta")
+                    self.assertEquals(line, "TwoTwo: BetaBeta")
                 elif lines == 7:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 8:
-                    self.assertTrue(line == "ThreeOne: GammaAlpha")
+                    self.assertEquals(line, "ThreeOne: GammaAlpha")
                 elif lines == 9:
-                    self.assertTrue(line == "ThreeTwo: GammaBeta")
+                    self.assertEquals(line, "ThreeTwo: GammaBeta")
                 elif lines == 10:
-                    self.assertTrue(line == "ThreeThree: GammaGamma")
+                    self.assertEquals(line, "ThreeThree: GammaGamma")
                 elif lines == 11:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 elif lines == 12:
-                    self.assertTrue(line == "FourOne: DeltaAlpha")
+                    self.assertEquals(line, "FourOne: DeltaAlpha")
                 elif lines == 13:
-                    self.assertTrue(line == "")
+                    self.assertEquals(line, "")
                 else:
                     self.assertTrue(0 < lines < 14)
             finally:
@@ -323,22 +323,22 @@ class Test(unittest.TestCase):
     def test050Typescript(self):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
-        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         self.assertTrue(source.open())
         events = 0
         for event in com.diag.hackamore.Multiplex.multiplex():
-            self.assertFalse(event == None)
+            self.assertIsNotNone(event)
             events = events + 1
             self.assertTrue(event)
-            self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
-            self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
-            self.assertTrue(com.diag.hackamore.Source.TIME in event)
+            self.assertIn(com.diag.hackamore.Source.SOURCE, event)
+            self.assertEquals(event[com.diag.hackamore.Source.SOURCE], name)
+            self.assertIn(com.diag.hackamore.Source.TIME, event)
             self.assertTrue(event[com.diag.hackamore.Source.TIME])
             if com.diag.hackamore.Source.END in event:
-                self.assertTrue(event[com.diag.hackamore.Source.END] == str(events))
+                self.assertEquals(event[com.diag.hackamore.Source.END], str(events))
                 break
-        self.assertTrue(events == 358) # 1 response, 356 events, 1 end
+        self.assertEquals(events, 358) # 1 response, 356 events, 1 end
         self.assertTrue(source.close())
 
 if __name__ == "__main__":
