@@ -19,6 +19,7 @@ USERNAME = "admin"
 SECRET = "85t3r15k"
 LOCALHOST = "127.0.0.1"
 SAMPLE = "./sample.txt"
+TYPESCRIPT = "./typescript.txt"
 
 address = ""
 port = 0
@@ -111,6 +112,10 @@ class Accepter(threading.Thread):
 
 class Producer(threading.Thread):
     
+    def __init__(self, path):
+        threading.Thread.__init__(self)
+        self.path = path
+    
     def run(self):
         global address
         global port
@@ -126,18 +131,19 @@ class Producer(threading.Thread):
             ready.notifyAll()
         sock2, client = sock.accept()
         print("Consumer=" + str(client))
-        stream = open(SAMPLE, "r")
-        while True:
-            with done:
-                if complete:
-                    break;
-            line = stream.readline(512)
-            if line == None:
-                break
-            elif not line:
-                break
-            else:
-                sock2.sendall(line)
+        stream = open(self.path, "r")
+        if stream != None:
+            while True:
+                with done:
+                    if complete:
+                        break;
+                line = stream.readline(512)
+                if line == None:
+                    break
+                elif not line:
+                    break
+                else:
+                    sock2.sendall(line)
         stream.close()
         sock2.close()
         with done:
@@ -199,6 +205,7 @@ class Test(unittest.TestCase):
         
     def test020Construction(self):
         name = "PBXSOCKET020"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)
         self.assertTrue(source != None)
@@ -218,6 +225,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET030"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
@@ -262,6 +270,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET040"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
@@ -306,6 +315,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET050"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
@@ -350,6 +360,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET060"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
@@ -394,10 +405,11 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET070"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
-        thread = Producer()
+        thread = Producer(SAMPLE)
         thread.start()
         with ready:
             while port == 0:
@@ -471,10 +483,11 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET080"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
-        thread = Producer()
+        thread = Producer(SAMPLE)
         thread.start()
         with ready:
             while port == 0:
@@ -573,10 +586,11 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = "PBXSOCKET090"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         port = 0
         complete = False
-        thread = Producer()
+        thread = Producer(SAMPLE)
         thread.start()
         with ready:
             while port == 0:
@@ -667,7 +681,59 @@ class Test(unittest.TestCase):
             done.notifyAll()
         thread.join()
     
-    def test100Server(self):
+    def test100Typescript(self):
+        global address
+        global port
+        global ready
+        global complete
+        global done
+        name = "PBXSOCKET100"
+        com.diag.hackamore.Multiplex.deregister()
+        self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
+        port = 0
+        complete = False
+        thread = Producer(TYPESCRIPT)
+        thread.start()
+        with ready:
+            while port == 0:
+                ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        self.assertTrue(source != None)
+        self.assertTrue(source.name != None)
+        self.assertTrue(source.name == name)
+        self.assertTrue(source.host != None)
+        self.assertTrue(source.host == LOCALHOST)
+        self.assertTrue(source.port != None)
+        self.assertTrue(source.port == port)
+        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(source.socket == None)
+        source.open()
+        self.assertFalse(source.socket == None)
+        self.assertTrue(source.name in com.diag.hackamore.Multiplex.sources)
+        events = 0
+        eof = False
+        while not eof:
+            for event in com.diag.hackamore.Multiplex.multiplex():
+                self.assertFalse(event == None)
+                events = events + 1
+                self.assertTrue(event)
+                self.assertTrue(com.diag.hackamore.Source.SOURCE in event)
+                self.assertTrue(event[com.diag.hackamore.Source.SOURCE] == name)
+                self.assertTrue(com.diag.hackamore.Source.TIME in event)
+                self.assertTrue(event[com.diag.hackamore.Source.TIME])
+                if com.diag.hackamore.Source.END in event:
+                    self.assertTrue(event[com.diag.hackamore.Source.END] == str(events))
+                    eof = True
+        self.assertTrue(events == 358) # 1 response, 356 events, 1 end
+        source.close()
+        self.assertFalse(source.name in com.diag.hackamore.Multiplex.sources)
+        self.assertTrue(source.socket == None)
+        with done:
+            complete = True
+            done.notifyAll()
+        thread.join()
+    
+    def test110Server(self):
         if not SERVER:
             logging.info("Bypassing test with live server.")
             return
@@ -676,7 +742,8 @@ class Test(unittest.TestCase):
         global ready
         global complete
         global done
-        name = "PBXSOCKET100"
+        name = "PBXSOCKET110"
+        com.diag.hackamore.Multiplex.deregister()
         self.assertFalse(name in com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)
         self.assertTrue(source != None)

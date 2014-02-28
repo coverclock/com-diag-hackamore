@@ -20,6 +20,10 @@ def unregister(source):
     global sources
     if source.name in sources:
         del sources[source.name]
+        
+def deregister():
+    global sources
+    sources = { }
 
 def multiplex(timeout = SELECT):
     global sources

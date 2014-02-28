@@ -26,7 +26,7 @@ class Socket(Source):
         self.timeout = timeout
         self.bufsize = bufsize
         self.authenticated = False
-        self.exception = None
+        self.eof = False
         self.partial = [ ]
         self.queue = [ ]
         self.socket = None
@@ -51,7 +51,8 @@ class Socket(Source):
             except Exception as exception:
                 logging.error("Socket.open: FAILED! " + str(self) + " " + str(exception))
             else:
-                self.exception = None
+                self.authenticated = False
+                self.eof = False
                 logging.info("Socket.open: CONNECTED. " + str(self))
                 self.login()
                 Source.open(self)
@@ -92,25 +93,27 @@ class Socket(Source):
     def read(self):
         line = None
         if self.socket != None:
-            try:
-                fragment = self.socket.recv(self.bufsize)
-            except Exception as exception:
-                logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
-            else:
-                if fragment == None:
-                    pass
-                elif not fragment:
-                    logging.info("Socket.read: END. " + str(self))
-                    self.exception = End
+            if not self.eof:
+                try:
+                    fragment = self.socket.recv(self.bufsize)
+                except Exception as exception:
+                    logging.error("Socket.read: FAILED! " + str(self) + " " + str(exception))
                 else:
-                    self.assemble(fragment)
-            finally:
-                pass
+                    if fragment == None:
+                        pass
+                    elif not fragment:
+                        self.eof = True
+                        logging.info("Socket.read: END. " + str(self))
+                    else:
+                        self.assemble(fragment)
+                finally:
+                    pass
             if self.queue:
                 line = self.queue.pop(0)
                 logging.debug("Socket.read: \"" + str(line) + "\"")
-            elif self.exception:
-                raise self.exception
+            elif self.eof:
+                exception = End
+                raise exception
             else:
                 pass
         return line
