@@ -30,6 +30,14 @@ class Test(unittest.TestCase):
         self.assertTrue(source.open())
         self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(com.diag.hackamore.Multiplex.active())
+        counter = { }
+        counter[com.diag.hackamore.Event.DIAL] = 0
+        counter[com.diag.hackamore.Event.HANGUP] = 0
+        counter[com.diag.hackamore.Event.LOCALBRIDGE] = 0
+        counter[com.diag.hackamore.Event.NEWCHANNEL] = 0
+        counter[com.diag.hackamore.Event.NEWSTATE] = 0
+        counter[com.diag.hackamore.Event.RENAME] = 0
+        counter[com.diag.hackamore.Event.SIPCALLID] = 0      
         events = com.diag.hackamore.Multiplex.multiplex()
         for event in events:
             self.assertIsNotNone(event)
@@ -64,6 +72,7 @@ class Test(unittest.TestCase):
                         destuniqueid = ( name, event[com.diag.hackamore.Event.DESTUNIQUEID] )
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDUC] )
                         print(com.diag.hackamore.Event.DIAL, channel, destination, destuniqueid, uniqueid)
+                        counter[com.diag.hackamore.Event.DIAL] = counter[com.diag.hackamore.Event.DIAL] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.HANGUP:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -73,6 +82,7 @@ class Test(unittest.TestCase):
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         print(com.diag.hackamore.Event.HANGUP, channel, uniqueid)
+                        counter[com.diag.hackamore.Event.HANGUP] = counter[com.diag.hackamore.Event.HANGUP] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.LOCALBRIDGE:
                     if not com.diag.hackamore.Event.CHANNEL1 in event:
                         pass
@@ -88,6 +98,7 @@ class Test(unittest.TestCase):
                         uniqueid1 = ( name, event[com.diag.hackamore.Event.UNIQUEID1] )
                         uniqueid2 = ( name, event[com.diag.hackamore.Event.UNIQUEID2] )
                         print(com.diag.hackamore.Event.LOCALBRIDGE, channel1, channel2, uniqueid1, uniqueid2)
+                        counter[com.diag.hackamore.Event.LOCALBRIDGE] = counter[com.diag.hackamore.Event.LOCALBRIDGE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWCHANNEL:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -103,6 +114,7 @@ class Test(unittest.TestCase):
                         channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         print(com.diag.hackamore.Event.NEWCHANNEL, channel, channelstate, channelstatedesc, uniqueid)
+                        counter[com.diag.hackamore.Event.NEWCHANNEL] = counter[com.diag.hackamore.Event.NEWCHANNEL] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWSTATE:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -118,6 +130,7 @@ class Test(unittest.TestCase):
                         channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         print(com.diag.hackamore.Event.NEWSTATE, channel, channelstate, channelstatedesc, uniqueid)
+                        counter[com.diag.hackamore.Event.NEWSTATE] = counter[com.diag.hackamore.Event.NEWSTATE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.RENAME:
                     if not com.diag.hackamore.Event.CHANNEL in event:
                         pass
@@ -130,14 +143,15 @@ class Test(unittest.TestCase):
                         newname = event[com.diag.hackamore.Event.NEWNAME]
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         print(com.diag.hackamore.Event.RENAME, channel, newname, destuniqueid, uniqueid)
+                        counter[com.diag.hackamore.Event.RENAME] = counter[com.diag.hackamore.Event.RENAME] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.VARSET:
                     if not com.diag.hackamore.Event.VARIABLE in event:
                         pass
                     elif event[com.diag.hackamore.Event.VARIABLE] != com.diag.hackamore.Event.SIPCALLID:
                         pass
-                    elif not com.diag.hackamore.Event.CHANNEL not in event:
+                    elif not com.diag.hackamore.Event.CHANNEL in event:
                         pass
-                    elif not com.diag.hackamore.Event.UNIQUEIDLC not in event:
+                    elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     elif not com.diag.hackamore.Event.VALUE in event:
                         pass
@@ -146,12 +160,20 @@ class Test(unittest.TestCase):
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         value = event[com.diag.hackamore.Event.VALUE]
                         print(com.diag.hackamore.Event.SIPCALLID, channel, uniqueid, value)
+                        counter[com.diag.hackamore.Event.SIPCALLID] = counter[com.diag.hackamore.Event.SIPCALLID] + 1
                 else:
                     pass
             else:
                 pass
         self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertFalse(com.diag.hackamore.Multiplex.active())
+        self.assertTrue(counter[com.diag.hackamore.Event.DIAL])
+        self.assertTrue(counter[com.diag.hackamore.Event.HANGUP])
+        self.assertTrue(counter[com.diag.hackamore.Event.LOCALBRIDGE])
+        self.assertTrue(counter[com.diag.hackamore.Event.NEWCHANNEL])
+        self.assertTrue(counter[com.diag.hackamore.Event.NEWSTATE])
+        self.assertTrue(counter[com.diag.hackamore.Event.RENAME])
+        self.assertTrue(counter[com.diag.hackamore.Event.SIPCALLID])    
 
 if __name__ == "__main__":
     unittest.main()

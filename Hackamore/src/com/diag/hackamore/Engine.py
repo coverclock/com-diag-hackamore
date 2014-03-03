@@ -12,7 +12,7 @@ import Multiplex
 
 complete = False
 
-def loop(logger = None):
+def engine(logger = None):
     global complete
     logger = Logger.logger() if logger == None else logger
     while not complete:

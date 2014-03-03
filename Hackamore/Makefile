@@ -88,6 +88,9 @@ test:
 		done; \
 	done
 
+pythonpath:
+	echo "export PYTHONPATH=$(CUR_DIR)/$(SRC_DIR):$(CUR_DIR)/$(TST_DIR)"
+
 ########## Housekeeping
 
 commit:
