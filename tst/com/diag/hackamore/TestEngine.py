@@ -9,7 +9,7 @@ import logging
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
-import com.diag.hackamore.Machine
+import com.diag.hackamore.Engine
 
 from Parameters import TYPESCRIPT
 
@@ -29,7 +29,7 @@ class Test(unittest.TestCase):
         self.assertTrue(source.open())
         self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(com.diag.hackamore.Multiplex.active())
-        com.diag.hackamore.Machine.loop()
+        com.diag.hackamore.Engine.engine()
 
 if __name__ == "__main__":
     unittest.main()
