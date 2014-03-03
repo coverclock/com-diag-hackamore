@@ -125,9 +125,9 @@ def engine(logger = None):
                         pass
                     elif event[Event.VARIABLE] != Event.SIPCALLID:
                         pass
-                    elif not Event.CHANNEL not in event:
+                    elif not Event.CHANNEL in event:
                         pass
-                    elif not Event.UNIQUEIDLC not in event:
+                    elif not Event.UNIQUEIDLC in event:
                         pass
                     elif not Event.VALUE in event:
                         pass
