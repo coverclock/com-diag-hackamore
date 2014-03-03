@@ -118,6 +118,8 @@ class Source:
             finally:
                 pass
         if event != None:
+            event[Event.TIME] = "DUMMY"
+            sorted(event, key=event.get)
             if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug("Source.get: %s", str(event))
             self.authentication(event)

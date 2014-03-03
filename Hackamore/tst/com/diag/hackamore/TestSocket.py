@@ -40,6 +40,7 @@ class Refuser(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         with ready:
             address, port2 = sock.getsockname()
@@ -60,6 +61,7 @@ class Binder(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         with ready:
             address, port = sock.getsockname()
@@ -79,6 +81,7 @@ class Listener(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
         with ready:
@@ -99,6 +102,7 @@ class Accepter(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
         with ready:
@@ -126,6 +130,7 @@ class Producer(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
         with ready:
@@ -144,11 +149,12 @@ class Producer(threading.Thread):
                     break
                 else:
                     sock2.sendall(line)
-        stream.close()
-        sock2.close()
+        sock2.shutdown(socket.SHUT_WR)
         with done:
             while not complete:
                 done.wait()
+        stream.close()
+        sock2.close()
         sock.close()
 
 class Server(threading.Thread):
@@ -165,16 +171,20 @@ class Server(threading.Thread):
         global complete
         global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
             print("Server=" + str(port))
             ready.notifyAll()
+        sock2 = None
         while True:
             with done:
                 while not proceed and not complete:
                     done.wait()
+                if sock2 != None:
+                    sock2.close()
                 if complete:
                     break
                 proceed = False
@@ -191,7 +201,7 @@ class Server(threading.Thread):
                     else:
                         sock2.sendall(line)
             stream.close()
-            sock2.close()
+            sock2.shutdown(socket.SHUT_WR)
         sock.close()
 
 class Test(unittest.TestCase):
