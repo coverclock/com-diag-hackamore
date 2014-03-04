@@ -4,6 +4,8 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+import logging
+
 from Source import Source
 from End import End
 
@@ -18,6 +20,7 @@ class File(Source):
         self.eof = False
         self.file = None
         self.bufsize = bufsize
+        self.logger.info("File: INIT. %s", str(self))
 
     def __del__(self):
         self.close()
@@ -89,7 +92,8 @@ class File(Source):
                     line = None
                 else:
                     line = line[0:-2]
-                    self.logger.debug("File.read: \"%s\"", str(line))
+                    if self.logger.isEnabledFor(logging.DEBUG):
+                        self.logger.debug("File.read: READ: %s \"%s\"", str(self), str(line))
             finally:
                 pass
         return line
