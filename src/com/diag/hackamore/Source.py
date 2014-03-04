@@ -121,7 +121,7 @@ class Source:
             #event[Event.TIME] = "DUMMY"
             #sorted(event, key=event.get)
             if self.logger.isEnabledFor(logging.DEBUG):
-                self.logger.debug("Source.get: %s", str(event))
+                self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
             self.authentication(event)
         return event
 

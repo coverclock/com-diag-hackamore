@@ -4,6 +4,7 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+import logging
 import socket
 
 from Source import Source
@@ -27,6 +28,7 @@ class Socket(Source):
         self.partial = [ ]
         self.queue = [ ]
         self.socket = None
+        self.logger.info("Socket: INIT. %s", str(self))
 
     def __del__(self):
         self.close()
@@ -120,7 +122,8 @@ class Socket(Source):
         line = None
         if self.queue:
             line = self.queue.pop(0)
-            self.logger.debug("Socket.read: \"%s\"", str(line))
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug("Socket.read: READ: %s \"%s\"", str(self), str(line))
         elif self.eof:
             exception = End
             raise exception
@@ -138,7 +141,8 @@ class Socket(Source):
                 self.logger.error("Socket.write: FAILED! %s %s", str(self), str(exception))
             else:
                 result = True
-                self.logger.debug("Socket.write: \"%s\"", str(line))
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug("Socket.write: WRITE: %s \"%s\"", str(self), str(line))
             finally:
                 pass
         return result
