@@ -77,24 +77,24 @@ class Server(threading.Thread):
             address, port = sock.getsockname()
             print("Server=" + str(port))
             ready.notifyAll()
-        consumers = [ ]
+        producers = [ ]
         while self.limit > 0:
             sock2, farend = sock.accept()
             print("Client=" + str(farend))
-            thread = Producer(sock2, TYPESCRIPT)
-            thread.start()
-            consumers.append(thread)
+            producer = Producer(sock2, TYPESCRIPT)
+            producer.start()
+            producers.append(producer)
             self.limit = self.limit - 1
-        for consumer in consumers:
-            consumer.join()
-            consumers.remove(consumer)
+        for producer in producers:
+            producer.join()
+            producers.remove(producer)
         sock.close()
         print("Server=done")
 
 class Test(unittest.TestCase):
 
     def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
+        com.diag.hackamore.Logger.logger().setLevel(logging.INFO)
 
     def tearDown(self):
         pass
