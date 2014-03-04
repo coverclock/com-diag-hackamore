@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Loop(self):
+    def test010Rinse(self):
         name = self.id()
         com.diag.hackamore.Multiplex.deregister()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
@@ -34,6 +34,17 @@ class Test(unittest.TestCase):
         com.diag.hackamore.Engine.engine(inputs, outputs)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
+
+    def test020Repeat(self):
+        name = self.id()
+        com.diag.hackamore.Multiplex.deregister()
+        source = com.diag.hackamore.File.File(name, TYPESCRIPT)
+        self.assertIsNotNone(source)
+        inputs = [ ]
+        inputs.append(source)
+        self.assertEquals(len(inputs), 1)
+        com.diag.hackamore.Engine.engine(inputs, inputs)
+        self.assertEquals(len(inputs), 1)
 
 if __name__ == "__main__":
     unittest.main()
