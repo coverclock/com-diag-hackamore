@@ -26,10 +26,14 @@ class Test(unittest.TestCase):
         com.diag.hackamore.Multiplex.deregister()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         self.assertIsNotNone(source)
-        self.assertTrue(source.open())
-        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(com.diag.hackamore.Multiplex.active())
-        com.diag.hackamore.Engine.engine()
+        inputs = [ ]
+        inputs.append(source)
+        outputs = [ ]
+        self.assertEquals(len(inputs), 1)
+        self.assertEquals(len(outputs), 0)
+        com.diag.hackamore.Engine.engine(inputs, outputs)
+        self.assertEquals(len(inputs), 0)
+        self.assertEquals(len(outputs), 1)
 
 if __name__ == "__main__":
     unittest.main()
