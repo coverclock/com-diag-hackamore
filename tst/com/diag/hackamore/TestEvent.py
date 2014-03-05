@@ -31,6 +31,10 @@ class Test(unittest.TestCase):
         self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(com.diag.hackamore.Multiplex.active())
         counter = { }
+        counter[com.diag.hackamore.Event.CONFBRIDGEEND] = 0
+        counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] = 0
+        counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] = 0
+        counter[com.diag.hackamore.Event.CONFBRIDGESTART] = 0
         counter[com.diag.hackamore.Event.DIAL] = 0
         counter[com.diag.hackamore.Event.HANGUP] = 0
         counter[com.diag.hackamore.Event.LOCALBRIDGE] = 0
@@ -53,7 +57,47 @@ class Test(unittest.TestCase):
                 self.assertFalse(com.diag.hackamore.Multiplex.active())
                 events.close()
             elif com.diag.hackamore.Event.EVENT in event:
-                if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.DIAL:
+                if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEEND:
+                    if not com.diag.hackamore.Event.CONFERENCE in event:
+                        pass
+                    else:
+                        conference = event[com.diag.hackamore.Event.CONFERENCE]
+                        print(com.diag.hackamore.Event.CONFBRIDGEEND, conference)
+                        counter[com.diag.hackamore.Event.CONFBRIDGEEND] = counter[com.diag.hackamore.Event.CONFBRIDGEEND] + 1
+                elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEJOIN:
+                    if not com.diag.hackamore.Event.CHANNEL in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CONFERENCE in event:
+                        pass
+                    elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
+                        pass
+                    else:
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        conference = event[com.diag.hackamore.Event.CONFERENCE]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.CONFBRIDGEJOIN, channel, conference, uniqueid)
+                        counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] = counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] + 1
+                elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGELEAVE:
+                    if not com.diag.hackamore.Event.CHANNEL in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CONFERENCE in event:
+                        pass
+                    elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
+                        pass
+                    else:
+                        channel = event[com.diag.hackamore.Event.CHANNEL]
+                        conference = event[com.diag.hackamore.Event.CONFERENCE]
+                        uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
+                        print(com.diag.hackamore.Event.CONFBRIDGELEAVE, channel, conference, uniqueid)
+                        counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] = counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] + 1
+                elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGESTART:
+                    if not com.diag.hackamore.Event.CONFERENCE in event:
+                        pass
+                    else:
+                        conference = event[com.diag.hackamore.Event.CONFERENCE]
+                        print(com.diag.hackamore.Event.CONFBRIDGESTART, conference)
+                        counter[com.diag.hackamore.Event.CONFBRIDGESTART] = counter[com.diag.hackamore.Event.CONFBRIDGESTART] + 1
+                elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.DIAL:
                     if not com.diag.hackamore.Event.SUBEVENT in event:
                         pass
                     elif event[com.diag.hackamore.Event.SUBEVENT] != com.diag.hackamore.Event.BEGIN:
@@ -167,6 +211,10 @@ class Test(unittest.TestCase):
                 pass
         self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertFalse(com.diag.hackamore.Multiplex.active())
+        self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEEND])
+        self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEJOIN])
+        self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGELEAVE])
+        self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGESTART])
         self.assertTrue(counter[com.diag.hackamore.Event.DIAL])
         self.assertTrue(counter[com.diag.hackamore.Event.HANGUP])
         self.assertTrue(counter[com.diag.hackamore.Event.LOCALBRIDGE])
