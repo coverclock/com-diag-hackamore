@@ -160,7 +160,8 @@ class Test(unittest.TestCase):
         engine.engine(sources, sources, debug = True)
         self.assertEquals(len(sources), 1)
         thread.join()
-        
+
+"""       
     def test040Active(self):
         global address
         global port
@@ -190,6 +191,7 @@ class Test(unittest.TestCase):
         self.assertEquals(len(sources), 1)
         state.dump()
         thread.join()
+"""
 
 if __name__ == "__main__":
     unittest.main()
