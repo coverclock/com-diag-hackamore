@@ -9,6 +9,22 @@ import logging
 import Logger
 import Event
 import Multiplex
+        
+def confbridgeend(logger, conference):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.confbridgeend: CONFBRIDGEEND: %s", str(conference))
+
+def confbridgejoin(logger, uniqueid, channel, conference):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.confbridgejoin: CONFBRIDGEJOIN: %s %s %s", str(uniqueid), str(channel), str(conference))
+
+def confbridgeleave(logger, uniqueid, channel, conference):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.confbridgeleave: CONFBRIDGELEAVE: %s %s %s", str(uniqueid), str(channel), str(conference))
+
+def confbridgestart(logger, conference):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.confbridgestart: CONFBRIDGESTART: %s %s %s %s", str(conference))
 
 def dial(logger, uniqueid, channel, destuniqueid, destination):
     if logger.isEnabledFor(logging.DEBUG):

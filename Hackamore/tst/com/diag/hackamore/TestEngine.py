@@ -125,6 +125,7 @@ class Test(unittest.TestCase):
         self.assertEquals(len(inputs), 1)
         
     def test030Server(self):
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
         global address
         global port
         global ready
