@@ -65,7 +65,7 @@ class File(Source):
         return result
  
     def fileno(self):
-        return self.file.fileno()
+        return self.file.fileno() if self.file != None else -1
 
     def read(self, multiplex = None):
         line = None

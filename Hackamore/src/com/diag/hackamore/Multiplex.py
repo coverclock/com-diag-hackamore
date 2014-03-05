@@ -45,15 +45,15 @@ class Multiplex:
             return self.sources[name]
         
     def service(self, timeout = SELECT):
-        candidates = self.sources.values()
+        candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]
         for source in select.select(candidates, NONE, NONE, timeout)[0]:
             source.service()
     
     def multiplex(self, timeout = SELECT):
-        candidates = self.sources.values()
-        delay = 0.0
+        candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]
+        effective = 0.0
         while candidates:
-            for source in select.select(candidates, NONE, NONE, delay)[0]:
+            for source in select.select(candidates, NONE, NONE, effective)[0]:
                 source.service()
             active = False
             for source in candidates:
@@ -62,4 +62,4 @@ class Multiplex:
                     active = True
                     message = Event(event, source.logger)
                     yield message
-            delay = 0.0 if active else timeout
+            effective = 0.0 if active else timeout

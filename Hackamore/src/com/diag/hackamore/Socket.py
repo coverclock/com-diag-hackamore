@@ -70,7 +70,7 @@ class Socket(Source):
         return result
  
     def fileno(self):
-        return self.socket.fileno()
+        return self.socket.fileno() if self.socket != None else -1
     
     def assemble(self, fragment):
         # This is really inefficient. When I finally move from Python 2.7
