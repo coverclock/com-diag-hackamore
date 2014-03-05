@@ -6,50 +6,57 @@ Licensed under the terms in the README.txt file.
 
 import select
 
+from Event import Event
+
 SELECT = 1.0
-EMPTY = ( )
+NONE = ( )
 
-sources = { }
+class Multiplex:
 
-def register(source):
-    global sources
-    if source.fileno() >= 0:
-        sources[source.name] = source
-
-def unregister(source):
-    global sources
-    if source.name in sources:
-        del sources[source.name]
+    def __init__(self, name):
+        self.name = name
+        self.sources = { }
         
-def deregister():
-    global sources
-    sources = { }
+    def __del__(self):
+        pass
 
-def active():
-    return True if sources else False
-
-def query(name):
-    global sources
-    if name in sources:
-        return sources[name]
+    def __repr__(self):
+        return "Multiplex(" + str(self.name) + ")"
     
-def service(timeout = SELECT):
-    global sources
-    candidates = sources.values()
-    for source in select.select(candidates, EMPTY, EMPTY, timeout)[0]:
-        source.service()
+    def register(self, source):
+        if source.fileno() >= 0:
+            self.sources[source.name] = source
+    
+    def unregister(self, source):
+        if source.name in self.sources:
+            del self.sources[source.name]
 
-def multiplex(timeout = SELECT):
-    global sources
-    candidates = sources.values()
-    delay = 0.0
-    while candidates:
-        for source in select.select(candidates, EMPTY, EMPTY, delay)[0]:
+    def deregister(self):
+        self.sources = { }
+    
+    def active(self):
+        return True if self.sources else False
+    
+    def query(self, name):
+        if name in self.sources:
+            return self.sources[name]
+        
+    def service(self, timeout = SELECT):
+        candidates = self.sources.values()
+        for source in select.select(candidates, NONE, NONE, timeout)[0]:
             source.service()
-        active = False
-        for source in candidates:
-            event = source.get(True)
-            if event != None:
-                active = True
-                yield event
-        delay = 0.0 if active else timeout
+    
+    def multiplex(self, timeout = SELECT):
+        candidates = self.sources.values()
+        delay = 0.0
+        while candidates:
+            for source in select.select(candidates, NONE, NONE, delay)[0]:
+                source.service()
+            active = False
+            for source in candidates:
+                event = source.get(self)
+                if event != None:
+                    active = True
+                    message = Event(event, source.logger)
+                    yield message
+            delay = 0.0 if active else timeout

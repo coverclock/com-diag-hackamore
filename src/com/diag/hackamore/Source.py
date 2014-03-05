@@ -9,7 +9,6 @@ import time
 
 import Logger
 import Event
-import Multiplex
 
 USERNAME = ""
 SECRET = ""
@@ -32,13 +31,12 @@ class Source:
             self.close()
 
     def __repr__(self):
-        return "Source(\"" + str(self.name) + "\")"
+        return "Source(" + str(self.name) + ")"
 
     def open(self):
         result = False
         if not self.state:
             self.count = 0
-            Multiplex.register(self)
             self.logger.info("Source.open: OPENED. %s", str(self))
             self.state = True
             self.authenticated = False
@@ -48,7 +46,6 @@ class Source:
     def close(self):
         result = False
         if self.state:
-            Multiplex.unregister(self)
             self.logger.info("Source.close: CLOSED. %s", str(self))
             self.state = False
             result = True
@@ -86,11 +83,11 @@ class Source:
                 self.authenticated = False
                 self.logger.info("Source:authentication: DEAUTHENTICATED. %s", str(self))
 
-    def get(self, multiplexing = False):
+    def get(self, multiplex = None):
         event = None
         while event == None:
             try:
-                line = self.read(multiplexing)
+                line = self.read(multiplex)
             except Exception:
                 self.count = self.count + 1
                 self.event[Event.TIME] = str(time.time())

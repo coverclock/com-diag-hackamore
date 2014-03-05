@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         counter[com.diag.hackamore.Event.NEWCHANNEL] = 0
         counter[com.diag.hackamore.Event.NEWSTATE] = 0
         counter[com.diag.hackamore.Event.RENAME] = 0
-        counter[com.diag.hackamore.Event.SIPCALLID] = 0      
+        counter[com.diag.hackamore.Event.SIPCALLID] = 0
         events = com.diag.hackamore.Multiplex.multiplex()
         for event in events:
             self.assertIsNotNone(event)

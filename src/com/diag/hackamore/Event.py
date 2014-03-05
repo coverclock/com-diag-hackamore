@@ -4,6 +4,8 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+import Logger
+
 # These symbols are keywords specific to the Hackamore application.
 
 END = "END"
@@ -52,3 +54,14 @@ RENAME = "Rename"
 SIPCALLID = "SIPCALLID"
 SUCCESS = "Success"
 
+class Event:
+
+    def __init__(self, event, logger = None):
+        self.logger = Logger.logger() if logger == None else logger
+        self.event = event
+
+    def __del__(self):
+        pass
+
+    def __repr__(self):
+        return "Event(" + str(self.event) + ")"

@@ -94,7 +94,7 @@ class Server(threading.Thread):
 class Test(unittest.TestCase):
 
     def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.INFO)
+        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
 
     def tearDown(self):
         pass
@@ -125,7 +125,6 @@ class Test(unittest.TestCase):
         self.assertEquals(len(inputs), 1)
         
     def test030Server(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
         global address
         global port
         global ready
@@ -140,7 +139,11 @@ class Test(unittest.TestCase):
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)

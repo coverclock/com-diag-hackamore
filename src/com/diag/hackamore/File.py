@@ -24,9 +24,10 @@ class File(Source):
 
     def __del__(self):
         self.close()
+        self.logger.info("Socket: FINI. %s", str(self))
 
     def __repr__(self):
-        return Source.__repr__(self) + ".File(\"" + str(self.path) + "\")"
+        return Source.__repr__(self) + ".File(" + str(self.path) + ")"
 
     def open(self):
         result = False
@@ -66,7 +67,7 @@ class File(Source):
     def fileno(self):
         return self.file.fileno()
 
-    def read(self, multiplexing = False):
+    def read(self, multiplex = None):
         line = None
         if self.file != None:
             try:
