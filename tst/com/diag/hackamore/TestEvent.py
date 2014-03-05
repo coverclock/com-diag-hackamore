@@ -21,15 +21,44 @@ class Test(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-    def test010Filter(self):
+    
+    def test010Construction(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
+        actual = None
+        message = com.diag.hackamore.Event.Event(actual)
+        self.assertIsNotNone(message)
+        expected = message.event
+        self.assertIsNone(expected)
+        self.assertIsNotNone(message.logger)
+        actual = { }
+        message = com.diag.hackamore.Event.Event(actual)
+        self.assertIsNotNone(message)
+        expected = message.event
+        self.assertIsNotNone(expected)
+        self.assertEquals(len(expected), 0)
+        self.assertIsNotNone(message.logger)
+        actual = { }
+        actual[name] = name
+        message = com.diag.hackamore.Event.Event(actual)
+        self.assertIsNotNone(message)
+        expected = message.event
+        self.assertIsNotNone(expected)
+        self.assertEquals(len(expected), 1)
+        self.assertIn(name, expected)
+        self.assertEquals(expected[name], name)
+        self.assertIsNotNone(message.logger)
+
+    def test020Filter(self):
+        name = self.id()
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
+        self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         self.assertIsNotNone(source)
         self.assertTrue(source.open())
-        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
-        self.assertTrue(com.diag.hackamore.Multiplex.active())
+        self.assertFalse(multiplex.active())
+        multiplex.register(source)
+        self.assertTrue(multiplex.active())
         counter = { }
         counter[com.diag.hackamore.Event.CONFBRIDGEEND] = 0
         counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] = 0
@@ -42,20 +71,25 @@ class Test(unittest.TestCase):
         counter[com.diag.hackamore.Event.NEWSTATE] = 0
         counter[com.diag.hackamore.Event.RENAME] = 0
         counter[com.diag.hackamore.Event.SIPCALLID] = 0
-        events = com.diag.hackamore.Multiplex.multiplex()
-        for event in events:
+        messages = multiplex.multiplex()
+        for message in messages:
+            self.assertIsNotNone(message)
+            event = message.event
             self.assertIsNotNone(event)
             self.assertTrue(event)
             self.assertIn(com.diag.hackamore.Event.SOURCE, event)
             name = event[com.diag.hackamore.Event.SOURCE]
             if com.diag.hackamore.Event.END in event:
-                temporary = com.diag.hackamore.Multiplex.query(name)
+                temporary = multiplex.query(name)
                 self.assertEquals(temporary.name, name)
                 self.assertIsNotNone(temporary)
                 self.assertTrue(temporary.close())
+                self.assertTrue(multiplex.active())
                 self.assertFalse(temporary.open())
-                self.assertFalse(com.diag.hackamore.Multiplex.active())
-                events.close()
+                self.assertTrue(multiplex.active())
+                multiplex.unregister(source)
+                self.assertFalse(multiplex.active())
+                messages.close()
             elif com.diag.hackamore.Event.EVENT in event:
                 if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEEND:
                     if not com.diag.hackamore.Event.CONFERENCE in event:
@@ -209,8 +243,7 @@ class Test(unittest.TestCase):
                     pass
             else:
                 pass
-        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
-        self.assertFalse(com.diag.hackamore.Multiplex.active())
+        self.assertFalse(multiplex.active())
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEEND])
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEJOIN])
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGELEAVE])
