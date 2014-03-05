@@ -102,34 +102,47 @@ class Test(unittest.TestCase):
 
     def test010Rinse(self):
         name = self.id()
-        source = com.diag.hackamore.File.File(name, TYPESCRIPT)
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        engine = com.diag.hackamore.Engine.Engine()
+        source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
         inputs.append(source)
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        com.diag.hackamore.Engine.engine(inputs, outputs)
+        engine.engine(inputs, outputs, debug = True)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
 
     def test020Repeat(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        source = com.diag.hackamore.File.File(name, TYPESCRIPT)
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        engine = com.diag.hackamore.Engine.Engine()
+        source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
         inputs.append(source)
         self.assertEquals(len(inputs), 1)
-        com.diag.hackamore.Engine.engine(inputs, inputs)
+        engine.engine(inputs, inputs, debug = True)
         self.assertEquals(len(inputs), 1)
         
-    def test030Server(self):
+    def test030Passive(self):
         global address
         global port
         global ready
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        engine = com.diag.hackamore.Engine.Engine()
         address = ""
         port = 0
         ready = threading.Condition()
@@ -139,16 +152,12 @@ class Test(unittest.TestCase):
         with ready:
             while port == 0:
                 ready.wait()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        com.diag.hackamore.Engine.engine(sources, sources)
+        engine.engine(sources, sources, debug = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
