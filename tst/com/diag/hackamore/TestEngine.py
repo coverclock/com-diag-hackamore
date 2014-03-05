@@ -141,14 +141,11 @@ class Test(unittest.TestCase):
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
-        inputs = [ ]
-        inputs.append(source)
-        outputs = [ ]
-        self.assertEquals(len(inputs), 1)
-        self.assertEquals(len(outputs), 0)
-        com.diag.hackamore.Engine.engine(inputs, outputs)
-        self.assertEquals(len(inputs), 0)
-        self.assertEquals(len(outputs), 1)
+        sources = [ ]
+        sources.append(source)
+        self.assertEquals(len(sources), 1)
+        com.diag.hackamore.Engine.engine(sources, sources)
+        self.assertEquals(len(sources), 1)
         thread.join()
 
 if __name__ == "__main__":

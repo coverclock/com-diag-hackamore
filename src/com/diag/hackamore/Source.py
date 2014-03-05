@@ -96,6 +96,10 @@ class Source:
                 self.event[Event.TIME] = str(time.time())
                 self.event[Event.END] = str(self.count)
                 event = self.event
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
+                if self.logger.isEnabledFor(logging.INFO):
+                    self.logger.info("Source.get: END: %s %d", str(self), self.count)
                 self.event = { }
                 self.event[Event.SOURCE] = self.name          
             else:
@@ -105,6 +109,9 @@ class Source:
                     self.count = self.count + 1
                     self.event[Event.TIME] = str(time.time())
                     event = self.event
+                    if self.logger.isEnabledFor(logging.DEBUG):
+                        self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
+                    self.authentication(event)
                     self.event = { }
                     self.event[Event.SOURCE] = self.name
                 else:
@@ -117,12 +124,9 @@ class Source:
                         self.event[data[0]] = data[1]
             finally:
                 pass
-        if event != None:
+        #if event != None:
             #event[Event.TIME] = "DUMMY"
             #sorted(event, key=event.get)
-            if self.logger.isEnabledFor(logging.DEBUG):
-                self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
-            self.authentication(event)
         return event
 
     def put(self, command):
