@@ -28,11 +28,11 @@ class Multiplex:
     
     def register(self, source):
         if source.fileno() >= 0:
-            self.sources[source.name] = source
+            self.sources[source.pbx] = source
     
     def unregister(self, source):
-        if source.name in self.sources:
-            del self.sources[source.name]
+        if source.pbx in self.sources:
+            del self.sources[source.pbx]
 
     def deregister(self):
         self.sources = { }
@@ -40,9 +40,9 @@ class Multiplex:
     def active(self):
         return True if self.sources else False
     
-    def query(self, name):
-        if name in self.sources:
-            return self.sources[name]
+    def query(self, pbx):
+        if pbx in self.sources:
+            return self.sources[pbx]
         
     def service(self, timeout = SELECT):
         candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]

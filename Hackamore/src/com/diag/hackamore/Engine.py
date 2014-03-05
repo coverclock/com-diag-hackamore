@@ -23,7 +23,7 @@ class Engine:
         self.logger.info("Engine: FINI. %s", str(self))
 
     def __repr__(self):
-        return "Engine()"
+        return "Engine(" + str(self.multiplex) + ")"
 
     def engine(self, inputs, outputs, debug = False):
         self.logger.info("Engine.engine: STARTING. %s", str(self))
@@ -38,10 +38,10 @@ class Engine:
             messages = self.multiplex.multiplex()
             for message in messages:
                 event = message.event
-                name = event[Event.SOURCE]
+                pbx = event[Event.SOURCE]
                 if Event.END in event:
-                    self.state.close(name)
-                    source = self.multiplex.query(name)
+                    self.state.close(pbx)
+                    source = self.multiplex.query(pbx)
                     source.close()
                     self.multiplex.unregister(source)
                     outputs.append(source)
@@ -54,9 +54,9 @@ class Engine:
                         else:
                             conference = event[Event.CONFERENCE]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s", str(Event.CONFBRIDGEEND), str(conference))
+                                self.logger.debug("Engine.engine: %s %s %s", str(Event.CONFBRIDGEEND), str(pbx), str(conference))
                             if not debug:
-                                self.state.confbridgeend(conference)
+                                self.state.confbridgeend(pbx, conference)
                     elif flavor == Event.CONFBRIDGEJOIN:
                         if not Event.CHANNEL in event:
                             pass
@@ -67,11 +67,11 @@ class Engine:
                         else:
                             channel = event[Event.CHANNEL]
                             conference = event[Event.CONFERENCE]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(uniqueid), str(channel), str(conference))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not debug:
-                                self.state.confbridgejoin(uniqueid, conference)
+                                self.state.confbridgejoin(pbx, uniqueid, conference)
                     elif flavor == Event.CONFBRIDGELEAVE:
                         if not Event.CHANNEL in event:
                             pass
@@ -82,20 +82,20 @@ class Engine:
                         else:
                             channel = event[Event.CHANNEL]
                             conference = event[Event.CONFERENCE]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(uniqueid), str(channel), str(conference))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not debug:
-                                self.state.confbridgeleave(uniqueid, conference)
+                                self.state.confbridgeleave(pbx, uniqueid, conference)
                     elif flavor == Event.CONFBRIDGESTART:
                         if not Event.CONFERENCE in event:
                             pass
                         else:
                             conference = event[Event.CONFERENCE]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s", str(Event.CONFBRIDGESTART), str(conference))
+                                self.logger.debug("Engine.engine: %s %s %s", str(Event.CONFBRIDGESTART), str(pbx), str(conference))
                             if not debug:
-                                self.state.confbridgestart(conference)
+                                self.state.confbridgestart(pbx, conference)
                     elif flavor == Event.DIAL:
                         if not Event.SUBEVENT in event:
                             pass
@@ -112,12 +112,12 @@ class Engine:
                         else:
                             channel = event[Event.CHANNEL]
                             destination = event[Event.DESTINATION]
-                            destuniqueid = ( name, event[Event.DESTUNIQUEID] )
-                            uniqueid = ( name, event[Event.UNIQUEIDUC] )
+                            destuniqueid = event[Event.DESTUNIQUEID]
+                            uniqueid = event[Event.UNIQUEIDUC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.DIAL), str(uniqueid), str(channel), str(destuniqueid), str(destination))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination))
                             if not debug:
-                                self.state.dial(uniqueid, destuniqueid)
+                                self.state.dial(pbx, uniqueid, destuniqueid)
                     elif flavor == Event.HANGUP:
                         if not Event.CHANNEL in event:
                             pass
@@ -125,11 +125,11 @@ class Engine:
                             pass
                         else:
                             channel = event[Event.CHANNEL]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s", str(Event.HANGUP), str(uniqueid), str(channel))
+                                self.logger.debug("Engine.engine: %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel))
                             if not debug:
-                                self.state.hangup(uniqueid)
+                                self.state.hangup(pbx, uniqueid)
                     elif flavor == Event.HANGUP:
                         if not Event.CHANNEL1 in event:
                             pass
@@ -142,12 +142,12 @@ class Engine:
                         else:
                             channel1 = event[Event.CHANNEL1]
                             channel2 = event[Event.CHANNEL2]
-                            uniqueid1 = ( name, event[Event.UNIQUEID1] )
-                            uniqueid2 = ( name, event[Event.UNIQUEID2] )
+                            uniqueid1 = event[Event.UNIQUEID1]
+                            uniqueid2 = event[Event.UNIQUEID2]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.HANGUP), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
                             if not debug:
-                                self.state.localbridge(uniqueid1, channel1, uniqueid2, channel2)
+                                self.state.localbridge(pbx, uniqueid1, channel1, uniqueid2, channel2)
                     elif flavor == Event.NEWCHANNEL:
                         if not Event.CHANNEL in event:
                             pass
@@ -161,11 +161,11 @@ class Engine:
                             channel = event[Event.CHANNEL]
                             channelstate = event[Event.CHANNELSTATE]
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.NEWCHANNEL), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
                             if not debug:
-                                self.state.newchannel(uniqueid, channel, channelstate, channelstatedesc)
+                                self.state.newchannel(pbx, uniqueid, channel, channelstate, channelstatedesc)
                     elif flavor == Event.NEWSTATE:
                         if not Event.CHANNEL in event:
                             pass
@@ -179,11 +179,11 @@ class Engine:
                             channel = event[Event.CHANNEL]
                             channelstate = event[Event.CHANNELSTATE]
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.NEWSTATE), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
                             if not debug:
-                                self.state.newstate(uniqueid, channelstate, channelstatedesc)
+                                self.state.newstate(pbx, uniqueid, channelstate, channelstatedesc)
                     elif flavor == Event.RENAME:
                         if not Event.CHANNEL in event:
                             pass
@@ -194,11 +194,11 @@ class Engine:
                         else:
                             channel = event[Event.CHANNEL]
                             newname = event[Event.NEWNAME]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s", str(Event.RENAME), str(uniqueid), str(channel), str(newname))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname))
                             if not debug:
-                                self.state.rename(uniqueid, newname)
+                                self.state.rename(pbx, uniqueid, newname)
                     elif flavor == Event.VARSET:
                         if not Event.VARIABLE in event:
                             pass
@@ -212,12 +212,12 @@ class Engine:
                             pass
                         else:
                             channel = event[Event.CHANNEL]
-                            uniqueid = ( name, event[Event.UNIQUEIDLC] )
+                            uniqueid = event[Event.UNIQUEIDLC]
                             value = event[Event.VALUE]
                             if enabled:
-                                self.logger.debug("Engine.engine: %s %s %s %s", str(Event.SIPCALLID), str(uniqueid), str(channel), str(value))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
                             if not debug:
-                                self.state.sipcallid(uniqueid, channel, value)
+                                self.state.sipcallid(pbx, uniqueid, channel, value)
                     else:
                         pass
                 else:

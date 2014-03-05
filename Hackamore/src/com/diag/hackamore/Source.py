@@ -15,14 +15,14 @@ SECRET = ""
 
 class Source:
 
-    def __init__(self, name, username = USERNAME, secret = SECRET, logger = None):
+    def __init__(self, pbx, username = USERNAME, secret = SECRET, logger = None):
         self.logger = Logger.logger() if logger == None else logger
-        self.name = name
+        self.pbx = pbx
         self.username = username
         self.secret = secret
         self.count = 0
         self.event = { }
-        self.event[Event.SOURCE] = self.name
+        self.event[Event.SOURCE] = self.pbx
         self.state = False
         self.authenticated = False
         
@@ -31,7 +31,7 @@ class Source:
             self.close()
 
     def __repr__(self):
-        return "Source(" + str(self.name) + ")"
+        return "Source(" + str(self.pbx) + ")"
 
     def open(self):
         result = False
@@ -98,7 +98,7 @@ class Source:
                 if self.logger.isEnabledFor(logging.INFO):
                     self.logger.info("Source.get: END: %s %d", str(self), self.count)
                 self.event = { }
-                self.event[Event.SOURCE] = self.name          
+                self.event[Event.SOURCE] = self.pbx          
             else:
                 if line == None:
                     break
@@ -110,7 +110,7 @@ class Source:
                         self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
                     self.authentication(event)
                     self.event = { }
-                    self.event[Event.SOURCE] = self.name
+                    self.event[Event.SOURCE] = self.pbx
                 else:
                     data = line.split(": ", 1)
                     if not data:

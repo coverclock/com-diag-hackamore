@@ -13,24 +13,20 @@ ROLE = ( "IDLE", "CALLING", "CALLED", "BRIDGE" )
 
 class Channel():
 
-    def __init__(self, uniqueid, channel, channelstate, channelstatedesc):
+    def __init__(self, pbx, uniqueid, channel, channelstate, channelstatedesc):
+        self.pbx = pbx
         self.uniqueid = uniqueid
         self.channel = channel
         self.channelstate = channelstate
         self.channelstatedesc = channelstatedesc
         self.role = IDLE
+        self.call = None
             
     def __del__(self):
         pass
 
     def __repr__(self):
-        return "Channel(" + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
-
-    def name(self):
-        return self.uniqueid[0]
-
-    def id(self):
-        return self.uniqueid[1]
+        return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
 
     def newstate(self, channelstate, channelstatedesc):
         self.channelstate = channelstate

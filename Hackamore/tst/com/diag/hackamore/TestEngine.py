@@ -160,6 +160,36 @@ class Test(unittest.TestCase):
         engine.engine(sources, sources, debug = True)
         self.assertEquals(len(sources), 1)
         thread.join()
+        
+    def test040Active(self):
+        global address
+        global port
+        global ready
+        name = self.id()
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        state = com.diag.hackamore.State.State()
+        engine = com.diag.hackamore.Engine.Engine(state = state)
+        address = ""
+        port = 0
+        ready = threading.Condition()
+        thread = Server(TYPESCRIPT, LIMIT)
+        self.assertIsNotNone(thread)
+        thread.start()
+        with ready:
+            while port == 0:
+                ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
+        self.assertIsNotNone(source)
+        sources = [ ]
+        sources.append(source)
+        self.assertEquals(len(sources), 1)
+        engine.engine(sources, sources)
+        self.assertEquals(len(sources), 1)
+        state.dump()
+        thread.join()
 
 if __name__ == "__main__":
     unittest.main()
