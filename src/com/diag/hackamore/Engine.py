@@ -10,8 +10,38 @@ import Logger
 import Event
 import Multiplex
 
+def dial(logger, uniqueid, channel, destuniqueid, destination):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.dial: DIAL: %s %s %s %s", str(uniqueid), str(channel), str(destuniqueid), str(destination))
+        
+def hangup(logger, uniqueid, channel):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.hangup: HANGUP: %s %s", str(uniqueid), str(channel))
+
+def localbridge(logger, uniqueid1, channel1, uniqueid2, channel2):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.localbridge: LOCALBRIDGE: %s %s %s %s", str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
+
+def newchannel(logger, uniqueid, channel, channelstate, channelstatedesc):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.newchannel: NEWCHANNEL: %s %s %s %s", str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+
+def newstate(logger, uniqueid, channel, channelstate, channelstatedesc):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.newstate: NEWSTATE: %s %s %s %s", str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+
+def rename(logger, uniqueid, channel, newname):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.rename: RENAME: %s %s %s", str(uniqueid), str(channel), str(newname))
+
+def sipcallid(logger, uniqueid, channel, value):
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug("Engine.sipcallid: SIPCALLID: %s %s %s", str(uniqueid), str(channel), str(value))
+
+def close(logger, name):
+    pass
+
 def engine(inputs, outputs, logger = None):
-    global complete
     logger = Logger.logger() if logger == None else logger
     logger.info("Engine.engine: STARTING.")
     while True:
@@ -25,16 +55,18 @@ def engine(inputs, outputs, logger = None):
         for event in events:
             name = event[Event.SOURCE]
             if Event.END in event:
+                close(logger, name)
                 source = Multiplex.query(name)
-                if source != None:
-                    if not source.close():
-                        pass
-                    elif source.open():
-                        pass
-                    else:
-                        outputs.append(source)
-                    if not Multiplex.active():
-                        events.close()
+                if source == None:
+                    pass
+                elif not source.close():
+                    pass
+                elif source.open():
+                    pass
+                else:
+                    outputs.append(source)
+                if not Multiplex.active():
+                    events.close()
             elif Event.EVENT in event:
                 if event[Event.EVENT] == Event.DIAL:
                     if not Event.SUBEVENT in event:
@@ -54,8 +86,7 @@ def engine(inputs, outputs, logger = None):
                         destination = event[Event.DESTINATION]
                         destuniqueid = ( name, event[Event.DESTUNIQUEID] )
                         uniqueid = ( name, event[Event.UNIQUEIDUC] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s %s %s", Event.DIAL, str(uniqueid), channel, str(destuniqueid), destination)
+                        dial(logger, uniqueid, channel, destuniqueid, destination)
                 elif event[Event.EVENT] == Event.HANGUP:
                     if not Event.CHANNEL in event:
                         pass
@@ -64,8 +95,7 @@ def engine(inputs, outputs, logger = None):
                     else:
                         channel = event[Event.CHANNEL]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s", Event.HANGUP, str(uniqueid), channel)
+                        hangup(logger, uniqueid, channel)
                 elif event[Event.EVENT] == Event.LOCALBRIDGE:
                     if not Event.CHANNEL1 in event:
                         pass
@@ -80,8 +110,7 @@ def engine(inputs, outputs, logger = None):
                         channel2 = event[Event.CHANNEL2]
                         uniqueid1 = ( name, event[Event.UNIQUEID1] )
                         uniqueid2 = ( name, event[Event.UNIQUEID2] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s %s %s", Event.LOCALBRIDGE, str(uniqueid1), channel1, str(uniqueid2), channel2)
+                        localbridge(logger, uniqueid1, channel1, uniqueid2, channel2)
                 elif event[Event.EVENT] == Event.NEWCHANNEL:
                     if not Event.CHANNEL in event:
                         pass
@@ -96,8 +125,7 @@ def engine(inputs, outputs, logger = None):
                         channelstate = event[Event.CHANNELSTATE]
                         channelstatedesc = event[Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s %s %s", Event.NEWCHANNEL, str(uniqueid), channel, channelstate, channelstatedesc)
+                        newchannel(logger, uniqueid, channel, channelstate, channelstatedesc)
                 elif event[Event.EVENT] == Event.NEWSTATE:
                     if not Event.CHANNEL in event:
                         pass
@@ -112,8 +140,7 @@ def engine(inputs, outputs, logger = None):
                         channelstate = event[Event.CHANNELSTATE]
                         channelstatedesc = event[Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s %s %s", Event.NEWSTATE, str(uniqueid), channel, channelstate, channelstatedesc)
+                        newstate(logger, uniqueid, channel, channelstate, channelstatedesc)
                 elif event[Event.EVENT] == Event.RENAME:
                     if not Event.CHANNEL in event:
                         pass
@@ -125,8 +152,7 @@ def engine(inputs, outputs, logger = None):
                         channel = event[Event.CHANNEL]
                         newname = event[Event.NEWNAME]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: %s %s %s %s", Event.RENAME, str(uniqueid), channel, newname)
+                        rename(logger, uniqueid, channel, newname)
                 elif event[Event.EVENT] == Event.VARSET:
                     if not Event.VARIABLE in event:
                         pass
@@ -142,8 +168,7 @@ def engine(inputs, outputs, logger = None):
                         channel = event[Event.CHANNEL]
                         uniqueid = ( name, event[Event.UNIQUEIDLC] )
                         value = event[Event.VALUE]
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug("Engine.engine: EVENT: %s %s %s %s", Event.SIPCALLID, str(uniqueid), channel, value)
+                        sipcallid(logger, uniqueid, channel, value)
                 else:
                     pass
             else:
