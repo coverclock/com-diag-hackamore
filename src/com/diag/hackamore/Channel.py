@@ -24,7 +24,7 @@ class Channel():
         pass
 
     def __repr__(self):
-        return "Channel(" + str(self.uniqueid[0]) + "," + str(self.channel) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
+        return "Channel(" + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
 
     def name(self):
         return self.uniqueid[0]
