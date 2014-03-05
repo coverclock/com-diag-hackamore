@@ -28,7 +28,7 @@ class State:
             if conference in self.conferences:
                 del self.conferences[conference]
     
-    def confbridgejoin(self, uniqueid, channel, conference):
+    def confbridgejoin(self, uniqueid, conference):
         with self.mutex:
             if not conference in self.conferences:
                 pass
@@ -39,7 +39,7 @@ class State:
                 chan = self.channels[uniqueid]
                 conf[uniqueid] = chan
     
-    def confbridgeleave(self, uniqueid, channel, conference):
+    def confbridgeleave(self, uniqueid, conference):
         with self.mutex:
             if not conference in self.conferences:
                 pass
@@ -53,7 +53,7 @@ class State:
         with self.mutex:
             self.conferences[conference] = { }
     
-    def dial(self, uniqueid, channel, destuniqueid, destination):
+    def dial(self, uniqueid, destuniqueid):
         with self.mutex:
             return
             if not uniqueid in self.channels:
@@ -66,7 +66,7 @@ class State:
                 calling.calling()
                 called.called()
             
-    def hangup(self, uniqueid, channel):
+    def hangup(self, uniqueid):
         with self.mutex:
             pass
     
@@ -79,13 +79,13 @@ class State:
             chan = Channel.Channel(uniqueid, channel, channelstate, channelstatedesc)
             self.channels[uniqueid] = chan
     
-    def newstate(self, uniqueid, channel, channelstate, channelstatedesc):
+    def newstate(self, uniqueid, channelstate, channelstatedesc):
         with self.mutex:
             if uniqueid in self.channels:
                 chan = self.channels[uniqueid]
                 chan.newstate(channelstate, channelstatedesc)
     
-    def rename(self, uniqueid, channel, newname):
+    def rename(self, uniqueid, newname):
         with self.mutex:
             if uniqueid in self.channels:
                 chan = self.channels[uniqueid]
@@ -96,5 +96,9 @@ class State:
             pass
     
     def close(self, name):
+        with self.mutex:
+            pass
+
+    def dump(self):
         with self.mutex:
             pass
