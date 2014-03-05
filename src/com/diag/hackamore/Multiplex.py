@@ -6,6 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import select
 
+import Logger
+
 from Event import Event
 
 SELECT = 1.0
@@ -13,12 +15,14 @@ NONE = ( )
 
 class Multiplex:
 
-    def __init__(self, name):
+    def __init__(self, name, logger = None):
+        self.logger = Logger.logger() if logger == None else logger
         self.name = name
         self.sources = { }
+        self.logger.info("Multiplex: INIT. %s", str(self))
         
     def __del__(self):
-        pass
+        self.logger.info("Multiplex: FINI. %s", str(self))
 
     def __repr__(self):
         return "Multiplex(" + str(self.name) + ")"
