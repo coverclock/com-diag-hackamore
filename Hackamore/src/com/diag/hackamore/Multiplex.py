@@ -15,9 +15,8 @@ NONE = ( )
 
 class Multiplex:
 
-    def __init__(self, name, logger = None):
+    def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
-        self.name = name
         self.sources = { }
         self.logger.info("Multiplex: INIT. %s", str(self))
         
@@ -25,7 +24,7 @@ class Multiplex:
         self.logger.info("Multiplex: FINI. %s", str(self))
 
     def __repr__(self):
-        return "Multiplex(" + str(self.name) + ")"
+        return "Multiplex(" + str(self.sources) + ")"
     
     def register(self, source):
         if source.fileno() >= 0:

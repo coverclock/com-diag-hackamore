@@ -652,7 +652,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         port = 0
@@ -762,7 +762,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         port = 0
@@ -871,7 +871,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         port = 0
@@ -1060,7 +1060,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         port = 0
@@ -1121,7 +1121,7 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)

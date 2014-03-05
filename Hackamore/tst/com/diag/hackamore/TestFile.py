@@ -165,7 +165,7 @@ class Test(unittest.TestCase):
  
     def test035Service(self):
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, SAMPLE)
@@ -246,7 +246,7 @@ class Test(unittest.TestCase):
 
     def test040Multiplexer(self):
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         multiplex.deregister()
         self.assertFalse(multiplex.active())
@@ -326,7 +326,7 @@ class Test(unittest.TestCase):
  
     def test050Typescript(self):
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         multiplex.deregister()
         self.assertFalse(multiplex.active())
