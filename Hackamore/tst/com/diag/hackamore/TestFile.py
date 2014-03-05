@@ -26,32 +26,24 @@ class Test(unittest.TestCase):
 
     def test010Construction(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.name)
         self.assertEquals(source.name, name)
         self.assertIsNotNone(source.path)
         self.assertEquals(source.path, SAMPLE)
-        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertIsNone(source.file)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
         self.assertIsNotNone(source.file)
-        self.assertIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertTrue(source.close())
         self.assertFalse(source.close())
-        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertIsNone(source.file)
         self.assertFalse(source.open())
-        self.assertNotIn(source.name, com.diag.hackamore.Multiplex.sources)
         self.assertIsNone(source.file)
 
     def test020Read(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
         self.assertTrue(source.open())
         lines = 0
@@ -100,8 +92,6 @@ class Test(unittest.TestCase):
  
     def test030Get(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.File.File(name, SAMPLE)
         self.assertTrue(source.open())
         events = 0
@@ -175,15 +165,20 @@ class Test(unittest.TestCase):
  
     def test035Service(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
+        self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, SAMPLE)
+        self.assertFalse(multiplex.active())
         self.assertTrue(source.open())
+        self.assertFalse(multiplex.active())
+        multiplex.register(source)
+        self.assertTrue(multiplex.active())
         events = 0
         eof = False
         while not eof:
-            com.diag.hackamore.Multiplex.service()
-            event = source.get(True)
+            multiplex.service()
+            event = source.get(multiplex)
             if event == None:
                 continue
             events = events + 1
@@ -251,12 +246,20 @@ class Test(unittest.TestCase):
 
     def test040Multiplexer(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
+        multiplex.deregister()
+        self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, SAMPLE)
+        self.assertFalse(multiplex.active())
         self.assertTrue(source.open())
+        self.assertFalse(multiplex.active())
+        multiplex.register(source)
+        self.assertTrue(multiplex.active())
         events = 0
-        for event in com.diag.hackamore.Multiplex.multiplex():
+        for message in multiplex.multiplex():
+            self.assertIsNotNone(message)
+            event = message.event
             self.assertIsNotNone(event)
             events = events + 1
             self.assertTrue(event)
@@ -323,12 +326,20 @@ class Test(unittest.TestCase):
  
     def test050Typescript(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
-        self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
+        multiplex.deregister()
+        self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
+        self.assertFalse(multiplex.active())
         self.assertTrue(source.open())
+        self.assertFalse(multiplex.active())
+        multiplex.register(source)
+        self.assertTrue(multiplex.active())
         events = 0
-        for event in com.diag.hackamore.Multiplex.multiplex():
+        for message in multiplex.multiplex():
+            self.assertIsNotNone(message)
+            event = message.event
             self.assertIsNotNone(event)
             events = events + 1
             self.assertTrue(event)

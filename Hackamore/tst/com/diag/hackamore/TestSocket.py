@@ -790,6 +790,8 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
         com.diag.hackamore.Multiplex.deregister()
         self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
@@ -1076,6 +1078,8 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
         com.diag.hackamore.Multiplex.deregister()
         self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         port = 0
@@ -1130,6 +1134,8 @@ class Test(unittest.TestCase):
         global complete
         global done
         name = self.id()
+        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        self.assertIsNotNone(multiplex)
         com.diag.hackamore.Multiplex.deregister()
         self.assertNotIn(name, com.diag.hackamore.Multiplex.sources)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)

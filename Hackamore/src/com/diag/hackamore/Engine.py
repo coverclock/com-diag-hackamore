@@ -9,26 +9,59 @@ import logging
 import Logger
 import Event
 import Multiplex
+
+from Channel import Channel
+
+channels = { }
+conferences = { }
         
 def confbridgeend(logger, conference):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.confbridgeend: CONFBRIDGEEND: %s", str(conference))
+    if conference in conferences:
+        del conferences[conference]
 
 def confbridgejoin(logger, uniqueid, channel, conference):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.confbridgejoin: CONFBRIDGEJOIN: %s %s %s", str(uniqueid), str(channel), str(conference))
+    if not conference in conferences:
+        pass
+    elif not uniqueid in channels:
+        pass
+    else:
+        conf = conferences[conference]
+        chan = channels[uniqueid]
+        conf[uniqueid] = chan
 
 def confbridgeleave(logger, uniqueid, channel, conference):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.confbridgeleave: CONFBRIDGELEAVE: %s %s %s", str(uniqueid), str(channel), str(conference))
+    if not conference in conferences:
+        pass
+    elif not uniqueid in channels:
+        pass
+    else:
+        conf = conferences[conference]
+        del conf[uniqueid]
 
 def confbridgestart(logger, conference):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.confbridgestart: CONFBRIDGESTART: %s", str(conference))
+    conferences[conference] = { }
 
 def dial(logger, uniqueid, channel, destuniqueid, destination):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.dial: DIAL: %s %s %s %s", str(uniqueid), str(channel), str(destuniqueid), str(destination))
+    if not uniqueid in channels:
+        pass
+    elif not destuniqueid in channels:
+        pass
+    else:
+        calling = channels[uniqueid]
+        called = channels[destuniqueid]
+        calling.calling()
+        called.called()
+        
         
 def hangup(logger, uniqueid, channel):
     if logger.isEnabledFor(logging.DEBUG):
@@ -41,14 +74,22 @@ def localbridge(logger, uniqueid1, channel1, uniqueid2, channel2):
 def newchannel(logger, uniqueid, channel, channelstate, channelstatedesc):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.newchannel: NEWCHANNEL: %s %s %s %s", str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+    chan = Channel(uniqueid, channel, channelstate, channelstatedesc)
+    channels[uniqueid] = chan
 
 def newstate(logger, uniqueid, channel, channelstate, channelstatedesc):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.newstate: NEWSTATE: %s %s %s %s", str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+    if uniqueid in channels:
+        chan = channels[uniqueid]
+        chan.newstate(channelstate, channelstatedesc)
 
 def rename(logger, uniqueid, channel, newname):
     if logger.isEnabledFor(logging.DEBUG):
         logger.debug("Engine.rename: RENAME: %s %s %s", str(uniqueid), str(channel), str(newname))
+    if uniqueid in channels:
+        chan = channels[uniqueid]
+        chan.rename(newname)
 
 def sipcallid(logger, uniqueid, channel, value):
     if logger.isEnabledFor(logging.DEBUG):

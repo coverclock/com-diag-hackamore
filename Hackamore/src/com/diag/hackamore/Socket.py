@@ -32,10 +32,11 @@ class Socket(Source):
 
     def __del__(self):
         self.close()
+        self.logger.info("Socket: FINI. %s", str(self))
 
     def __repr__(self):
-        return Source.__repr__(self) + ".Socket(\"" + str(self.host) + "\"," + str(self.port) + ")"
-
+        return Source.__repr__(self) + ".Socket(" + str(self.host) + "," + str(self.port) + ")"
+ 
     def open(self):
         result = False
         if self.socket == None:
@@ -116,8 +117,8 @@ class Socket(Source):
             finally:
                 pass
 
-    def read(self, multiplexing = False):
-        if not multiplexing:
+    def read(self, multiplex = None):
+        if multiplex == None:
             self.service()
         line = None
         if self.queue:
