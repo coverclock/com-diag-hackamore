@@ -17,8 +17,8 @@ RECV = 512
 
 class Socket(Source):
 
-    def __init__(self, name, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV, logger = None):
-        Source.__init__(self, name, username, secret, logger = logger)
+    def __init__(self, pbx, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV, logger = None):
+        Source.__init__(self, pbx, username, secret, logger = logger)
         self.host = host
         self.port = port
         self.timeout = timeout

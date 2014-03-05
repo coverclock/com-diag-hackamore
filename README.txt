@@ -41,10 +41,14 @@ License along with this library; if not, contact
 
 ABSTRACT
 
-This is the Digital Aggregates Corporation Hackamore package. Hackamore is an
-application written in Python that maintains a dynamic model of the states of
-multiple interconnected Asterisk PBXes using the Asterisk Management Interface
-(AMI). It is useful for the functional testing of such systems.
+This is the Digital Aggregates Corporation Hackamore package. Hackamore is a
+framework and application written in Python that maintains a dynamic model of
+the call states of one or more Asterisk PBXes using the Asterisk Management
+Interface (AMI). It was inspired by prior work done in C by Mark Jackson at
+Aircell Business Aviation LLC. Hackamore is a work in progress.
+
+The unit tests for this project have been run on Python 2.7.5 under MacOS
+"Mavericks", and on Python 2.7.3 under Ubuntu 12.04 "precise".
 
 This software is an original work of its author(s).
 

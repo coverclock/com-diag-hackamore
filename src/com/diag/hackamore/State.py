@@ -16,89 +16,120 @@ class State:
         self.mutex = threading.Condition()
         self.channels = { }
         self.conferences = { }
+        self.calls = { }
 
     def __del__(self):
         pass
 
     def __repr__(self):
         return "State()"
-        
-    def confbridgeend(self, conference):
+
+    def confbridgeend(self, pbx, conference):
         with self.mutex:
-            if conference in self.conferences:
-                del self.conferences[conference]
+            if pbx in self.conferences:
+                conferences = self.conferences[pbx]
+                if conference in conferences:
+                    del conferences[conference]
     
-    def confbridgejoin(self, uniqueid, conference):
+    def confbridgejoin(self, pbx, uniqueid, conference):
         with self.mutex:
-            if not conference in self.conferences:
-                pass
-            elif not uniqueid in self.channels:
-                pass
-            else:
-                conf = self.conferences[conference]
-                chan = self.channels[uniqueid]
-                conf[uniqueid] = chan
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                if pbx in self.conferences:
+                    conferences = self.conferences[pbx]
+                    if uniqueid in channels:
+                        chan = channels[uniqueid]
+                        if conference in conferences:
+                            conf = conferences[conference]
+                            conf[uniqueid] = chan
     
-    def confbridgeleave(self, uniqueid, conference):
+    def confbridgeleave(self, pbx, uniqueid, conference):
         with self.mutex:
-            if not conference in self.conferences:
-                pass
-            elif not uniqueid in self.channels:
-                pass
-            else:
-                conf = self.conferences[conference]
-                del conf[uniqueid]
+            if pbx in self.conferences:
+                conferences = self.conferences[pbx]
+                if conference in conferences:
+                    conf = conferences[conference]
+                    if uniqueid in conf:
+                        del conf[uniqueid]
     
-    def confbridgestart(self, conference):
+    def confbridgestart(self, pbx, conference):
         with self.mutex:
-            self.conferences[conference] = { }
+            if not pbx in self.conferences:
+                self.conferences[pbx] = { }
+            conferences = self.conferences[pbx]
+            conferences[conference] = { }
     
-    def dial(self, uniqueid, destuniqueid):
+    def dial(self, pbx, uniqueid, destuniqueid):
         with self.mutex:
-            return
-            if not uniqueid in self.channels:
-                pass
-            elif not destuniqueid in self.channels:
-                pass
-            else:
-                calling = self.channels[uniqueid]
-                called = self.channels[destuniqueid]
-                calling.calling()
-                called.called()
-            
-    def hangup(self, uniqueid):
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                if uniqueid in channels:
+                    chan = channels[uniqueid]
+                    chan.calling()
+                    if destuniqueid in channels:
+                        destchan = channels[destuniqueid]
+                        destchan.called()
+                        
+
+    def hangup(self, pbx, uniqueid):
         with self.mutex:
             pass
     
-    def localbridge(self, uniqueid1, channel1, uniqueid2, channel2):
+    def localbridge(self, pbx, uniqueid1, channel1, uniqueid2, channel2):
         with self.mutex:
             pass
     
-    def newchannel(self, uniqueid, channel, channelstate, channelstatedesc):
+    def newchannel(self, pbx, uniqueid, channel, channelstate, channelstatedesc):
         with self.mutex:
-            chan = Channel.Channel(uniqueid, channel, channelstate, channelstatedesc)
-            self.channels[uniqueid] = chan
+            chan = Channel.Channel(pbx, uniqueid, channel, channelstate, channelstatedesc)
+            if not pbx in self.channels:
+                self.channels[pbx] = { }
+            channels = self.channels[pbx]
+            channels[uniqueid] = chan
     
-    def newstate(self, uniqueid, channelstate, channelstatedesc):
+    def newstate(self, pbx, uniqueid, channelstate, channelstatedesc):
         with self.mutex:
-            if uniqueid in self.channels:
-                chan = self.channels[uniqueid]
-                chan.newstate(channelstate, channelstatedesc)
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                if uniqueid in channels:
+                    chan = channels[uniqueid]
+                    chan.newstate(channelstate, channelstatedesc)
     
-    def rename(self, uniqueid, newname):
+    def rename(self, pbx, uniqueid, newname):
         with self.mutex:
-            if uniqueid in self.channels:
-                chan = self.channels[uniqueid]
-                chan.rename(newname)
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                if uniqueid in channels:
+                    chan = channels[uniqueid]
+                    chan.rename(newname)
     
-    def sipcallid(self, uniqueid, channel, value):
+    def sipcallid(self, pbx, uniqueid, channel, value):
         with self.mutex:
             pass
     
     def close(self, name):
         with self.mutex:
-            pass
+            for pbx in self.channels:
+                channels = self.channels[pbx]
+                for uniqueid in channels:
+                    self.hangup(pbx, uniqueid)
 
     def dump(self):
         with self.mutex:
-            pass
+            print("CHANNELS")
+            for pbx in self.channels:
+                print(str(pbx))
+                channels = self.channels[pbx]
+                for channel in channels:
+                    chan = channels[channel]
+                    print(str(chan))
+            print("CONFERENCES")
+            for pbx in self.conferences:
+                print(str(pbx))
+                conferences = self.conferences[pbx]
+                for conference in conferences:
+                    conf = conferences[conference]
+                    print(str(conf))
+
+    def audit(self):
+        pass

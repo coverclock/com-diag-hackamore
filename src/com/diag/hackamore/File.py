@@ -14,8 +14,8 @@ OPEN = "rb"
 
 class File(Source):
 
-    def __init__(self, name, path, bufsize = READLINE, logger = None):
-        Source.__init__(self, name, logger = logger)
+    def __init__(self, pbx, path, bufsize = READLINE, logger = None):
+        Source.__init__(self, pbx, logger = logger)
         self.path = path
         self.eof = False
         self.file = None
