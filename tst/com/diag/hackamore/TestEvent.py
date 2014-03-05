@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
 
     def test020Filter(self):
         name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex(name)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)

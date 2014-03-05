@@ -13,6 +13,7 @@ import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
 import com.diag.hackamore.Engine
+import com.diag.hackamore.Event
 
 from Parameters import USERNAME
 from Parameters import SECRET
@@ -101,7 +102,6 @@ class Test(unittest.TestCase):
 
     def test010Rinse(self):
         name = self.id()
-        com.diag.hackamore.Multiplex.deregister()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT)
         self.assertIsNotNone(source)
         inputs = [ ]
