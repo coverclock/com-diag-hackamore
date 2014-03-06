@@ -1,6 +1,6 @@
 Action: Login
-Username: admin
-Secret: pw123
+Username: username
+Secret: secret
 
 Response: Success
 Message: Authentication accepted
@@ -11,30 +11,30 @@ Status: Fully Booted
 
 Event: Newchannel
 Privilege: call,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 ChannelState: 6
 ChannelStateDesc: Up
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 AccountCode: 
 Exten: s
-Context: incoming_4wire
+Context: incoming_analog
 Uniqueid: 1389990149.26
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-O00000006
-Context: incoming_4wire
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
 Extension: s
 Priority: 1
 Application: Verbose
-AppData: 1, 4-Wire off hook call, context=incoming_4wire, exten=s, channel=4WIRE/1-O00000006
+AppData: 1, analog off hook call, context=incoming_analog, exten=s, channel=ANALOG/1-O00000006
 Uniqueid: 1389990149.26
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-O00000006
-Context: incoming_4wire
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
 Extension: s
 Priority: 2
 Application: Verbose
@@ -43,8 +43,8 @@ Uniqueid: 1389990149.26
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-O00000006
-Context: incoming_4wire
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
 Extension: s
 Priority: 3
 Application: Set
@@ -53,15 +53,15 @@ Uniqueid: 1389990149.26
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 Variable: __DYNAMIC_FEATURES
 Value: calleronhold#calleroffhold#callerstartthreeway
 Uniqueid: 1389990149.26
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-O00000006
-Context: incoming_4wire
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
 Extension: s
 Priority: 4
 Application: WaitExten
@@ -70,32 +70,32 @@ Uniqueid: 1389990149.26
 
 Event: HangupRequest
 Privilege: call,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 Uniqueid: 1389990149.26
 
 Event: SoftHangupRequest
 Privilege: call,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 Uniqueid: 1389990149.26
 Cause: 16
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 ChannelState: 0
 ChannelStateDesc: Down
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: 
 ConnectedLineName: 
 Uniqueid: 1389990149.26
 
 Event: Hangup
 Privilege: call,all
-Channel: 4WIRE/1-O00000006
+Channel: ANALOG/1-O00000006
 Uniqueid: 1389990149.26
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: <unknown>
 ConnectedLineName: <unknown>
 AccountCode: 
@@ -110,7 +110,7 @@ ChannelStateDesc: Down
 CallerIDNum: 210
 CallerIDName: 210
 AccountCode: 
-Exten: 51
+Exten: 301
 Context: us_incoming
 Uniqueid: 1389990159.27
 
@@ -150,17 +150,17 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 1
 Application: Verbose
-AppData: 1, Dialing 4 Wire at 51
+AppData: 1, Dialing analog at 301
 Uniqueid: 1389990159.27
 
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 2
 Application: Verbose
 AppData: 1,Setting DYNAMIC_FEATURES: calleeonhold#calleeoffhold#calleestartthreeway
@@ -170,7 +170,7 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 3
 Application: Set
 AppData: __DYNAMIC_FEATURES=calleeonhold#calleeoffhold#calleestartthreeway
@@ -187,7 +187,7 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 4
 Application: Set
 AppData: did-header=
@@ -204,7 +204,7 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 5
 Application: GotoIf
 AppData: 0?setdid:checkdnd
@@ -214,7 +214,7 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 7
 Application: GotoIf
 AppData: 1?notdnd:dnd
@@ -224,20 +224,20 @@ Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 8
 Application: Verbose
-AppData: Attempting to call 4WIRE/51
+AppData: Attempting to call ANALOG/301
 Uniqueid: 1389990159.27
 
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Context: us_incoming
-Extension: 51
+Extension: 301
 Priority: 9
 Application: Dial
-AppData: 4WIRE/51/s,90,TtHh
+AppData: ANALOG/301/s,90,TtHh
 Uniqueid: 1389990159.27
 
 Event: VarSet
@@ -277,30 +277,30 @@ Uniqueid: 1389990159.27
 
 Event: Newchannel
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 ChannelState: 1
 ChannelStateDesc: Rsrvd
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 AccountCode: 
 Exten: s
-Context: incoming_4wire
+Context: incoming_analog
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDPEERNUMBER
-Value: 51/s
+Value: 301/s
 Uniqueid: 1389990159.28
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 ChannelState: 5
 ChannelStateDesc: Ringing
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: 210
 ConnectedLineName: 210
 Uniqueid: 1389990159.28
@@ -309,22 +309,22 @@ Event: Dial
 Privilege: call,all
 SubEvent: Begin
 Channel: SIP/US-00000008
-Destination: 4WIRE/1-I00000007
+Destination: ANALOG/1-I00000007
 CallerIDNum: 210
 CallerIDName: 210
 ConnectedLineNum: <unknown>
 ConnectedLineName: <unknown>
 UniqueID: 1389990159.27
 DestUniqueID: 1389990159.28
-Dialstring: 51/s
+Dialstring: 301/s
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 ChannelState: 6
 ChannelStateDesc: Up
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: 210
 ConnectedLineName: 210
 Uniqueid: 1389990159.28
@@ -340,26 +340,26 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: DIALEDPEERNAME
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: DIALEDPEERNUMBER
-Value: 51/s
+Value: 301/s
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
@@ -371,13 +371,13 @@ ChannelState: 6
 ChannelStateDesc: Up
 CallerIDNum: 210
 CallerIDName: 210
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990159.27
 
 Event: NewAccountCode
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 AccountCode: 
 OldAccountCode: 
@@ -387,29 +387,29 @@ Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
 Channel1: SIP/US-00000008
-Channel2: 4WIRE/1-I00000007
+Channel2: ANALOG/1-I00000007
 Uniqueid1: 1389990159.27
 Uniqueid2: 1389990159.28
 CallerID1: 210
-CallerID2: 51
+CallerID2: 301
 
 Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
 Value: 73f63cdc2862b8d608af883f67ee51e4@192.0.2.2:5060
 Uniqueid: 1389990159.28
@@ -418,19 +418,19 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
 Value: 73f63cdc2862b8d608af883f67ee51e4@192.0.2.2:5060
 Uniqueid: 1389990159.28
@@ -495,7 +495,7 @@ DLSR: 0.0020(sec)
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 Digit: #
 Direction: Received
@@ -504,7 +504,7 @@ End: No
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 Digit: #
 Direction: Received
@@ -516,40 +516,40 @@ Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
 Channel1: SIP/US-00000008
-Channel2: 4WIRE/1-I00000007
+Channel2: ANALOG/1-I00000007
 Uniqueid1: 1389990159.27
 Uniqueid2: 1389990159.28
 CallerID1: 210
-CallerID2: 51
+CallerID2: 301
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
 Channel1: SIP/US-00000008
-Channel2: 4WIRE/1-I00000007
+Channel2: ANALOG/1-I00000007
 Uniqueid1: 1389990159.27
 Uniqueid2: 1389990159.28
 CallerID1: 210
-CallerID2: 51
+CallerID2: 301
 
 Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
 Value: 73f63cdc2862b8d608af883f67ee51e4@192.0.2.2:5060
 Uniqueid: 1389990159.28
@@ -558,26 +558,26 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
 Value: 73f63cdc2862b8d608af883f67ee51e4@192.0.2.2:5060
 Uniqueid: 1389990159.28
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 Digit: 0
 Direction: Received
@@ -586,7 +586,7 @@ End: No
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 Digit: 0
 Direction: Received
@@ -598,15 +598,15 @@ Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
 Channel1: SIP/US-00000008
-Channel2: 4WIRE/1-I00000007
+Channel2: ANALOG/1-I00000007
 Uniqueid1: 1389990159.27
 Uniqueid2: 1389990159.28
 CallerID1: 210
-CallerID2: 51
+CallerID2: 301
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DYNAMIC_PEERNAME
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
@@ -615,12 +615,12 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: DYNAMIC_PEERNAME
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.27
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DYNAMIC_FEATURENAME
 Value: calleestartthreeway
 Uniqueid: 1389990159.28
@@ -641,122 +641,122 @@ Class: default
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_EXTEN
 Value: 
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_CONTEXT
-Value: incoming_4wire
+Value: incoming_analog
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_PRIORITY
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 1
 Application: Verbose
-AppData: 1,Starting Three Way Calling Routine, Initiator is 4WIRE/1-I00000007, Peer is SIP/US-00000008
+AppData: 1,Starting Three Way Calling Routine, Initiator is ANALOG/1-I00000007, Peer is SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 2
 Application: Set
-AppData: ChanName=4WIRE/1-I00000007
+AppData: ChanName=ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
 Value: 1-I00000007
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 3
 Application: Set
-AppData: Tech=4WIRE
+AppData: Tech=ANALOG
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: Tech
-Value: 4WIRE
+Value: ANALOG
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
 Value: 
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 4
 Application: Set
@@ -765,22 +765,22 @@ Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: Chan
 Value: 1-I00000007
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 5
 Application: Set
@@ -789,46 +789,46 @@ Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: INITIATING_EXTEN
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 6
 Application: Set
-AppData: CONFNO=51
+AppData: CONFNO=301
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: CONFNO
-Value: 51
+Value: 301
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 7
 Application: Set
@@ -837,145 +837,145 @@ Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: __THREEWAY_PEER_A
 Value: SIP/US-00000008
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 8
 Application: ChannelRedirect
-AppData: SIP/US-00000008,fc-tw-first-conference-user,51,1
+AppData: SIP/US-00000008,p1-s2-first-conference-user,301,1
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: CHANNELREDIRECT_STATUS
 Value: SUCCESS
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 9
 Application: Set
-AppData: CHANNEL(hangup_handler_push)=fc-tw-four-wire-hangup-handler,s,1
+AppData: CHANNEL(hangup_handler_push)=p1-s2-analog-hangup-handler,s,1
 Uniqueid: 1389990159.28
 
 Event: HangupHandlerPush
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990159.28
-Handler: fc-tw-four-wire-hangup-handler,s,1
+Handler: p1-s2-analog-hangup-handler,s,1
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-start
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
 Extension: s
 Priority: 10
 Application: ChannelRedirect
-AppData: 4WIRE/1-I00000007,fc-tw-collect,s,1
+AppData: ANALOG/1-I00000007,p1-s2-collect,s,1
 Uniqueid: 1389990159.28
 
 Event: Newchannel
 Privilege: call,all
-Channel: AsyncGoto/4WIRE/1-I00000007
+Channel: AsyncGoto/ANALOG/1-I00000007
 ChannelState: 6
 ChannelStateDesc: Up
 CallerIDNum: 
 CallerIDName: 
 AccountCode: 
 Exten: s
-Context: macro-fc-tw-start
+Context: macro-p1-s2-start
 Uniqueid: 1389990173.29
 
 Event: Masquerade
 Privilege: call,all
-Clone: 4WIRE/1-I00000007
+Clone: ANALOG/1-I00000007
 CloneState: Up
-Original: AsyncGoto/4WIRE/1-I00000007
+Original: AsyncGoto/ANALOG/1-I00000007
 OriginalState: Up
 
 Event: Rename
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
-Newname: 4WIRE/1-I00000007<MASQ>
+Channel: ANALOG/1-I00000007
+Newname: ANALOG/1-I00000007<MASQ>
 Uniqueid: 1389990159.28
 
 Event: Rename
 Privilege: call,all
-Channel: AsyncGoto/4WIRE/1-I00000007
-Newname: 4WIRE/1-I00000007
+Channel: AsyncGoto/ANALOG/1-I00000007
+Newname: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 
 Event: Rename
 Privilege: call,all
-Channel: 4WIRE/1-I00000007<MASQ>
-Newname: AsyncGoto/4WIRE/1-I00000007<ZOMBIE>
+Channel: ANALOG/1-I00000007<MASQ>
+Newname: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 0
 Uniqueid: 1389990173.29
 
 Event: NewCallerid
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+Channel: ANALOG/1-I00000007
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 Uniqueid: 1389990173.29
 CID-CallingPres: 0 (Presentation Allowed, Not Screened)
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: AsyncGoto/4WIRE/1-I00000007<ZOMBIE>
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
 Variable: CHANNELREDIRECT_STATUS
 Value: SUCCESS
 Uniqueid: 1389990159.28
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: AsyncGoto/4WIRE/1-I00000007<ZOMBIE>
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
 Variable: MACRO_DEPTH
 Value: 0
 Uniqueid: 1389990159.28
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 1
 Application: Verbose
@@ -990,7 +990,7 @@ UniqueID: 1389990159.27
 
 Event: Hangup
 Privilege: call,all
-Channel: AsyncGoto/4WIRE/1-I00000007<ZOMBIE>
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
 Uniqueid: 1389990159.28
 CallerIDNum: <unknown>
 CallerIDName: <unknown>
@@ -1002,8 +1002,8 @@ Cause-txt: Unknown
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 2
 Application: Read
@@ -1012,7 +1012,7 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: READSTATUS
 Value: ERROR
 Uniqueid: 1389990173.29
@@ -1034,42 +1034,42 @@ DialStatus: ANSWER
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-first-conference-user
-Extension: 51
+Context: p1-s2-first-conference-user
+Extension: 301
 Priority: 1
 Application: Verbose
-AppData: 1,First Conference User: Dropping SIP/US-00000008 into Conference 51
+AppData: 1,First Conference User: Dropping SIP/US-00000008 into Conference 301
 Uniqueid: 1389990159.27
 
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-first-conference-user
-Extension: 51
+Context: p1-s2-first-conference-user
+Extension: 301
 Priority: 2
 Application: Set
-AppData: CHANNEL(hangup_handler_push)=fc-tw-first-user-hangup-handler,s,1
+AppData: CHANNEL(hangup_handler_push)=p1-s2-first-user-hangup-handler,s,1
 Uniqueid: 1389990159.27
 
 Event: HangupHandlerPush
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Uniqueid: 1389990159.27
-Handler: fc-tw-first-user-hangup-handler,s,1
+Handler: p1-s2-first-user-hangup-handler,s,1
 
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-first-conference-user
-Extension: 51
+Context: p1-s2-first-conference-user
+Extension: 301
 Priority: 3
 Application: ConfBridge
-AppData: 51,three-way,user-profile
+AppData: 301,three-way,user-profile
 Uniqueid: 1389990159.27
 
 Event: ConfbridgeStart
 Privilege: call,all
-Conference: 51
+Conference: 301
 
 Event: RTCPSent
 Privilege: reporting,all
@@ -1103,7 +1103,7 @@ RTT: 1(sec)
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: 5
 Direction: Received
@@ -1112,7 +1112,7 @@ End: No
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: 5
 Direction: Received
@@ -1121,7 +1121,7 @@ End: Yes
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: 2
 Direction: Received
@@ -1130,7 +1130,7 @@ End: No
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: 2
 Direction: Received
@@ -1172,7 +1172,7 @@ Event: ConfbridgeJoin
 Privilege: call,all
 Channel: SIP/US-00000008
 Uniqueid: 1389990159.27
-Conference: 51
+Conference: 301
 CallerIDnum: 210
 CallerIDname: 210
 
@@ -1207,22 +1207,22 @@ DLSR: 0.0020(sec)
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DEST
-Value: 52
+Value: 302
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: READSTATUS
 Value: TIMEOUT
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 3
 Application: GotoIf
@@ -1231,8 +1231,8 @@ Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 4
 Application: GotoIf
@@ -1241,8 +1241,8 @@ Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 5
 Application: Set
@@ -1251,90 +1251,90 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: __DYNAMIC_FEATURES
 Value: callerjointhreeway
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-collect
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
 Extension: s
 Priority: 6
 Application: Dial
-AppData: Local/52@dialed_4wire/n,90,gb(fc-tw-third-user-prebridge^s^1)
+AppData: Local/302@dialed_analog/n,90,gb(p1-s2-third-user-prebridge^s^1)
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALSTATUS
 Value: 
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDPEERNUMBER
 Value: 
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDPEERNAME
 Value: 
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ANSWEREDTIME
 Value: 
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDTIME
 Value: 
 Uniqueid: 1389990173.29
 
 Event: Newchannel
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 ChannelState: 0
 ChannelStateDesc: Down
 CallerIDNum: 
 CallerIDName: 
 AccountCode: 
-Exten: 52
-Context: dialed_4wire
+Exten: 302
+Context: dialed_analog
 Uniqueid: 1389990179.32
 
 Event: Newchannel
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 ChannelState: 4
 ChannelStateDesc: Ring
 CallerIDNum: 
 CallerIDName: 
 AccountCode: 
-Exten: 52
-Context: dialed_4wire
+Exten: 302
+Context: dialed_analog
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: DIALEDPEERNUMBER
-Value: 52@dialed_4wire/n
+Value: 302@dialed_analog/n
 Uniqueid: 1389990179.32
 
 Event: NewCallerid
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 CallerIDNum: s
 CallerIDName: 210
 Uniqueid: 1389990179.32
@@ -1342,15 +1342,15 @@ CID-CallingPres: 0 (Presentation Allowed, Not Screened)
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: LOCAL(ARGC)
 Value: 0
 Uniqueid: 1389990179.32
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-user-prebridge
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
 Extension: s
 Priority: 1
 Application: Verbose
@@ -1359,24 +1359,24 @@ Uniqueid: 1389990179.32
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-user-prebridge
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
 Extension: s
 Priority: 2
 Application: Set
-AppData: CHANNEL(hangup_handler_push)=fc-tw-third-user-hangup-handler,s,1
+AppData: CHANNEL(hangup_handler_push)=p1-s2-third-user-hangup-handler,s,1
 Uniqueid: 1389990179.32
 
 Event: HangupHandlerPush
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990179.32
-Handler: fc-tw-third-user-hangup-handler,s,1
+Handler: p1-s2-third-user-hangup-handler,s,1
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-user-prebridge
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
 Extension: s
 Priority: 3
 Application: Return
@@ -1385,49 +1385,49 @@ Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: GOSUB_RETVAL
 Value: 
 Uniqueid: 1389990179.32
 
 Event: LocalBridge
 Privilege: call,all
-Channel1: Local/52@dialed_4wire-00000002;1
-Channel2: Local/52@dialed_4wire-00000002;2
+Channel1: Local/302@dialed_analog-00000002;1
+Channel2: Local/302@dialed_analog-00000002;2
 Uniqueid1: 1389990179.32
 Uniqueid2: 1389990179.33
-Context: dialed_4wire
-Exten: 52
+Context: dialed_analog
+Exten: 302
 LocalOptimization: Yes
 
 Event: Dial
 Privilege: call,all
 SubEvent: Begin
-Channel: 4WIRE/1-I00000007
-Destination: Local/52@dialed_4wire-00000002;1
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+Channel: ANALOG/1-I00000007
+Destination: Local/302@dialed_analog-00000002;1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: 210
 ConnectedLineName: 210
 UniqueID: 1389990173.29
 DestUniqueID: 1389990179.32
-Dialstring: 52@dialed_4wire/n
+Dialstring: 302@dialed_analog/n
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 1
 Application: Verbose
-AppData: 1, Dialing 4 Wire at 52
+AppData: 1, Dialing analog at 302
 Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 2
 Application: Verbose
 AppData: 1,Setting DYNAMIC_FEATURES: calleeonhold#calleeoffhold#calleestartthreeway
@@ -1435,9 +1435,9 @@ Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 3
 Application: Set
 AppData: __DYNAMIC_FEATURES=calleeonhold#calleeoffhold#calleestartthreeway
@@ -1445,16 +1445,16 @@ Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: __DYNAMIC_FEATURES
 Value: calleeonhold#calleeoffhold#calleestartthreeway
 Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 4
 Application: Set
 AppData: did-header=
@@ -1462,16 +1462,16 @@ Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: did-header
 Value: 
 Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 5
 Application: GotoIf
 AppData: 0?setdid:checkdnd
@@ -1479,9 +1479,9 @@ Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 7
 Application: GotoIf
 AppData: 1?notdnd:dnd
@@ -1489,208 +1489,208 @@ Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 8
 Application: Verbose
-AppData: Attempting to call 4WIRE/52
+AppData: Attempting to call ANALOG/302
 Uniqueid: 1389990179.33
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
-Context: dialed_4wire
-Extension: 52
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
 Priority: 9
 Application: Dial
-AppData: 4WIRE/52/s,90,TtHh
+AppData: ANALOG/302/s,90,TtHh
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALSTATUS
 Value: 
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDPEERNUMBER
 Value: 
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDPEERNAME
 Value: 
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: ANSWEREDTIME
 Value: 
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDTIME
 Value: 
 Uniqueid: 1389990179.33
 
 Event: Newchannel
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 ChannelState: 1
 ChannelStateDesc: Rsrvd
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
+CallerIDNum: 302
+CallerIDName: ANALOG 2
 AccountCode: 
 Exten: s
-Context: incoming_4wire
+Context: incoming_analog
 Uniqueid: 1389990179.34
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Variable: DIALEDPEERNUMBER
-Value: 52/s
+Value: 302/s
 Uniqueid: 1389990179.34
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 ChannelState: 5
 ChannelStateDesc: Ringing
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990179.34
 
 Event: Dial
 Privilege: call,all
 SubEvent: Begin
-Channel: Local/52@dialed_4wire-00000002;2
-Destination: 4WIRE/2-I00000008
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
+Channel: Local/302@dialed_analog-00000002;2
+Destination: ANALOG/2-I00000008
+CallerIDNum: 301
+CallerIDName: ANALOG 1
 ConnectedLineNum: s
 ConnectedLineName: 210
 UniqueID: 1389990179.33
 DestUniqueID: 1389990179.34
-Dialstring: 52/s
+Dialstring: 302/s
 
 Event: Newstate
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 ChannelState: 5
 ChannelStateDesc: Ringing
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990179.32
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 ChannelState: 6
 ChannelStateDesc: Up
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990179.34
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALSTATUS
 Value: ANSWER
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDPEERNAME
-Value: 4WIRE/2-I00000008
+Value: ANALOG/2-I00000008
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDPEERNUMBER
-Value: 52/s
+Value: 302/s
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: BRIDGEPEER
-Value: 4WIRE/2-I00000008
+Value: ANALOG/2-I00000008
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;2
+Value: Local/302@dialed_analog-00000002;2
 Uniqueid: 1389990179.34
 
 Event: Newstate
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 ChannelState: 6
 ChannelStateDesc: Up
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALSTATUS
 Value: ANSWER
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDPEERNAME
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDPEERNUMBER
-Value: 52@dialed_4wire/n
+Value: 302@dialed_analog/n
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: NewAccountCode
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990179.32
 AccountCode: 
 OldAccountCode: 
@@ -1699,55 +1699,55 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: Newstate
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 ChannelState: 6
 ChannelStateDesc: Up
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
-ConnectedLineNum: 52
-ConnectedLineName: 4WIRE 2
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: NewAccountCode
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Uniqueid: 1389990179.34
 AccountCode: 
 OldAccountCode: 
@@ -1756,89 +1756,89 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: Local/52@dialed_4wire-00000002;2
-Channel2: 4WIRE/2-I00000008
+Channel1: Local/302@dialed_analog-00000002;2
+Channel2: ANALOG/2-I00000008
 Uniqueid1: 1389990179.33
 Uniqueid2: 1389990179.34
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: BRIDGEPEER
-Value: 4WIRE/2-I00000008
+Value: ANALOG/2-I00000008
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;2
+Value: Local/302@dialed_analog-00000002;2
 Uniqueid: 1389990179.34
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: BRIDGEPEER
-Value: 4WIRE/2-I00000008
+Value: ANALOG/2-I00000008
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;2
+Value: Local/302@dialed_analog-00000002;2
 Uniqueid: 1389990179.34
 
 Event: RTCPSent
@@ -1873,7 +1873,7 @@ RTT: 1(sec)
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: *
 Direction: Received
@@ -1884,55 +1884,55 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: *
 Direction: Received
@@ -1943,55 +1943,55 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: *
 Direction: Received
@@ -2002,55 +2002,55 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Link
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: BRIDGEPEER
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: BRIDGEPEER
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: DTMF
 Privilege: dtmf,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Digit: *
 Direction: Received
@@ -2061,37 +2061,37 @@ Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: 4WIRE/1-I00000007
-Channel2: Local/52@dialed_4wire-00000002;1
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
 Uniqueid1: 1389990173.29
 Uniqueid2: 1389990179.32
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DYNAMIC_PEERNAME
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: DYNAMIC_PEERNAME
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DYNAMIC_FEATURENAME
 Value: callerjointhreeway
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: DYNAMIC_FEATURENAME
 Value: callerjointhreeway
 Uniqueid: 1389990179.32
@@ -2099,128 +2099,128 @@ Uniqueid: 1389990179.32
 Event: MusicOnHold
 Privilege: call,all
 State: Start
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 UniqueID: 1389990179.32
 Class: default
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_EXTEN
 Value: s
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_CONTEXT
-Value: fc-tw-collect
+Value: p1-s2-collect
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_PRIORITY
 Value: 6
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 1
 Application: Verbose
-AppData: 1,Joining Three Way Call for 4WIRE/1-I00000007, Peer is Local/52@dialed_4wire-00000002;1
+AppData: 1,Joining Three Way Call for ANALOG/1-I00000007, Peer is Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 2
 Application: Set
-AppData: ChanName=4WIRE/1-I00000007
+AppData: ChanName=ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
-Value: 4WIRE/1-I00000007
+Value: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
 Value: 1-I00000007
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 3
 Application: Set
-AppData: Tech=4WIRE
+AppData: Tech=ANALOG
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: Tech
-Value: 4WIRE
+Value: ANALOG
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ChanName
 Value: 
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 4
 Application: Set
@@ -2229,22 +2229,22 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: Chan
 Value: 1-I00000007
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 5
 Application: Set
@@ -2253,146 +2253,146 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: INITIATING_EXTEN
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 6
 Application: Set
-AppData: CONFNO=51
+AppData: CONFNO=301
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: CONFNO
-Value: 51
+Value: 301
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 7
 Application: Set
-AppData: __THREEWAY_PEER_C=Local/52@dialed_4wire-00000002;1
+AppData: __THREEWAY_PEER_C=Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: __THREEWAY_PEER_C
-Value: Local/52@dialed_4wire-00000002;1
+Value: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 8
 Application: ChannelRedirect
-AppData: Local/52@dialed_4wire-00000002;1,fc-tw-third-conference-user,51,1
+AppData: Local/302@dialed_analog-00000002;1,p1-s2-third-conference-user,301,1
 Uniqueid: 1389990173.29
 
 Event: Newchannel
 Privilege: call,all
-Channel: AsyncGoto/Local/52@dialed_4wire-00000002;1
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1
 ChannelState: 6
 ChannelStateDesc: Up
 CallerIDNum: 
 CallerIDName: 
 AccountCode: 
 Exten: 
-Context: dialed_4wire
+Context: dialed_analog
 Uniqueid: 1389990188.35
 
 Event: Masquerade
 Privilege: call,all
-Clone: Local/52@dialed_4wire-00000002;1
+Clone: Local/302@dialed_analog-00000002;1
 CloneState: Up
-Original: AsyncGoto/Local/52@dialed_4wire-00000002;1
+Original: AsyncGoto/Local/302@dialed_analog-00000002;1
 OriginalState: Up
 
 Event: Rename
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
-Newname: Local/52@dialed_4wire-00000002;1<MASQ>
+Channel: Local/302@dialed_analog-00000002;1
+Newname: Local/302@dialed_analog-00000002;1<MASQ>
 Uniqueid: 1389990179.32
 
 Event: Rename
 Privilege: call,all
-Channel: AsyncGoto/Local/52@dialed_4wire-00000002;1
-Newname: Local/52@dialed_4wire-00000002;1
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1
+Newname: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
 
 Event: Rename
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1<MASQ>
-Newname: AsyncGoto/Local/52@dialed_4wire-00000002;1<ZOMBIE>
+Channel: Local/302@dialed_analog-00000002;1<MASQ>
+Newname: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
 Uniqueid: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: MACRO_DEPTH
 Value: 0
 Uniqueid: 1389990188.35
 
 Event: NewCallerid
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
+Channel: Local/302@dialed_analog-00000002;1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
 Uniqueid: 1389990188.35
 CID-CallingPres: 0 (Presentation Allowed, Not Screened)
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: CHANNELREDIRECT_STATUS
 Value: SUCCESS
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 9
 Application: Set
@@ -2401,29 +2401,29 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 1
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: macro-fc-tw-join
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
 Extension: s
 Priority: 10
 Application: ConfBridge
-AppData: 51,three-way,initiator-profile
+AppData: 301,three-way,initiator-profile
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-conference-user
-Extension: 51
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-conference-user
+Extension: 301
 Priority: 1
 Application: Verbose
-AppData: 1,Third Conference User: Dropping Local/52@dialed_4wire-00000002;1 into Conference 51
+AppData: 1,Third Conference User: Dropping Local/302@dialed_analog-00000002;1 into Conference 301
 Uniqueid: 1389990188.35
 
 Event: MusicOnHold
@@ -2434,12 +2434,12 @@ UniqueID: 1389990159.27
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-conference-user
-Extension: 51
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-conference-user
+Extension: 301
 Priority: 2
 Application: ConfBridge
-AppData: 51,three-way,user-profile
+AppData: 301,three-way,user-profile
 Uniqueid: 1389990188.35
 
 Event: RTCPSent
@@ -2473,19 +2473,19 @@ DLSR: 0.0020(sec)
 
 Event: ConfbridgeJoin
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
-Conference: 51
-CallerIDnum: 51
-CallerIDname: 4WIRE 1
+Conference: 301
+CallerIDnum: 301
+CallerIDname: ANALOG 1
 
 Event: ConfbridgeJoin
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
-Conference: 51
-CallerIDnum: 52
-CallerIDname: 4WIRE 2
+Conference: 301
+CallerIDnum: 302
+CallerIDname: ANALOG 2
 
 Event: RTCPSent
 Privilege: reporting,all
@@ -2518,60 +2518,60 @@ DLSR: 0.0020(sec)
 
 Event: HangupRequest
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Uniqueid: 1389990179.34
 
 Event: Bridge
 Privilege: call,all
 Bridgestate: Unlink
 Bridgetype: core
-Channel1: Local/52@dialed_4wire-00000002;2
-Channel2: 4WIRE/2-I00000008
+Channel1: Local/302@dialed_analog-00000002;2
+Channel2: ANALOG/2-I00000008
 Uniqueid1: 1389990179.33
 Uniqueid2: 1389990179.34
-CallerID1: 51
-CallerID2: 52
+CallerID1: 301
+CallerID2: 302
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: ANSWEREDTIME
 Value: 15
 Uniqueid: 1389990179.33
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALEDTIME
 Value: 19
 Uniqueid: 1389990179.33
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 ChannelState: 0
 ChannelStateDesc: Down
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 Uniqueid: 1389990179.34
 
 Event: Hangup
 Privilege: call,all
-Channel: 4WIRE/2-I00000008
+Channel: ANALOG/2-I00000008
 Uniqueid: 1389990179.34
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 AccountCode: 
 Cause: 0
 Cause-txt: Unknown
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Variable: DIALSTATUS
 Value: ANSWER
 Uniqueid: 1389990179.33
@@ -2579,42 +2579,42 @@ Uniqueid: 1389990179.33
 Event: Dial
 Privilege: call,all
 SubEvent: End
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 UniqueID: 1389990179.33
 DialStatus: ANSWER
 
 Event: SoftHangupRequest
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Uniqueid: 1389990179.33
 Cause: 16
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: CHANLOCALSTATUS
 Value: ANSWER
 Uniqueid: 1389990188.35
 
 Event: Hangup
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;2
+Channel: Local/302@dialed_analog-00000002;2
 Uniqueid: 1389990179.33
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
-ConnectedLineNum: 52
-ConnectedLineName: 4WIRE 2
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
 AccountCode: 
 Cause: 0
 Cause-txt: Unknown
 
 Event: ConfbridgeLeave
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
-Conference: 51
-CallerIDnum: 52
-CallerIDname: 4WIRE 2
+Conference: 301
+CallerIDnum: 302
+CallerIDname: ANALOG 2
 
 Event: RTCPSent
 Privilege: reporting,all
@@ -2647,27 +2647,27 @@ DLSR: 0.0030(sec)
 
 Event: SoftHangupRequest
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
 Cause: 16
 
 Event: HangupHandlerRun
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
-Handler: fc-tw-third-user-hangup-handler,s,1
+Handler: p1-s2-third-user-hangup-handler,s,1
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: LOCAL(ARGC)
 Value: 0
 Uniqueid: 1389990188.35
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-user-hangup-handler
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-hangup-handler
 Extension: s
 Priority: 1
 Application: Verbose
@@ -2676,8 +2676,8 @@ Uniqueid: 1389990188.35
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
-Context: fc-tw-third-user-hangup-handler
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-hangup-handler
 Extension: s
 Priority: 2
 Application: Return
@@ -2686,35 +2686,35 @@ Uniqueid: 1389990188.35
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Variable: GOSUB_RETVAL
 Value: 
 Uniqueid: 1389990188.35
 
 Event: Hangup
 Privilege: call,all
-Channel: Local/52@dialed_4wire-00000002;1
+Channel: Local/302@dialed_analog-00000002;1
 Uniqueid: 1389990188.35
-CallerIDNum: 52
-CallerIDName: 4WIRE 2
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 AccountCode: 
 Cause: 0
 Cause-txt: Unknown
 
 Event: HangupRequest
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 
 Event: ConfbridgeLeave
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
-Conference: 51
-CallerIDnum: 51
-CallerIDname: 4WIRE 1
+Conference: 301
+CallerIDnum: 301
+CallerIDname: ANALOG 1
 
 Event: MusicOnHold
 Privilege: call,all
@@ -2725,28 +2725,28 @@ Class: default
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_DEPTH
 Value: 0
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_EXTEN
 Value: 
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_CONTEXT
-Value: incoming_4wire
+Value: incoming_analog
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: MACRO_PRIORITY
 Value: 1
 Uniqueid: 1389990173.29
@@ -2754,12 +2754,12 @@ Uniqueid: 1389990173.29
 Event: MusicOnHold
 Privilege: call,all
 State: Stop
-Channel: AsyncGoto/Local/52@dialed_4wire-00000002;1<ZOMBIE>
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
 UniqueID: 1389990179.32
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: ANSWEREDTIME
 Value: 20
 Uniqueid: 1389990173.29
@@ -2768,20 +2768,20 @@ Event: ConfbridgeLeave
 Privilege: call,all
 Channel: SIP/US-00000008
 Uniqueid: 1389990159.27
-Conference: 51
+Conference: 301
 CallerIDnum: 210
 CallerIDname: 210
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALEDTIME
 Value: 44
 Uniqueid: 1389990173.29
 
 Event: Hangup
 Privilege: call,all
-Channel: AsyncGoto/Local/52@dialed_4wire-00000002;1<ZOMBIE>
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
 Uniqueid: 1389990179.32
 CallerIDNum: <unknown>
 CallerIDName: <unknown>
@@ -2793,7 +2793,7 @@ Cause-txt: Normal Clearing
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: DIALSTATUS
 Value: ANSWER
 Uniqueid: 1389990173.29
@@ -2801,60 +2801,60 @@ Uniqueid: 1389990173.29
 Event: Dial
 Privilege: call,all
 SubEvent: End
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 UniqueID: 1389990173.29
 DialStatus: ANSWER
 
 Event: SoftHangupRequest
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
 Cause: 16
 
 Event: HangupHandlerRun
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
-Handler: fc-tw-four-wire-hangup-handler,s,1
+Handler: p1-s2-analog-hangup-handler,s,1
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: LOCAL(ARGC)
 Value: 0
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-four-wire-hangup-handler
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
 Extension: s
 Priority: 1
 Application: Verbose
-AppData: 1, HANGUP HANDLER 4 WIRE!!
+AppData: 1, HANGUP HANDLER ANALOG
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-four-wire-hangup-handler
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
 Extension: s
 Priority: 2
 Application: ChannelRedirect
-AppData: SIP/US-00000008,fc-tw-hangup-channel,s,1
+AppData: SIP/US-00000008,p1-s2-hangup-channel,s,1
 Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: CHANNELREDIRECT_STATUS
 Value: SUCCESS
 Uniqueid: 1389990173.29
 
 Event: Newexten
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
-Context: fc-tw-four-wire-hangup-handler
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
 Extension: s
 Priority: 3
 Application: Return
@@ -2863,37 +2863,37 @@ Uniqueid: 1389990173.29
 
 Event: VarSet
 Privilege: dialplan,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Variable: GOSUB_RETVAL
 Value: 
 Uniqueid: 1389990173.29
 
 Event: Newstate
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 ChannelState: 0
 ChannelStateDesc: Down
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
-ConnectedLineNum: 52
-ConnectedLineName: 4WIRE 2
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
 Uniqueid: 1389990173.29
 
 Event: Hangup
 Privilege: call,all
-Channel: 4WIRE/1-I00000007
+Channel: ANALOG/1-I00000007
 Uniqueid: 1389990173.29
-CallerIDNum: 51
-CallerIDName: 4WIRE 1
-ConnectedLineNum: 52
-ConnectedLineName: 4WIRE 2
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
 AccountCode: 
 Cause: 16
 Cause-txt: Normal Clearing
 
 Event: ConfbridgeEnd
 Privilege: call,all
-Conference: 51
+Conference: 301
 
 Event: Hangup
 Privilege: call,all
@@ -2922,7 +2922,7 @@ Cause-txt: Unknown
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-hangup-channel
+Context: p1-s2-hangup-channel
 Extension: s
 Priority: 1
 Application: Verbose
@@ -2932,7 +2932,7 @@ Uniqueid: 1389990159.27
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-hangup-channel
+Context: p1-s2-hangup-channel
 Extension: s
 Priority: 2
 Application: Hangup
@@ -2949,7 +2949,7 @@ Event: HangupHandlerRun
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Uniqueid: 1389990159.27
-Handler: fc-tw-first-user-hangup-handler,s,1
+Handler: p1-s2-first-user-hangup-handler,s,1
 
 Event: VarSet
 Privilege: dialplan,all
@@ -2961,7 +2961,7 @@ Uniqueid: 1389990159.27
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-first-user-hangup-handler
+Context: p1-s2-first-user-hangup-handler
 Extension: s
 Priority: 1
 Application: Verbose
@@ -2971,7 +2971,7 @@ Uniqueid: 1389990159.27
 Event: Newexten
 Privilege: dialplan,all
 Channel: SIP/US-00000008
-Context: fc-tw-first-user-hangup-handler
+Context: p1-s2-first-user-hangup-handler
 Extension: s
 Priority: 2
 Application: Return
@@ -3026,8 +3026,8 @@ Channel: SIP/US-00000008
 Uniqueid: 1389990159.27
 CallerIDNum: 210
 CallerIDName: 210
-ConnectedLineNum: 51
-ConnectedLineName: 4WIRE 1
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
 AccountCode: 
 Cause: 16
 Cause-txt: Normal Clearing
