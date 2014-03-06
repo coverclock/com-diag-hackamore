@@ -15,10 +15,11 @@ import com.diag.hackamore.Socket
 import com.diag.hackamore.End
 import com.diag.hackamore.Multiplex
 
-from Parameters import SERVER
+from com.diag.hackamore.Credentials import SERVER
+from com.diag.hackamore.Credentials import USERNAME
+from com.diag.hackamore.Credentials import SECRET
+
 from Parameters import PORT
-from Parameters import USERNAME
-from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import SAMPLE
 from Parameters import TYPESCRIPT
