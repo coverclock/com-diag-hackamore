@@ -73,9 +73,9 @@ class State:
                             calls = [ ]
                             for channel in chan.call:
                                 calls.append(channel)
-                            self.calls.remove(chan.call)
                             for channel in dest.call:
                                 calls.append(channel)
+                            self.calls.remove(chan.call)
                             self.calls.remove(dest.call)
                             chan.call = calls
                             dest.call = calls
@@ -84,7 +84,7 @@ class State:
                             chan.call.append(dest)
                             dest.call = chan.call
                         elif dest.call != None:
-                            dest.call.append(chan)
+                            dest.call.insert(0, chan)
                             chan.call = dest.call
                         else:
                             calls = [ chan, dest ]
