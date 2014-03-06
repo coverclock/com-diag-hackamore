@@ -16,7 +16,7 @@ class State:
         self.mutex = threading.Condition()
         self.channels = { }
         self.conferences = { }
-        self.calls = { }
+        self.calls = [ ]
 
     def __del__(self):
         pass
@@ -67,9 +67,30 @@ class State:
                     chan = channels[uniqueid]
                     chan.calling()
                     if destuniqueid in channels:
-                        destchan = channels[destuniqueid]
-                        destchan.called()
-                        
+                        dest = channels[destuniqueid]
+                        dest.called()
+                        if (chan.call != None) and (dest.call != None):
+                            calls = [ ]
+                            for channel in chan.call:
+                                calls.append(channel)
+                            self.calls.remove(chan.call)
+                            for channel in dest.call:
+                                calls.append(channel)
+                            self.calls.remove(dest.call)
+                            chan.call = calls
+                            dest.call = calls
+                            self.calls.append(calls)
+                        elif chan.call != None:
+                            chan.call.append(dest)
+                            dest.call = chan.call
+                        elif dest.call != None:
+                            dest.call.append(chan)
+                            chan.call = dest.call
+                        else:
+                            calls = [ chan, dest ]
+                            chan.call = calls
+                            dest.call = calls
+                            self.calls.append(calls)
 
     def hangup(self, pbx, uniqueid):
         with self.mutex:
@@ -112,7 +133,7 @@ class State:
             for pbx in self.channels:
                 channels = self.channels[pbx]
                 for uniqueid in channels:
-                    self.hangup(pbx, uniqueid)
+                    pass # self.hangup(pbx, uniqueid)
 
     def dump(self):
         with self.mutex:
@@ -123,6 +144,10 @@ class State:
                 for channel in channels:
                     chan = channels[channel]
                     print(str(chan))
+            for calls in self.calls:
+                print("CALL")
+                for chan in calls:
+                    print(str(chan)) 
             print("CONFERENCES")
             for pbx in self.conferences:
                 print(str(pbx))
