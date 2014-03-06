@@ -14,9 +14,10 @@ class State:
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.mutex = threading.Condition()
-        self.channels = { }
-        self.conferences = { }
-        self.calls = [ ]
+        self.channels = { }     # chan = self.channels[pbx][uniqueid]
+        self.bridges = { }      # chan = self.bridges[pbx][conference][uniqueid]
+        self.trunks = { }       # chan = self.trunks[sipcallid]
+        self.calls = [ ]        # chan = self.calls[0:-1][0:-1]
 
     def __del__(self):
         pass
@@ -24,40 +25,110 @@ class State:
     def __repr__(self):
         return "State()"
 
+    def remove(self, pbx, uniqueid):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                if chan.call != None:
+                    chan.call.remove(chan)
+                    if not chan.call:
+                        self.calls.remove(chan.call)
+                if chan.conference != None:
+                    if pbx in self.bridges:
+                        bridges = self.bridges[pbx]
+                        if chan.conference in bridges:
+                            bridge = bridges[chan.conference]
+                            if uniqueid in bridge:
+                                del bridge[uniqueid]
+                                if not bridge:
+                                    del bridges[chan.conference]
+                                    if not bridges:
+                                        del self.bridges[pbx]                       
+                if chan.sipcallid in self.trunks:
+                    del self.trunks[chan.sipcallid]
+                del channels[uniqueid]
+                if not channels:
+                    del self.channels[pbx]
+    
+    def close(self, pbx):
+        with self.mutex:
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                for uniqueid in channels:
+                    self.remove(pbx, uniqueid)
+
+    def dump(self):
+        with self.mutex:
+            print("CHANNELS")
+            for pbx in self.channels:
+                print(str(pbx))
+                channels = self.channels[pbx]
+                for channel in channels:
+                    chan = channels[channel]
+                    print(str(chan))
+            for pbx in self.bridges:
+                bridges = self.bridges[pbx]
+                for conference in bridges:
+                    bridge = bridges[conference]
+                    print("BRIDGE")
+                    for uniqueid in bridge:
+                        chan = bridge[uniqueid]
+                        print(str(chan))
+            print("TRUNKS")
+            for sipcallid in self.trunks:
+                chan = self.trunks[sipcallid]
+                print(str(chan))
+            for calls in self.calls:
+                print("CALL")
+                for chan in calls:
+                    print(str(chan)) 
+
+    def audit(self):
+        with self.mutex:
+            pass
+
     def confbridgeend(self, pbx, conference):
         with self.mutex:
-            if pbx in self.conferences:
-                conferences = self.conferences[pbx]
-                if conference in conferences:
-                    del conferences[conference]
+            if pbx in self.bridges:
+                bridges = self.bridges[pbx]
+                if conference in bridges:
+                    bridge = bridges[conference]
+                    for uniqueid in bridge:
+                        chan = bridge[uniqueid]
+                        chan.leave()
+                    del bridges[conference]
     
     def confbridgejoin(self, pbx, uniqueid, conference):
         with self.mutex:
             if pbx in self.channels:
                 channels = self.channels[pbx]
-                if pbx in self.conferences:
-                    conferences = self.conferences[pbx]
+                if pbx in self.bridges:
+                    bridges = self.bridges[pbx]
                     if uniqueid in channels:
                         chan = channels[uniqueid]
-                        if conference in conferences:
-                            conf = conferences[conference]
-                            conf[uniqueid] = chan
+                        if conference in bridges:
+                            bridge = bridges[conference]
+                            bridge[uniqueid] = chan
+                            chan.join(conference)
     
     def confbridgeleave(self, pbx, uniqueid, conference):
         with self.mutex:
-            if pbx in self.conferences:
-                conferences = self.conferences[pbx]
-                if conference in conferences:
-                    conf = conferences[conference]
-                    if uniqueid in conf:
-                        del conf[uniqueid]
+            if pbx in self.bridges:
+                bridges = self.bridges[pbx]
+                if conference in bridges:
+                    bridge = bridges[conference]
+                    if uniqueid in bridge:
+                        chan = bridge[uniqueid]
+                        chan.leave(conference)
+                        del bridge[uniqueid]
     
     def confbridgestart(self, pbx, conference):
         with self.mutex:
-            if not pbx in self.conferences:
-                self.conferences[pbx] = { }
-            conferences = self.conferences[pbx]
-            conferences[conference] = { }
+            if not pbx in self.bridges:
+                self.bridges[pbx] = { }
+            bridges = self.bridges[pbx]
+            bridges[conference] = { }
     
     def dial(self, pbx, uniqueid, destuniqueid):
         with self.mutex:
@@ -94,7 +165,7 @@ class State:
 
     def hangup(self, pbx, uniqueid):
         with self.mutex:
-            pass
+            self.remove(pbx, uniqueid)
     
     def localbridge(self, pbx, uniqueid1, channel1, uniqueid2, channel2):
         with self.mutex:
@@ -123,38 +194,40 @@ class State:
                 if uniqueid in channels:
                     chan = channels[uniqueid]
                     chan.rename(newname)
-    
-    def sipcallid(self, pbx, uniqueid, channel, value):
-        with self.mutex:
-            pass
-    
-    def close(self, name):
-        with self.mutex:
-            for pbx in self.channels:
-                channels = self.channels[pbx]
-                for uniqueid in channels:
-                    pass # self.hangup(pbx, uniqueid)
 
-    def dump(self):
+    def sipcallid(self, pbx, uniqueid, value):
         with self.mutex:
-            print("CHANNELS")
-            for pbx in self.channels:
-                print(str(pbx))
+            if pbx in self.channels:
                 channels = self.channels[pbx]
-                for channel in channels:
-                    chan = channels[channel]
-                    print(str(chan))
-            for calls in self.calls:
-                print("CALL")
-                for chan in calls:
-                    print(str(chan)) 
-            print("CONFERENCES")
-            for pbx in self.conferences:
-                print(str(pbx))
-                conferences = self.conferences[pbx]
-                for conference in conferences:
-                    conf = conferences[conference]
-                    print(str(conf))
-
-    def audit(self):
-        pass
+                if uniqueid in channels:
+                    chan = channels[uniqueid]
+                    chan.endpoint(value)
+                    if not value in self.trunks:
+                        self.trunks[value] = chan
+                    else:
+                        dest = self.trunks[value]
+                        del self.trunks[value]
+                        chan.trunk()
+                        dest.trunk()
+                        if (chan.call != None) and (dest.call != None):
+                            calls = [ ]
+                            for channel in chan.call:
+                                calls.append(channel)
+                            for channel in dest.call:
+                                calls.append(channel)
+                            self.calls.remove(chan.call)
+                            self.calls.remove(dest.call)
+                            chan.call = calls
+                            dest.call = calls
+                            self.calls.append(calls)
+                        elif chan.call != None:
+                            chan.call.append(dest)
+                            dest.call = chan.call
+                        elif dest.call != None:
+                            dest.call.insert(0, chan)
+                            chan.call = dest.call
+                        else:
+                            calls = [ chan, dest ]
+                            chan.call = calls
+                            dest.call = calls
+                            self.calls.append(calls)

@@ -217,7 +217,7 @@ class Engine:
                             if enabled:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
                             if not debug:
-                                self.state.sipcallid(pbx, uniqueid, channel, value)
+                                self.state.sipcallid(pbx, uniqueid, value)
                     else:
                         pass
                 else:
