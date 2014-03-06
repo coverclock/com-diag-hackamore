@@ -10,6 +10,10 @@ import Logger
 import Channel
 
 class State:
+    
+    #####
+    ##### CTOR/DTOR
+    #####
 
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
@@ -24,6 +28,10 @@ class State:
 
     def __repr__(self):
         return "State()"
+    
+    #####
+    ##### PRIVATE
+    #####
 
     def remove(self, pbx, uniqueid):
         if pbx in self.channels:
@@ -51,12 +59,41 @@ class State:
                 if not channels:
                     del self.channels[pbx]
     
-    def close(self, pbx):
-        with self.mutex:
-            if pbx in self.channels:
-                channels = self.channels[pbx]
-                for uniqueid in channels:
-                    self.remove(pbx, uniqueid)
+    def connect(self, pbx, uniqueid, destuniqueid):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.calling()
+                if destuniqueid in channels:
+                    dest = channels[destuniqueid]
+                    dest.called()
+                    if (chan.call != None) and (dest.call != None):
+                        calls = [ ]
+                        for channel in chan.call:
+                            calls.append(channel)
+                        for channel in dest.call:
+                            calls.append(channel)
+                        self.calls.remove(chan.call)
+                        self.calls.remove(dest.call)
+                        chan.call = calls
+                        dest.call = calls
+                        self.calls.append(calls)
+                    elif chan.call != None:
+                        chan.call.append(dest)
+                        dest.call = chan.call
+                    elif dest.call != None:
+                        dest.call.insert(0, chan)
+                        chan.call = dest.call
+                    else:
+                        calls = [ chan, dest ]
+                        chan.call = calls
+                        dest.call = calls
+                        self.calls.append(calls)
+
+    #####
+    ##### DEBUG
+    #####
 
     def dump(self):
         with self.mutex:
@@ -87,6 +124,17 @@ class State:
     def audit(self):
         with self.mutex:
             pass
+    
+    #####
+    ##### PUBLIC
+    #####
+    
+    def close(self, pbx):
+        with self.mutex:
+            if pbx in self.channels:
+                channels = self.channels[pbx]
+                for uniqueid in channels:
+                    self.remove(pbx, uniqueid)
 
     def confbridgeend(self, pbx, conference):
         with self.mutex:
@@ -132,44 +180,15 @@ class State:
     
     def dial(self, pbx, uniqueid, destuniqueid):
         with self.mutex:
-            if pbx in self.channels:
-                channels = self.channels[pbx]
-                if uniqueid in channels:
-                    chan = channels[uniqueid]
-                    chan.calling()
-                    if destuniqueid in channels:
-                        dest = channels[destuniqueid]
-                        dest.called()
-                        if (chan.call != None) and (dest.call != None):
-                            calls = [ ]
-                            for channel in chan.call:
-                                calls.append(channel)
-                            for channel in dest.call:
-                                calls.append(channel)
-                            self.calls.remove(chan.call)
-                            self.calls.remove(dest.call)
-                            chan.call = calls
-                            dest.call = calls
-                            self.calls.append(calls)
-                        elif chan.call != None:
-                            chan.call.append(dest)
-                            dest.call = chan.call
-                        elif dest.call != None:
-                            dest.call.insert(0, chan)
-                            chan.call = dest.call
-                        else:
-                            calls = [ chan, dest ]
-                            chan.call = calls
-                            dest.call = calls
-                            self.calls.append(calls)
+            self.connect(pbx, uniqueid, destuniqueid)
 
     def hangup(self, pbx, uniqueid):
         with self.mutex:
             self.remove(pbx, uniqueid)
     
-    def localbridge(self, pbx, uniqueid1, channel1, uniqueid2, channel2):
+    def localbridge(self, pbx, uniqueid1, uniqueid2):
         with self.mutex:
-            pass
+            self.connect(pbx, uniqueid1, uniqueid2)
     
     def newchannel(self, pbx, uniqueid, channel, channelstate, channelstatedesc):
         with self.mutex:

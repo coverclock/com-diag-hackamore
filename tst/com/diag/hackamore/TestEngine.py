@@ -13,10 +13,10 @@ import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
 import com.diag.hackamore.Engine
-import com.diag.hackamore.Event
 
-from Parameters import USERNAME
-from Parameters import SECRET
+from com.diag.hackamore.Credentials import USERNAME
+from com.diag.hackamore.Credentials import SECRET
+
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
 
@@ -114,7 +114,7 @@ class Test(unittest.TestCase):
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        engine.engine(inputs, outputs, debug = True)
+        engine.engine(inputs, outputs, suppress = True)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
 
@@ -130,7 +130,7 @@ class Test(unittest.TestCase):
         inputs = [ ]
         inputs.append(source)
         self.assertEquals(len(inputs), 1)
-        engine.engine(inputs, inputs, debug = True)
+        engine.engine(inputs, inputs, suppress = True)
         self.assertEquals(len(inputs), 1)
         
     def test030Passive(self):
@@ -157,7 +157,7 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, debug = True)
+        engine.engine(sources, sources, suppress = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
@@ -186,7 +186,7 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources)
+        engine.engine(sources, sources, verbose = True)
         self.assertEquals(len(sources), 1)
         state.dump()
         thread.join()
