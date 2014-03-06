@@ -14,10 +14,10 @@ class State:
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.mutex = threading.Condition()
-        self.channels = { }     # chan = self.channels[pbx][uniqueid]
-        self.bridges = { }      # chan = self.bridges[pbx][conference][uniqueid]
-        self.trunks = { }       # chan = self.trunks[sipcallid]
-        self.calls = [ ]        # chan = self.calls[0:-1][0:-1]
+        self.channels = { }     # Channel = self.channels[pbx][uniqueid]
+        self.bridges = { }      # Channel = self.bridges[pbx][conference][uniqueid]
+        self.trunks = { }       # Channel = self.trunks[sipcallid]
+        self.calls = [ ]        # Channel = self.calls[0:-1][0:-1]
 
     def __del__(self):
         pass
