@@ -14,6 +14,10 @@ TIME = "TIME"
 
 # These symbols are keywords used by the Asterisk Management Interface.
 
+BRIDGE = "Bridge"
+CALLERID1 = "CallerID1"
+CALLERID2 = "CallerID2"
+CALLERIDNUM = "CallerIDNum"
 CHANNEL = "Channel"
 CHANNEL1 = "Channel1"
 CHANNEL2 = "Channel2"

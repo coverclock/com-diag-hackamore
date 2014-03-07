@@ -60,6 +60,7 @@ class Test(unittest.TestCase):
         multiplex.register(source)
         self.assertTrue(multiplex.active())
         counter = { }
+        counter[com.diag.hackamore.Event.BRIDGE] = 0
         counter[com.diag.hackamore.Event.CONFBRIDGEEND] = 0
         counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] = 0
         counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] = 0
@@ -91,7 +92,29 @@ class Test(unittest.TestCase):
                 self.assertFalse(multiplex.active())
                 messages.close()
             elif com.diag.hackamore.Event.EVENT in event:
-                if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEEND:
+                if event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.BRIDGE:
+                    if not com.diag.hackamore.Event.CALLERID1 in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CALLERID2 in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CHANNEL1 in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CHANNEL2 in event:
+                        pass
+                    elif not com.diag.hackamore.Event.UNIQUEID1 in event:
+                        pass
+                    elif not com.diag.hackamore.Event.UNIQUEID1 in event:
+                        pass
+                    else:
+                        callerid1 = event[com.diag.hackamore.Event.CALLERID1]
+                        callerid2 = event[com.diag.hackamore.Event.CALLERID2]
+                        channel1 = event[com.diag.hackamore.Event.CHANNEL1]
+                        channel2 = event[com.diag.hackamore.Event.CHANNEL2]
+                        uniqueid1 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID1] )
+                        uniqueid2 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID2] )
+                        print(com.diag.hackamore.Event.BRIDGE, callerid1, callerid2, channel1, channel2, uniqueid1, uniqueid2)
+                        counter[com.diag.hackamore.Event.BRIDGE] = counter[com.diag.hackamore.Event.BRIDGE] + 1
+                elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEEND:
                     if not com.diag.hackamore.Event.CONFERENCE in event:
                         pass
                     else:
@@ -178,7 +201,9 @@ class Test(unittest.TestCase):
                         print(com.diag.hackamore.Event.LOCALBRIDGE, channel1, channel2, uniqueid1, uniqueid2)
                         counter[com.diag.hackamore.Event.LOCALBRIDGE] = counter[com.diag.hackamore.Event.LOCALBRIDGE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWCHANNEL:
-                    if not com.diag.hackamore.Event.CHANNEL in event:
+                    if not com.diag.hackamore.Event.CALLERIDNUM in event:
+                        pass
+                    elif not com.diag.hackamore.Event.CHANNEL in event:
                         pass
                     elif not com.diag.hackamore.Event.CHANNELSTATE in event:
                         pass
@@ -187,11 +212,12 @@ class Test(unittest.TestCase):
                     elif not com.diag.hackamore.Event.UNIQUEIDLC in event:
                         pass
                     else:
+                        calleridnum = event[com.diag.hackamore.Event.CALLERIDNUM]
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         channelstate = event[com.diag.hackamore.Event.CHANNELSTATE]
                         channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.NEWCHANNEL, channel, channelstate, channelstatedesc, uniqueid)
+                        print(com.diag.hackamore.Event.NEWCHANNEL, channel, calleridnum, channelstate, channelstatedesc, uniqueid)
                         counter[com.diag.hackamore.Event.NEWCHANNEL] = counter[com.diag.hackamore.Event.NEWCHANNEL] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWSTATE:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -244,6 +270,7 @@ class Test(unittest.TestCase):
             else:
                 pass
         self.assertFalse(multiplex.active())
+        self.assertTrue(counter[com.diag.hackamore.Event.BRIDGE])
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEEND])
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGEJOIN])
         self.assertTrue(counter[com.diag.hackamore.Event.CONFBRIDGELEAVE])

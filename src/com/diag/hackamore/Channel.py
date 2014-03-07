@@ -13,9 +13,10 @@ ROLE = ( "IDLE", "CALLING", "CALLED", "TRUNK" )
 
 class Channel():
 
-    def __init__(self, pbx, uniqueid, channel, channelstate, channelstatedesc):
+    def __init__(self, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc):
         self.pbx = pbx
         self.uniqueid = uniqueid
+        self.calleridnum = calleridnum
         self.sipcallid = None
         self.conference = None
         self.channel = channel
@@ -28,7 +29,7 @@ class Channel():
         pass
 
     def __repr__(self):
-        return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.sipcallid) + "," + str(self.channel) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
+        return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.calleridnum) + "," + str(self.sipcallid) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
 
     def newstate(self, channelstate, channelstatedesc):
         self.channelstate = channelstate
@@ -59,6 +60,9 @@ class Channel():
         else:
             pass
 
+    def dial(self, calleridnum):
+        self.calleridnum = calleridnum
+
     def join(self, conference):
         self.conference = conference
 
@@ -66,5 +70,5 @@ class Channel():
         self.conference = None
         
     def dump(self):
-        print "", "", "", "", "CHANNEL", self.channel, ROLE[self.role], self.channelstatedesc, self.pbx, self.uniqueid, self.sipcallid, self.conference, hex(id(self.call))
+        print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
 
