@@ -39,6 +39,9 @@ class State:
             channels = self.channels[pbx]
             if uniqueid in channels:
                 chan = channels[uniqueid]
+                if chan.calleridnum != None:
+                    if chan.channel in self.numbers:
+                        del self.numbers[chan.channel]
                 if chan.call != None:
                     chan.call.remove(chan)
                     if not chan.call:

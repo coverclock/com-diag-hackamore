@@ -161,11 +161,10 @@ class Test(unittest.TestCase):
         self.assertEquals(len(sources), 1)
         thread.join()
 
-    def test040Active(self):
+    def test040Verbose(self):
         global address
         global port
         global ready
-        name = self.id()
         com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
         state = com.diag.hackamore.State.State()
         engine = com.diag.hackamore.Engine.Engine(state = state)
@@ -178,7 +177,7 @@ class Test(unittest.TestCase):
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        source = com.diag.hackamore.Socket.Socket("192.168.1.220", USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)

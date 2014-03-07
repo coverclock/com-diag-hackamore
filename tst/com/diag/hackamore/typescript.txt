@@ -118,7 +118,7 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: SIPURI
-Value: sip:601@192.168.1.222:5060
+Value: sip:601@192.168.1.220:5060
 Uniqueid: 1389990159.27
 
 Event: VarSet
@@ -132,7 +132,7 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: SIP/US-00000008
 Variable: SIPCALLID
-Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.222:5060
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
 Uniqueid: 1389990159.27
 
 Event: Newstate
@@ -411,7 +411,7 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
-Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.222:5060
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
 Uniqueid: 1389990159.28
 
 Event: VarSet
@@ -432,12 +432,12 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
-Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.222:5060
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
 Uniqueid: 1389990159.28
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990164.0431579136
 SentRTP: 40160
@@ -452,7 +452,7 @@ DLSR: 65517.1930 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -466,7 +466,7 @@ DLSR: 0.0020(sec)
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990169.0430448640
 SentRTP: 80160
@@ -481,7 +481,7 @@ DLSR: 4.9970 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -551,7 +551,7 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
-Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.222:5060
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
 Uniqueid: 1389990159.28
 
 Event: VarSet
@@ -572,7 +572,7 @@ Event: VarSet
 Privilege: dialplan,all
 Channel: ANALOG/1-I00000007
 Variable: BRIDGEPVTCALLID
-Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.222:5060
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
 Uniqueid: 1389990159.28
 
 Event: DTMF
@@ -1073,7 +1073,7 @@ Conference: 301
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990174.0432336896
 SentRTP: 120136
@@ -1088,7 +1088,7 @@ DLSR: 4.9970 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -1178,7 +1178,7 @@ CallerIDname: 601
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990179.0433655808
 SentRTP: 160048
@@ -1193,7 +1193,7 @@ DLSR: 4.9980 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -1843,7 +1843,7 @@ Uniqueid: 1389990179.34
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990184.0428466176
 SentRTP: 200048
@@ -1858,7 +1858,7 @@ DLSR: 4.9950 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -2444,7 +2444,7 @@ Uniqueid: 1389990188.35
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990189.0431108096
 SentRTP: 240048
@@ -2459,7 +2459,7 @@ DLSR: 4.9960 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -2489,7 +2489,7 @@ CallerIDname: ANALOG 2
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990194.0430166016
 SentRTP: 280048
@@ -2504,7 +2504,7 @@ DLSR: 4.9960 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
@@ -2618,7 +2618,7 @@ CallerIDname: ANALOG 2
 
 Event: RTCPSent
 Privilege: reporting,all
-To: 192.168.1.222:15539
+To: 192.168.1.220:15539
 OurSSRC: 197794318
 SentNTP: 1389990199.0431390720
 SentRTP: 320048
@@ -2633,7 +2633,7 @@ DLSR: 4.9970 (sec)
 
 Event: RTCPReceived
 Privilege: reporting,all
-From: 192.168.1.222:15539
+From: 192.168.1.220:15539
 PT: 200(Sender Report)
 ReceptionReports: 1
 SenderSSRC: 0
