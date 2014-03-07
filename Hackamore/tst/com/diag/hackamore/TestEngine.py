@@ -61,7 +61,7 @@ class Producer(threading.Thread):
 
 class Server(threading.Thread):
     
-    def __init__(self, path, limit):
+    def __init__(self, path, limit = 1):
         threading.Thread.__init__(self)
         self.path = path
         self.limit = limit
@@ -166,22 +166,19 @@ class Test(unittest.TestCase):
         global port
         global ready
         name = self.id()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
+        com.diag.hackamore.Logger.logger().setLevel(logging.INFO)
         state = com.diag.hackamore.State.State()
         engine = com.diag.hackamore.Engine.Engine(state = state)
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, LIMIT)
+        thread = Server(TYPESCRIPT)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
