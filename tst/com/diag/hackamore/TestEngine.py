@@ -166,7 +166,7 @@ class Test(unittest.TestCase):
         global port
         global ready
         name = self.id()
-        com.diag.hackamore.Logger.logger().setLevel(logging.INFO)
+        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
         state = com.diag.hackamore.State.State()
         engine = com.diag.hackamore.Engine.Engine(state = state)
         address = ""
