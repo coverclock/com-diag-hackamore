@@ -100,31 +100,34 @@ class State:
 
     def dump(self):
         with self.mutex:
-            print("DUMP " + hex(id(self)))
-            print(" CHANNELS")
+            print "STATE"
+            print "", "CHANNELS"
             for pbx in self.channels:
+                print "", "", "SOURCE", pbx
                 channels = self.channels[pbx]
                 for channel in channels:
                     chan = channels[channel]
-                    print("  " + str(chan))
-            print(" BRIDGES")
+                    chan.dump()
+            print "", "BRIDGES"
             for pbx in self.bridges:
+                print "", "", "SOURCE", pbx
                 bridges = self.bridges[pbx]
                 for conference in bridges:
+                    print "", "", "", "BRIDGE", conference
                     bridge = bridges[conference]
-                    print("  BRIDGE " + hex(id(bridge)))
                     for uniqueid in bridge:
                         chan = bridge[uniqueid]
-                        print("   " + str(chan))
-            print(" TRUNKS")
+                        chan.dump()
+            print "", "TRUNKS"
             for sipcallid in self.trunks:
+                print "", "", "ID", sipcallid
                 chan = self.trunks[sipcallid]
-                print("  " + str(chan))
-            print(" CALLS")
+                chan.dump()
+            print "", "CALLS"
             for call in self.calls:
-                print("  CALL " + hex(id(call)))
+                print "", "", "CALL", hex(id(call))
                 for chan in call:
-                    print("   " + str(chan)) 
+                    chan.dump()
 
     def audit(self):
         with self.mutex:

@@ -185,7 +185,6 @@ class Test(unittest.TestCase):
         self.assertEquals(len(sources), 1)
         engine.engine(sources, sources, verbose = True)
         self.assertEquals(len(sources), 1)
-        state.dump()
         thread.join()
 
 if __name__ == "__main__":
