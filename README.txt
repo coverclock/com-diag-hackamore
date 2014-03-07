@@ -52,6 +52,35 @@ The unit tests for this project have been run on Python 2.7.5 under MacOS
 
 This software is an original work of its author(s).
 
+If you want to run any of the unit tests that execute against a live Asterisk
+server, those unit tests need to know your server's hostname or IP address and
+the username and secret that you administered in your
+
+    /etc/asterisk/manager.conf
+
+file. You can either define these in your environment as the values of the
+variables
+    
+    COM_DIAG_HACKAMORE_SERVER,
+    COM_DIAG_HACKAMORE_USERNAME, and
+    COM_DIAG_HACKAMORE_SECRET
+    
+respectively, or you can define them in a file in your home directory named
+
+    .com_diag_hackamore
+
+and the unit tests will extract them from successive lines encoded in
+
+    keyword=value
+    
+form where the keywords are the same as the environmental variable names above.
+Note that this capability is not part of the unit test modules but part of the
+Hackamore framework itself. So you can use this capability in your own Hackamore
+application instead of embedding this sensitive information in your Python
+program or in (for example) your Eclipse project metadata. If the value of
+COM_DIAG_HACKAMORE_SERVER is not defined or is an empty string, the unit tests
+which run against a live server will automatically be bypassed.
+
 ----------------------------------------------------------------------
 
 CONTACT

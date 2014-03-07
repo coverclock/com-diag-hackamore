@@ -56,6 +56,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s", str(Event.CONFBRIDGEEND), str(pbx), str(conference))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.CONFBRIDGEEND), str(pbx), str(conference)
                                 self.state.confbridgeend(pbx, conference)
                                 if verbose:
                                     self.state.dump()
@@ -73,6 +75,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference)
                                 self.state.confbridgejoin(pbx, uniqueid, conference)
                                 if verbose:
                                     self.state.dump()
@@ -90,6 +94,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference)
                                 self.state.confbridgeleave(pbx, uniqueid, conference)
                                 if verbose:
                                     self.state.dump()
@@ -101,6 +107,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s", str(Event.CONFBRIDGESTART), str(pbx), str(conference))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.CONFBRIDGESTART), str(pbx), str(conference)
                                 self.state.confbridgestart(pbx, conference)
                                 if verbose:
                                     self.state.dump()
@@ -125,6 +133,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination)
                                 self.state.dial(pbx, uniqueid, destuniqueid)
                                 if verbose:
                                     self.state.dump()
@@ -139,6 +149,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel)
                                 self.state.hangup(pbx, uniqueid)
                                 if verbose:
                                     self.state.dump()
@@ -157,8 +169,10 @@ class Engine:
                             uniqueid1 = event[Event.UNIQUEID1]
                             uniqueid2 = event[Event.UNIQUEID2]
                             if debug:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
+                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.LOCALBRIDGE), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.LOCALBRIDGE), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2)
                                 self.state.localbridge(pbx, uniqueid1, uniqueid2)
                                 if verbose:
                                     self.state.dump()
@@ -179,6 +193,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc)
                                 self.state.newchannel(pbx, uniqueid, channel, channelstate, channelstatedesc)
                                 if verbose:
                                     self.state.dump()
@@ -199,6 +215,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc)
                                 self.state.newstate(pbx, uniqueid, channelstate, channelstatedesc)
                                 if verbose:
                                     self.state.dump()
@@ -216,6 +234,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname)
                                 self.state.rename(pbx, uniqueid, newname)
                                 if verbose:
                                     self.state.dump()
@@ -237,6 +257,8 @@ class Engine:
                             if debug:
                                 self.logger.debug("Engine.engine: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
                             if not suppress:
+                                if verbose:
+                                    print "EVENT", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value)
                                 self.state.sipcallid(pbx, uniqueid, value)
                                 if verbose:
                                     self.state.dump()

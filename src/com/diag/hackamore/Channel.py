@@ -39,7 +39,7 @@ class Channel():
         
     def endpoint(self, sipcallid):
         self.sipcallid = sipcallid
-        
+
     def trunk(self):
         self.role = TRUNK
 
