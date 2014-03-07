@@ -22,6 +22,7 @@ class State:
         self.bridges = { }      # Channel = self.bridges[pbx][conference][uniqueid]
         self.trunks = { }       # Channel = self.trunks[sipcallid]
         self.calls = [ ]        # Channel = self.calls[0:-1][0:-1]
+        self.numbers = { }      # calleridnum = self.numbers[channel]
 
     def __del__(self):
         pass
@@ -59,40 +60,40 @@ class State:
                 if not channels:
                     del self.channels[pbx]
     
-    def merge(self, chan, dest):
-        if (chan.call != None) and (dest.call != None):
+    def merge(self, chan1, chan2):
+        if (chan1.call == None) and (chan2.call == None):
+            calls = [ chan1, chan2 ]
+            chan1.call = calls
+            chan2.call = calls
+            self.calls.append(calls)
+        elif chan1.call == None:
+            chan2.call.insert(0, chan1)
+            chan1.call = chan2.call
+        elif chan2.call == None:
+            chan1.call.append(chan2)
+            chan2.call = chan1.call
+        elif id(chan1.call) != id(chan2.call):
             calls = [ ]
-            for channel in chan.call:
+            for channel in chan1.call:
                 calls.append(channel)
-            for channel in dest.call:
+            for channel in chan2.call:
                 calls.append(channel)
-            self.calls.remove(chan.call)
-            self.calls.remove(dest.call)
-            chan.call = calls
-            dest.call = calls
+            self.calls.remove(chan1.call)
+            self.calls.remove(chan2.call)
+            chan1.call = calls
+            chan2.call = calls
             self.calls.append(calls)
-        elif chan.call != None:
-            chan.call.append(dest)
-            dest.call = chan.call
-        elif dest.call != None:
-            dest.call.insert(0, chan)
-            chan.call = dest.call
         else:
-            calls = [ chan, dest ]
-            chan.call = calls
-            dest.call = calls
-            self.calls.append(calls)
+            pass # Typically a re-Bridge.
     
-    def connect(self, pbx, uniqueid, destuniqueid):
+    def connect(self, pbx, uniqueid1, uniqueid2):
         if pbx in self.channels:
             channels = self.channels[pbx]
-            if uniqueid in channels:
-                chan = channels[uniqueid]
-                chan.calling()
-                if destuniqueid in channels:
-                    dest = channels[destuniqueid]
-                    dest.called()
-                    self.merge(chan, dest)
+            if uniqueid1 in channels:
+                chan1 = channels[uniqueid1]
+                if uniqueid2 in channels:
+                    chan2 = channels[uniqueid2]
+                    self.merge(chan1, chan2)
 
     #####
     ##### DEBUG
@@ -101,33 +102,42 @@ class State:
     def dump(self):
         with self.mutex:
             print "STATE"
-            print "", "CHANNELS"
-            for pbx in self.channels:
-                print "", "", "SOURCE", pbx
-                channels = self.channels[pbx]
-                for channel in channels:
-                    chan = channels[channel]
-                    chan.dump()
-            print "", "BRIDGES"
-            for pbx in self.bridges:
-                print "", "", "SOURCE", pbx
-                bridges = self.bridges[pbx]
-                for conference in bridges:
-                    print "", "", "", "BRIDGE", conference
-                    bridge = bridges[conference]
-                    for uniqueid in bridge:
-                        chan = bridge[uniqueid]
+            if self.channels:
+                print "", "CHANNELS"
+                for pbx in self.channels:
+                    print "", "", "SOURCE", pbx
+                    channels = self.channels[pbx]
+                    for channel in channels:
+                        chan = channels[channel]
                         chan.dump()
-            print "", "TRUNKS"
-            for sipcallid in self.trunks:
-                print "", "", "ID", sipcallid
-                chan = self.trunks[sipcallid]
-                chan.dump()
-            print "", "CALLS"
-            for call in self.calls:
-                print "", "", "CALL", hex(id(call))
-                for chan in call:
+            if self.bridges:
+                print "", "BRIDGES"
+                for pbx in self.bridges:
+                    print "", "", "SOURCE", pbx
+                    bridges = self.bridges[pbx]
+                    for conference in bridges:
+                        print "", "", "", "BRIDGE", conference
+                        bridge = bridges[conference]
+                        for uniqueid in bridge:
+                            chan = bridge[uniqueid]
+                            chan.dump()
+            if self.trunks:
+                print "", "TRUNKS"
+                for sipcallid in self.trunks:
+                    print "", "", "ID", sipcallid
+                    chan = self.trunks[sipcallid]
                     chan.dump()
+            if self.calls:
+                print "", "CALLS"
+                for call in self.calls:
+                    print "", "", "CALL", hex(id(call))
+                    for chan in call:
+                        chan.dump()
+            if self.numbers:
+                print "", "NUMBERS"
+                for channel in self.numbers:
+                    calleridnum = self.numbers[channel]
+                    print "", "", "NUMBER", calleridnum, channel
 
     def audit(self):
         with self.mutex:
@@ -136,6 +146,10 @@ class State:
     #####
     ##### PUBLIC
     #####
+    
+    def bridge(self, pbx, uniqueid1, uniqueid2):
+        with self.mutex:
+            self.connect(pbx, uniqueid1, uniqueid2)
     
     def close(self, pbx):
         with self.mutex:
@@ -189,8 +203,14 @@ class State:
             bridges[conference] = { }
     
     def dial(self, pbx, uniqueid, destuniqueid):
-        with self.mutex:
-            self.connect(pbx, uniqueid, destuniqueid)
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.calling()
+                if destuniqueid in channels:
+                    dest = channels[destuniqueid]
+                    dest.called()
 
     def hangup(self, pbx, uniqueid):
         with self.mutex:
@@ -200,13 +220,19 @@ class State:
         with self.mutex:
             self.connect(pbx, uniqueid1, uniqueid2)
     
-    def newchannel(self, pbx, uniqueid, channel, channelstate, channelstatedesc):
+    def newchannel(self, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc):
         with self.mutex:
-            chan = Channel.Channel(pbx, uniqueid, channel, channelstate, channelstatedesc)
+            chan = Channel.Channel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
             if not pbx in self.channels:
                 self.channels[pbx] = { }
             channels = self.channels[pbx]
             channels[uniqueid] = chan
+            if calleridnum == None:
+                pass
+            elif not calleridnum:
+                pass
+            else:
+                self.numbers[channel] = calleridnum
     
     def newstate(self, pbx, uniqueid, channelstate, channelstatedesc):
         with self.mutex:
@@ -223,6 +249,10 @@ class State:
                 if uniqueid in channels:
                     chan = channels[uniqueid]
                     chan.rename(newname)
+                    if chan.calleridnum == None or not chan.calleridnum:
+                        if chan.channel in self.numbers:
+                            calleridnum = self.numbers[chan.channel]
+                            chan.dial(calleridnum)
 
     def sipcallid(self, pbx, uniqueid, value):
         with self.mutex:
