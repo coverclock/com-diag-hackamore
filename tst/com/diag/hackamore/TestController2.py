@@ -12,7 +12,7 @@ import time
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
-import com.diag.hackamore.Engine
+import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import SERVER
 from com.diag.hackamore.Credentials import USERNAME
@@ -110,7 +110,7 @@ class Test(unittest.TestCase):
         global address
         global port
         global ready
-        engine = com.diag.hackamore.Engine.Engine()
+        controller = com.diag.hackamore.Controller.Controller()
         address = ""
         port = 0
         ready = threading.Condition()
@@ -125,7 +125,7 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, verbose = True, clear = True)
+        controller.loop(sources, sources, verbose = True, clear = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
