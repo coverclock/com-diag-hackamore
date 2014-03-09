@@ -9,7 +9,7 @@ import threading
 import Logger
 import Channel
 
-class State:
+class Model:
     
     #####
     ##### CTOR/DTOR
@@ -28,7 +28,7 @@ class State:
         pass
 
     def __repr__(self):
-        return "State(" + hex(id(self)) + ")"
+        return "Model(" + hex(id(self)) + ")"
 
     #####
     ##### PRIVATE

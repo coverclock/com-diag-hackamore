@@ -8,11 +8,11 @@ import unittest
 import logging
 import socket
 import threading
-import time
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
+import com.diag.hackamore.Model
 import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import USERNAME
@@ -165,8 +165,8 @@ class Test(unittest.TestCase):
         global ready
         name = self.id()
         com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
-        state = com.diag.hackamore.State.State()
-        controller = com.diag.hackamore.Controller.Controller(state = state)
+        model = com.diag.hackamore.Model.Model()
+        controller = com.diag.hackamore.Controller.Controller(model = model)
         address = ""
         port = 0
         ready = threading.Condition()
