@@ -13,20 +13,20 @@ import Event
 import Multiplex
 import State
 
-class Engine:
+class Controller:
 
     def __init__(self, state = None, multiplex = None, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.multiplex = Multiplex.Multiplex(self.logger) if multiplex == None else multiplex
         self.state = State.State(self.logger) if state == None else state
         self.window = None
-        self.logger.info("Engine: INIT. %s", str(self))
+        self.logger.info("Controller: INIT. %s", str(self))
         
     def __del__(self):
-        self.logger.info("Engine: FINI. %s", str(self))
+        self.logger.info("Controller: FINI. %s", str(self))
 
     def __repr__(self):
-        return "Engine(" + str(self.multiplex) + ")"
+        return "Controller(" + str(self.multiplex) + ")"
     
     def initscr(self):
         self.window = True
@@ -49,8 +49,8 @@ class Engine:
         #    self.window.endwin()
         pass
 
-    def engine(self, inputs, outputs, suppress = False, verbose = False, clear = False):
-        self.logger.info("Engine.engine: STARTING. %s", str(self))
+    def loop(self, inputs, outputs, suppress = False, verbose = False, clear = False):
+        self.logger.info("Controller.loop: STARTING. %s", str(self))
         debug = self.logger.isEnabledFor(logging.DEBUG)
         if verbose and clear:
             self.initscr()
@@ -69,7 +69,7 @@ class Engine:
                 pbx = event[Event.SOURCE]
                 if Event.END in event:
                     if debug:
-                        self.logger.debug("Engine.engine: EVENT: %s %s", str(Event.END), str(pbx))
+                        self.logger.debug("Controller.loop: EVENT: %s %s", str(Event.END), str(pbx))
                     if not suppress:
                         if verbose:
                             self.erase()
@@ -106,7 +106,7 @@ class Engine:
                             uniqueid1 = event[Event.UNIQUEID1]
                             uniqueid2 = event[Event.UNIQUEID2]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s %s %s %s", str(Event.BRIDGE), str(pbx), str(uniqueid1), str(channel1), str(callerid1), str(uniqueid2), str(channel2), str(callerid2))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s %s %s", str(Event.BRIDGE), str(pbx), str(uniqueid1), str(channel1), str(callerid1), str(uniqueid2), str(channel2), str(callerid2))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -121,7 +121,7 @@ class Engine:
                         else:
                             conference = event[Event.CONFERENCE]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s", str(Event.CONFBRIDGEEND), str(pbx), str(conference))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s", str(Event.CONFBRIDGEEND), str(pbx), str(conference))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -142,7 +142,7 @@ class Engine:
                             conference = event[Event.CONFERENCE]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -163,7 +163,7 @@ class Engine:
                             conference = event[Event.CONFERENCE]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -178,7 +178,7 @@ class Engine:
                         else:
                             conference = event[Event.CONFERENCE]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s", str(Event.CONFBRIDGESTART), str(pbx), str(conference))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s", str(Event.CONFBRIDGESTART), str(pbx), str(conference))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -206,7 +206,7 @@ class Engine:
                             destuniqueid = event[Event.DESTUNIQUEID]
                             uniqueid = event[Event.UNIQUEIDUC]
                             if debug:
-                                self.logger.debug("Engine.engine: %s %s %s %s %s %s", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination))
+                                self.logger.debug("Controller.loop: %s %s %s %s %s %s", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -224,7 +224,7 @@ class Engine:
                             channel = event[Event.CHANNEL]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -248,7 +248,7 @@ class Engine:
                             uniqueid1 = event[Event.UNIQUEID1]
                             uniqueid2 = event[Event.UNIQUEID2]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s %s", str(Event.LOCALBRIDGE), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s", str(Event.LOCALBRIDGE), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -275,7 +275,7 @@ class Engine:
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s %s %s", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(calleridnum), str(channelstate), str(channelstatedesc))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s %s", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(calleridnum), str(channelstate), str(channelstatedesc))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -299,7 +299,7 @@ class Engine:
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s %s", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -320,7 +320,7 @@ class Engine:
                             newname = event[Event.NEWNAME]
                             uniqueid = event[Event.UNIQUEIDLC]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -345,7 +345,7 @@ class Engine:
                             uniqueid = event[Event.UNIQUEIDLC]
                             value = event[Event.VALUE]
                             if debug:
-                                self.logger.debug("Engine.engine: EVENT: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
+                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
                             if not suppress:
                                 if verbose:
                                     self.erase()
@@ -360,4 +360,4 @@ class Engine:
                     pass
                 sn = sn + 1
         self.endwin()
-        self.logger.info("Engine.engine: STOPPING. %s", str(self))
+        self.logger.info("Controller.loop: STOPPING. %s", str(self))

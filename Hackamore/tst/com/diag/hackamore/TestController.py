@@ -13,9 +13,8 @@ import time
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
-import com.diag.hackamore.Engine
+import com.diag.hackamore.Controller
 
-from com.diag.hackamore.Credentials import SERVER
 from com.diag.hackamore.Credentials import USERNAME
 from com.diag.hackamore.Credentials import SECRET
 
@@ -105,7 +104,7 @@ class Test(unittest.TestCase):
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        engine = com.diag.hackamore.Engine.Engine()
+        controller = com.diag.hackamore.Controller.Controller()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
@@ -113,7 +112,7 @@ class Test(unittest.TestCase):
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        engine.engine(inputs, outputs, suppress = True)
+        controller.loop(inputs, outputs, suppress = True)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
 
@@ -123,13 +122,13 @@ class Test(unittest.TestCase):
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        engine = com.diag.hackamore.Engine.Engine()
+        controller = com.diag.hackamore.Controller.Controller()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
         inputs.append(source)
         self.assertEquals(len(inputs), 1)
-        engine.engine(inputs, inputs, suppress = True)
+        controller.loop(inputs, inputs, suppress = True)
         self.assertEquals(len(inputs), 1)
         
     def test030Passive(self):
@@ -141,7 +140,7 @@ class Test(unittest.TestCase):
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        engine = com.diag.hackamore.Engine.Engine()
+        controller = com.diag.hackamore.Controller.Controller()
         address = ""
         port = 0
         ready = threading.Condition()
@@ -156,7 +155,7 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, suppress = True)
+        controller.loop(sources, sources, suppress = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
@@ -167,7 +166,7 @@ class Test(unittest.TestCase):
         name = self.id()
         com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
         state = com.diag.hackamore.State.State()
-        engine = com.diag.hackamore.Engine.Engine(state = state)
+        controller = com.diag.hackamore.Controller.Controller(state = state)
         address = ""
         port = 0
         ready = threading.Condition()
@@ -182,7 +181,7 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, verbose = True)
+        controller.loop(sources, sources, verbose = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
