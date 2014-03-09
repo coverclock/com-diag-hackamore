@@ -12,7 +12,7 @@ import threading
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
-import com.diag.hackamore.Model
+import com.diag.hackamore.ModelDefault
 import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import USERNAME
@@ -104,7 +104,6 @@ class Test(unittest.TestCase):
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        controller = com.diag.hackamore.Controller.Controller()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
@@ -112,7 +111,8 @@ class Test(unittest.TestCase):
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        controller.loop(inputs, outputs, suppress = True)
+        controller = com.diag.hackamore.Controller.Controller()
+        controller.loop(inputs, outputs)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
 
@@ -122,13 +122,13 @@ class Test(unittest.TestCase):
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        controller = com.diag.hackamore.Controller.Controller()
         source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
         self.assertIsNotNone(source)
         inputs = [ ]
         inputs.append(source)
         self.assertEquals(len(inputs), 1)
-        controller.loop(inputs, inputs, suppress = True)
+        controller = com.diag.hackamore.Controller.Controller()
+        controller.loop(inputs, inputs)
         self.assertEquals(len(inputs), 1)
         
     def test030Passive(self):
@@ -136,11 +136,6 @@ class Test(unittest.TestCase):
         global port
         global ready
         name = self.id()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
-        controller = com.diag.hackamore.Controller.Controller()
         address = ""
         port = 0
         ready = threading.Condition()
@@ -150,23 +145,25 @@ class Test(unittest.TestCase):
         with ready:
             while port == 0:
                 ready.wait()
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
         source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        controller.loop(sources, sources, suppress = True)
+        controller = com.diag.hackamore.Controller.Controller()
+        controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
 
-    def test040Verbose(self):
+    def test040Active(self):
         global address
         global port
         global ready
         name = self.id()
-        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
-        model = com.diag.hackamore.Model.Model()
-        controller = com.diag.hackamore.Controller.Controller(model = model)
         address = ""
         port = 0
         ready = threading.Condition()
@@ -176,12 +173,18 @@ class Test(unittest.TestCase):
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+        console = logging.StreamHandler()
+        logger.addHandler(console)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        controller.loop(sources, sources, verbose = True)
+        model = com.diag.hackamore.ModelDefault.ModelDefault()
+        controller = com.diag.hackamore.Controller.Controller(model = model)
+        controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
 

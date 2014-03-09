@@ -4,22 +4,19 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import logging
-import sys
-#import curses
-
 import Logger
 import Event
 import Multiplex
 import Model
+import View
 
 class Controller:
 
-    def __init__(self, model = None, multiplex = None, logger = None):
+    def __init__(self, model = None, view = None, multiplex = None, logger = None):
         self.logger = Logger.logger() if logger == None else logger
-        self.multiplex = Multiplex.Multiplex(self.logger) if multiplex == None else multiplex
-        self.model = Model.Model(self.logger) if model == None else model
-        self.window = None
+        self.model = Model.Model(logger = self.logger) if model == None else model
+        self.view = View.View(model = self.model, logger = self.logger) if view == None else view
+        self.multiplex = Multiplex.Multiplex(logger = self.logger) if multiplex == None else multiplex
         self.logger.info("Controller: INIT. %s", str(self))
         
     def __del__(self):
@@ -27,35 +24,9 @@ class Controller:
 
     def __repr__(self):
         return "Controller(" + str(self.multiplex) + ")"
-    
-    def initscr(self):
-        self.window = True
-        #self.window = curses.initscr()
-        #curses.nl()
-        #curses.nocbreak()
-    
-    def erase(self):
-        if self.window != None:
-            #self.window.erase()
-            print chr(0x1b) + "[2J"
-            print chr(0x1b) + "[;H"
 
-    def flush(self):
-        if self.window != None:
-            sys.stdout.flush()
-
-    def endwin(self):
-        #if self.window != None:
-        #    self.window.endwin()
-        pass
-
-    def loop(self, inputs, outputs, suppress = False, verbose = False, clear = False):
+    def loop(self, inputs, outputs):
         self.logger.info("Controller.loop: STARTING. %s", str(self))
-        debug = self.logger.isEnabledFor(logging.DEBUG)
-        if verbose and clear:
-            self.initscr()
-            self.erase()
-        sn = 0
         while True:
             for source in inputs:
                 if source.open():
@@ -68,16 +39,9 @@ class Controller:
                 event = message.event
                 pbx = event[Event.SOURCE]
                 if Event.END in event:
-                    if debug:
-                        self.logger.debug("Controller.loop: EVENT: %s %s", str(Event.END), str(pbx))
-                    if not suppress:
-                        if verbose:
-                            self.erase()
-                            print "EVENT", sn, Event.END, pbx
-                        self.model.close(pbx)
-                        if verbose:
-                            self.model.dump()  
-                            self.flush()
+                    self.view.end(pbx)
+                    self.model.end(pbx)
+                    self.view.refresh()
                     source = self.multiplex.query(pbx)
                     source.close()
                     self.multiplex.unregister(source)
@@ -105,31 +69,17 @@ class Controller:
                             channel2 = event[Event.CHANNEL2]
                             uniqueid1 = event[Event.UNIQUEID1]
                             uniqueid2 = event[Event.UNIQUEID2]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s %s %s", str(Event.BRIDGE), str(pbx), str(uniqueid1), str(channel1), str(callerid1), str(uniqueid2), str(channel2), str(callerid2))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.BRIDGE, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2
-                                self.model.bridge(pbx, uniqueid1, uniqueid2)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.bridge(pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2)
+                            self.model.bridge(pbx, uniqueid1, uniqueid2)
+                            self.view.refresh()
                     elif flavor == Event.CONFBRIDGEEND:
                         if not Event.CONFERENCE in event:
                             pass
                         else:
                             conference = event[Event.CONFERENCE]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s", str(Event.CONFBRIDGEEND), str(pbx), str(conference))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.CONFBRIDGEEND, pbx, conference
-                                self.model.confbridgeend(pbx, conference)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.confbridgeend(pbx, conference)
+                            self.model.confbridgeend(pbx, conference)
+                            self.view.refresh()
                     elif flavor == Event.CONFBRIDGEJOIN:
                         if not Event.CHANNEL in event:
                             pass
@@ -141,16 +91,9 @@ class Controller:
                             channel = event[Event.CHANNEL]
                             conference = event[Event.CONFERENCE]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGEJOIN), str(pbx), str(uniqueid), str(channel), str(conference))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.CONFBRIDGEJOIN, pbx, uniqueid, channel, conference
-                                self.model.confbridgejoin(pbx, uniqueid, conference)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.confbridgejoin(pbx, uniqueid, channel, conference)
+                            self.model.confbridgejoin(pbx, uniqueid, conference)
+                            self.view.refresh()
                     elif flavor == Event.CONFBRIDGELEAVE:
                         if not Event.CHANNEL in event:
                             pass
@@ -162,31 +105,17 @@ class Controller:
                             channel = event[Event.CHANNEL]
                             conference = event[Event.CONFERENCE]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.CONFBRIDGELEAVE), str(pbx), str(uniqueid), str(channel), str(conference))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.CONFBRIDGELEAVE, pbx, uniqueid, channel, conference
-                                self.model.confbridgeleave(pbx, uniqueid, conference)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.confbridgeleave(pbx, uniqueid, channel, conference)
+                            self.model.confbridgeleave(pbx, uniqueid, conference)
+                            self.view.refresh()
                     elif flavor == Event.CONFBRIDGESTART:
                         if not Event.CONFERENCE in event:
                             pass
                         else:
                             conference = event[Event.CONFERENCE]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s", str(Event.CONFBRIDGESTART), str(pbx), str(conference))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.CONFBRIDGESTART, pbx, conference
-                                self.model.confbridgestart(pbx, conference)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.confbridgestart(pbx, conference)
+                            self.model.confbridgestart(pbx, conference)
+                            self.view.refresh()
                     elif flavor == Event.DIAL:
                         if not Event.SUBEVENT in event:
                             pass
@@ -205,16 +134,9 @@ class Controller:
                             destination = event[Event.DESTINATION]
                             destuniqueid = event[Event.DESTUNIQUEID]
                             uniqueid = event[Event.UNIQUEIDUC]
-                            if debug:
-                                self.logger.debug("Controller.loop: %s %s %s %s %s %s", str(Event.DIAL), str(pbx), str(uniqueid), str(channel), str(destuniqueid), str(destination))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.DIAL, pbx, uniqueid, channel, destuniqueid, destination
-                                self.model.dial(pbx, uniqueid, destuniqueid)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.dial(pbx, uniqueid, channel, destuniqueid, destination)
+                            self.model.dial(pbx, uniqueid, destuniqueid)
+                            self.view.refresh()
                     elif flavor == Event.HANGUP:
                         if not Event.CHANNEL in event:
                             pass
@@ -223,16 +145,9 @@ class Controller:
                         else:
                             channel = event[Event.CHANNEL]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s", str(Event.HANGUP), str(pbx), str(uniqueid), str(channel))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.HANGUP, pbx, uniqueid, channel
-                                self.model.hangup(pbx, uniqueid)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.hangup(pbx, uniqueid, channel)
+                            self.model.hangup(pbx, uniqueid)
+                            self.view.refresh()
                     elif flavor == Event.LOCALBRIDGE:
                         if not Event.CHANNEL1 in event:
                             pass
@@ -247,16 +162,9 @@ class Controller:
                             channel2 = event[Event.CHANNEL2]
                             uniqueid1 = event[Event.UNIQUEID1]
                             uniqueid2 = event[Event.UNIQUEID2]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s", str(Event.LOCALBRIDGE), str(pbx), str(uniqueid1), str(channel1), str(uniqueid2), str(channel2))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.LOCALBRIDGE, pbx, uniqueid1, channel1, uniqueid2, channel2
-                                self.model.localbridge(pbx, uniqueid1, uniqueid2)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.localbridge(pbx, uniqueid1, channel1, uniqueid2, channel2)
+                            self.model.localbridge(pbx, uniqueid1, uniqueid2)
+                            self.view.refresh()
                     elif flavor == Event.NEWCHANNEL:
                         if not Event.CALLERIDNUM in event:
                             pass
@@ -274,16 +182,9 @@ class Controller:
                             channelstate = event[Event.CHANNELSTATE]
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s %s", str(Event.NEWCHANNEL), str(pbx), str(uniqueid), str(channel), str(calleridnum), str(channelstate), str(channelstatedesc))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.NEWCHANNEL, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc
-                                self.model.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
+                            self.model.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
+                            self.view.refresh()
                     elif flavor == Event.NEWSTATE:
                         if not Event.CHANNEL in event:
                             pass
@@ -298,16 +199,9 @@ class Controller:
                             channelstate = event[Event.CHANNELSTATE]
                             channelstatedesc = event[Event.CHANNELSTATEDESC]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s %s", str(Event.NEWSTATE), str(pbx), str(uniqueid), str(channel), str(channelstate), str(channelstatedesc))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.NEWSTATE, pbx, uniqueid, channel, channelstate, channelstatedesc
-                                self.model.newstate(pbx, uniqueid, channelstate, channelstatedesc)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.newstate(pbx, uniqueid, channel, channelstate, channelstatedesc)
+                            self.model.newstate(pbx, uniqueid, channelstate, channelstatedesc)
+                            self.view.refresh()
                     elif flavor == Event.RENAME:
                         if not Event.CHANNEL in event:
                             pass
@@ -319,16 +213,9 @@ class Controller:
                             channel = event[Event.CHANNEL]
                             newname = event[Event.NEWNAME]
                             uniqueid = event[Event.UNIQUEIDLC]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.RENAME), str(pbx), str(uniqueid), str(channel), str(newname))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.RENAME, pbx, uniqueid, channel, newname
-                                self.model.rename(pbx, uniqueid, newname)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.rename(pbx, uniqueid, channel, newname)
+                            self.model.rename(pbx, uniqueid, newname)
+                            self.view.refresh()
                     elif flavor == Event.VARSET:
                         if not Event.VARIABLE in event:
                             pass
@@ -344,20 +231,11 @@ class Controller:
                             channel = event[Event.CHANNEL]
                             uniqueid = event[Event.UNIQUEIDLC]
                             value = event[Event.VALUE]
-                            if debug:
-                                self.logger.debug("Controller.loop: EVENT: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
-                            if not suppress:
-                                if verbose:
-                                    self.erase()
-                                    print "EVENT", sn, Event.SIPCALLID, pbx, uniqueid, channel, value
-                                self.model.sipcallid(pbx, uniqueid, value)
-                                if verbose:
-                                    self.model.dump()
-                                    self.flush()
+                            self.view.sipcallid(pbx, uniqueid, channel, value)
+                            self.model.sipcallid(pbx, uniqueid, value)
+                            self.view.refresh()
                     else:
                         pass
                 else:
                     pass
-                sn = sn + 1
-        self.endwin()
         self.logger.info("Controller.loop: STOPPING. %s", str(self))

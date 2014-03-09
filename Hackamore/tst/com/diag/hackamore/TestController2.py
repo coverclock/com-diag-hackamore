@@ -12,6 +12,8 @@ import time
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
+import com.diag.hackamore.ModelDefault
+import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import SERVER
@@ -106,15 +108,14 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test040Display(self):
+    def test010Print(self):
         global address
         global port
         global ready
-        controller = com.diag.hackamore.Controller.Controller()
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, delay = DELAY)
+        thread = Server(TYPESCRIPT)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
@@ -125,7 +126,10 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        controller.loop(sources, sources, verbose = True, clear = True)
+        model = com.diag.hackamore.ModelDefault.ModelDefault()
+        view = com.diag.hackamore.ViewPrint.ViewPrint(model = model)
+        controller = com.diag.hackamore.Controller.Controller(model = model, view = view)
+        controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
 
