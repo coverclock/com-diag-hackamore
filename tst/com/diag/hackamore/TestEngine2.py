@@ -11,7 +11,6 @@ import threading
 import time
 
 import com.diag.hackamore.Logger
-import com.diag.hackamore.File
 import com.diag.hackamore.Socket
 import com.diag.hackamore.Engine
 
@@ -33,10 +32,11 @@ DELAY=0.1
 
 class Producer(threading.Thread):
     
-    def __init__(self, sock, path):
+    def __init__(self, sock, path, delay = 0):
         threading.Thread.__init__(self)
         self.sock = sock
         self.path = path
+        self.delay = delay
         
     def run(self):
         stream = open(self.path, "r")
@@ -49,6 +49,12 @@ class Producer(threading.Thread):
                     break
                 else:
                     self.sock.sendall(line)
+                    if line != "\r\n":
+                        pass
+                    if not self.delay:
+                        pass
+                    else:
+                        time.sleep(self.delay)
         stream.close()
         self.sock.shutdown(socket.SHUT_WR)
         while True:
@@ -63,10 +69,11 @@ class Producer(threading.Thread):
 
 class Server(threading.Thread):
     
-    def __init__(self, path, limit = 1):
+    def __init__(self, path, limit = 1, delay = 0):
         threading.Thread.__init__(self)
         self.path = path
         self.limit = limit
+        self.delay = delay
     
     def run(self):
         global address
@@ -82,7 +89,7 @@ class Server(threading.Thread):
         producers = [ ]
         while self.limit > 0:
             sock2, farend = sock.accept()
-            producer = Producer(sock2, TYPESCRIPT)
+            producer = Producer(sock2, TYPESCRIPT, self.delay)
             producer.start()
             producers.append(producer)
             self.limit = self.limit - 1
@@ -94,95 +101,31 @@ class Server(threading.Thread):
 class Test(unittest.TestCase):
 
     def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.DEBUG)
+        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
 
     def tearDown(self):
         pass
 
-    def test010Rinse(self):
-        name = self.id()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
-        engine = com.diag.hackamore.Engine.Engine()
-        source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
-        self.assertIsNotNone(source)
-        inputs = [ ]
-        inputs.append(source)
-        outputs = [ ]
-        self.assertEquals(len(inputs), 1)
-        self.assertEquals(len(outputs), 0)
-        engine.engine(inputs, outputs, suppress = True)
-        self.assertEquals(len(inputs), 0)
-        self.assertEquals(len(outputs), 1)
-
-    def test020Repeat(self):
-        name = self.id()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
-        engine = com.diag.hackamore.Engine.Engine()
-        source = com.diag.hackamore.File.File(name, TYPESCRIPT, logger = logger)
-        self.assertIsNotNone(source)
-        inputs = [ ]
-        inputs.append(source)
-        self.assertEquals(len(inputs), 1)
-        engine.engine(inputs, inputs, suppress = True)
-        self.assertEquals(len(inputs), 1)
-        
-    def test030Passive(self):
+    def test040Display(self):
         global address
         global port
         global ready
-        name = self.id()
-        logger = logging.getLogger(name)
-        logger.setLevel(logging.INFO)
-        console = logging.StreamHandler()
-        logger.addHandler(console)
         engine = com.diag.hackamore.Engine.Engine()
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, LIMIT)
+        thread = Server(TYPESCRIPT, delay = DELAY)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
+        source = com.diag.hackamore.Socket.Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, suppress = True)
-        self.assertEquals(len(sources), 1)
-        thread.join()
-
-    def test040Verbose(self):
-        global address
-        global port
-        global ready
-        name = self.id()
-        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
-        state = com.diag.hackamore.State.State()
-        engine = com.diag.hackamore.Engine.Engine(state = state)
-        address = ""
-        port = 0
-        ready = threading.Condition()
-        thread = Server(TYPESCRIPT)
-        self.assertIsNotNone(thread)
-        thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
-        self.assertIsNotNone(source)
-        sources = [ ]
-        sources.append(source)
-        self.assertEquals(len(sources), 1)
-        engine.engine(sources, sources, verbose = True)
+        engine.engine(sources, sources, verbose = True, clear = True)
         self.assertEquals(len(sources), 1)
         thread.join()
 
