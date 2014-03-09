@@ -11,14 +11,14 @@ import sys
 import Logger
 import Event
 import Multiplex
-import State
+import Model
 
 class Controller:
 
-    def __init__(self, state = None, multiplex = None, logger = None):
+    def __init__(self, model = None, multiplex = None, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.multiplex = Multiplex.Multiplex(self.logger) if multiplex == None else multiplex
-        self.state = State.State(self.logger) if state == None else state
+        self.model = Model.Model(self.logger) if model == None else model
         self.window = None
         self.logger.info("Controller: INIT. %s", str(self))
         
@@ -74,9 +74,9 @@ class Controller:
                         if verbose:
                             self.erase()
                             print "EVENT", sn, Event.END, pbx
-                        self.state.close(pbx)
+                        self.model.close(pbx)
                         if verbose:
-                            self.state.dump()  
+                            self.model.dump()  
                             self.flush()
                     source = self.multiplex.query(pbx)
                     source.close()
@@ -111,9 +111,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.BRIDGE, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2
-                                self.state.bridge(pbx, uniqueid1, uniqueid2)
+                                self.model.bridge(pbx, uniqueid1, uniqueid2)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.CONFBRIDGEEND:
                         if not Event.CONFERENCE in event:
@@ -126,9 +126,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.CONFBRIDGEEND, pbx, conference
-                                self.state.confbridgeend(pbx, conference)
+                                self.model.confbridgeend(pbx, conference)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.CONFBRIDGEJOIN:
                         if not Event.CHANNEL in event:
@@ -147,9 +147,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.CONFBRIDGEJOIN, pbx, uniqueid, channel, conference
-                                self.state.confbridgejoin(pbx, uniqueid, conference)
+                                self.model.confbridgejoin(pbx, uniqueid, conference)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.CONFBRIDGELEAVE:
                         if not Event.CHANNEL in event:
@@ -168,9 +168,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.CONFBRIDGELEAVE, pbx, uniqueid, channel, conference
-                                self.state.confbridgeleave(pbx, uniqueid, conference)
+                                self.model.confbridgeleave(pbx, uniqueid, conference)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.CONFBRIDGESTART:
                         if not Event.CONFERENCE in event:
@@ -183,9 +183,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.CONFBRIDGESTART, pbx, conference
-                                self.state.confbridgestart(pbx, conference)
+                                self.model.confbridgestart(pbx, conference)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.DIAL:
                         if not Event.SUBEVENT in event:
@@ -211,9 +211,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.DIAL, pbx, uniqueid, channel, destuniqueid, destination
-                                self.state.dial(pbx, uniqueid, destuniqueid)
+                                self.model.dial(pbx, uniqueid, destuniqueid)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.HANGUP:
                         if not Event.CHANNEL in event:
@@ -229,9 +229,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.HANGUP, pbx, uniqueid, channel
-                                self.state.hangup(pbx, uniqueid)
+                                self.model.hangup(pbx, uniqueid)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.LOCALBRIDGE:
                         if not Event.CHANNEL1 in event:
@@ -253,9 +253,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.LOCALBRIDGE, pbx, uniqueid1, channel1, uniqueid2, channel2
-                                self.state.localbridge(pbx, uniqueid1, uniqueid2)
+                                self.model.localbridge(pbx, uniqueid1, uniqueid2)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.NEWCHANNEL:
                         if not Event.CALLERIDNUM in event:
@@ -280,9 +280,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.NEWCHANNEL, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc
-                                self.state.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
+                                self.model.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.NEWSTATE:
                         if not Event.CHANNEL in event:
@@ -304,9 +304,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.NEWSTATE, pbx, uniqueid, channel, channelstate, channelstatedesc
-                                self.state.newstate(pbx, uniqueid, channelstate, channelstatedesc)
+                                self.model.newstate(pbx, uniqueid, channelstate, channelstatedesc)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.RENAME:
                         if not Event.CHANNEL in event:
@@ -325,9 +325,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.RENAME, pbx, uniqueid, channel, newname
-                                self.state.rename(pbx, uniqueid, newname)
+                                self.model.rename(pbx, uniqueid, newname)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     elif flavor == Event.VARSET:
                         if not Event.VARIABLE in event:
@@ -350,9 +350,9 @@ class Controller:
                                 if verbose:
                                     self.erase()
                                     print "EVENT", sn, Event.SIPCALLID, pbx, uniqueid, channel, value
-                                self.state.sipcallid(pbx, uniqueid, value)
+                                self.model.sipcallid(pbx, uniqueid, value)
                                 if verbose:
-                                    self.state.dump()
+                                    self.model.dump()
                                     self.flush()
                     else:
                         pass
