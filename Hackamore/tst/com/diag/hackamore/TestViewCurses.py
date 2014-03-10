@@ -122,7 +122,6 @@ class Test(unittest.TestCase):
         port = 0
         ready = threading.Condition()
         thread = Server(TYPESCRIPT, delay = 0.01)
-        #thread = Server(TYPESCRIPT)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:

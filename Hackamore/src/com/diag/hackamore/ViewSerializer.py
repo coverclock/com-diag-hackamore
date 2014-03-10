@@ -63,6 +63,6 @@ class ViewSerializer:
     def sipcallid(self, pbx, uniqueid, channel, value):
         return self.view.sipcallid(pbx, uniqueid, channel, value)
 
-    def refresh(self):
+    def display(self):
         with self.mutex:
-            return self.view.refresh()
+            return self.view.display()

@@ -67,5 +67,5 @@ class View:
     def sipcallid(self, pbx, uniqueid, channel, value):
         self.logger.debug("View: EVENT: %s %s %s %s %s", str(Event.SIPCALLID), str(pbx), str(uniqueid), str(channel), str(value))
 
-    def refresh(self):
+    def display(self):
         pass

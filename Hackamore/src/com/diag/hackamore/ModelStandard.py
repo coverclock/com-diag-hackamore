@@ -82,7 +82,11 @@ class ModelStandard(Model):
         else:
             pass # Typically a re-Bridge.
     
-    def connect(self, pbx, uniqueid1, uniqueid2):
+    #####
+    ##### PUBLIC
+    #####
+    
+    def bridge(self, pbx, uniqueid1, uniqueid2):
         if pbx in self.channels:
             channels = self.channels[pbx]
             if uniqueid1 in channels:
@@ -90,13 +94,6 @@ class ModelStandard(Model):
                 if uniqueid2 in channels:
                     chan2 = channels[uniqueid2]
                     self.merge(chan1, chan2)
-    
-    #####
-    ##### PUBLIC
-    #####
-    
-    def bridge(self, pbx, uniqueid1, uniqueid2):
-        self.connect(pbx, uniqueid1, uniqueid2)
 
     def confbridgeend(self, pbx, conference):
         if pbx in self.bridges:
@@ -157,7 +154,15 @@ class ModelStandard(Model):
         self.remove(pbx, uniqueid)
     
     def localbridge(self, pbx, uniqueid1, uniqueid2):
-        self.connect(pbx, uniqueid1, uniqueid2)
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid1 in channels:
+                chan1 = channels[uniqueid1]
+                if uniqueid2 in channels:
+                    chan2 = channels[uniqueid2]
+                    chan1.trunk()
+                    chan2.trunk()
+                    self.merge(chan1, chan2)
     
     def newchannel(self, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc):
         chan = Channel.Channel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
