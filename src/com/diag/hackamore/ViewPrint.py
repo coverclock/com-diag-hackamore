@@ -80,7 +80,7 @@ class ViewPrint(View):
         print "EVENT", self.sn, Event.SIPCALLID, pbx, uniqueid, channel, value
         self.sn = self.sn + 1
 
-    def refresh(self):
+    def display(self):
         print "VIEW"
         if self.model.channels:
             print "", "CHANNELS"
@@ -89,13 +89,13 @@ class ViewPrint(View):
                 channels = self.model.channels[pbx]
                 for channel in channels:
                     chan = channels[channel]
-                    chan.dump()
+                    chan.display()
         if self.model.calls:
             print "", "CALLS"
             for call in self.model.calls:
                 print "", "", "CALL", hex(id(call))
                 for chan in call:
-                    chan.dump()
+                    chan.display()
         if self.model.bridges:
             print "", "BRIDGES"
             for pbx in self.model.bridges:
@@ -106,13 +106,13 @@ class ViewPrint(View):
                     bridge = bridges[conference]
                     for uniqueid in bridge:
                         chan = bridge[uniqueid]
-                        chan.dump()
+                        chan.display()
         if self.model.trunks:
             print "", "TRUNKS"
             for sipcallid in self.model.trunks:
                 print "", "", "ID", sipcallid
                 chan = self.model.trunks[sipcallid]
-                chan.dump()
+                chan.display()
         if self.model.numbers:
             print "", "NUMBERS"
             for channel in self.model.numbers:

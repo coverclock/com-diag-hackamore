@@ -41,7 +41,7 @@ class Controller:
                 if Event.END in event:
                     self.view.end(pbx)
                     self.model.end(pbx)
-                    self.view.refresh()
+                    self.view.display()
                     source = self.multiplex.query(pbx)
                     source.close()
                     self.multiplex.unregister(source)
@@ -71,7 +71,7 @@ class Controller:
                             uniqueid2 = event[Event.UNIQUEID2]
                             self.view.bridge(pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2)
                             self.model.bridge(pbx, uniqueid1, uniqueid2)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.CONFBRIDGEEND:
                         if not Event.CONFERENCE in event:
                             pass
@@ -79,7 +79,7 @@ class Controller:
                             conference = event[Event.CONFERENCE]
                             self.view.confbridgeend(pbx, conference)
                             self.model.confbridgeend(pbx, conference)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.CONFBRIDGEJOIN:
                         if not Event.CHANNEL in event:
                             pass
@@ -93,7 +93,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.confbridgejoin(pbx, uniqueid, channel, conference)
                             self.model.confbridgejoin(pbx, uniqueid, conference)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.CONFBRIDGELEAVE:
                         if not Event.CHANNEL in event:
                             pass
@@ -107,7 +107,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.confbridgeleave(pbx, uniqueid, channel, conference)
                             self.model.confbridgeleave(pbx, uniqueid, conference)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.CONFBRIDGESTART:
                         if not Event.CONFERENCE in event:
                             pass
@@ -115,7 +115,7 @@ class Controller:
                             conference = event[Event.CONFERENCE]
                             self.view.confbridgestart(pbx, conference)
                             self.model.confbridgestart(pbx, conference)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.DIAL:
                         if not Event.SUBEVENT in event:
                             pass
@@ -136,7 +136,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDUC]
                             self.view.dial(pbx, uniqueid, channel, destuniqueid, destination)
                             self.model.dial(pbx, uniqueid, destuniqueid)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.HANGUP:
                         if not Event.CHANNEL in event:
                             pass
@@ -147,7 +147,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.hangup(pbx, uniqueid, channel)
                             self.model.hangup(pbx, uniqueid)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.LOCALBRIDGE:
                         if not Event.CHANNEL1 in event:
                             pass
@@ -164,7 +164,7 @@ class Controller:
                             uniqueid2 = event[Event.UNIQUEID2]
                             self.view.localbridge(pbx, uniqueid1, channel1, uniqueid2, channel2)
                             self.model.localbridge(pbx, uniqueid1, uniqueid2)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.NEWCHANNEL:
                         if not Event.CALLERIDNUM in event:
                             pass
@@ -184,7 +184,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
                             self.model.newchannel(pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.NEWSTATE:
                         if not Event.CHANNEL in event:
                             pass
@@ -201,7 +201,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.newstate(pbx, uniqueid, channel, channelstate, channelstatedesc)
                             self.model.newstate(pbx, uniqueid, channelstate, channelstatedesc)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.RENAME:
                         if not Event.CHANNEL in event:
                             pass
@@ -215,7 +215,7 @@ class Controller:
                             uniqueid = event[Event.UNIQUEIDLC]
                             self.view.rename(pbx, uniqueid, channel, newname)
                             self.model.rename(pbx, uniqueid, newname)
-                            self.view.refresh()
+                            self.view.display()
                     elif flavor == Event.VARSET:
                         if not Event.VARIABLE in event:
                             pass
@@ -233,7 +233,7 @@ class Controller:
                             value = event[Event.VALUE]
                             self.view.sipcallid(pbx, uniqueid, channel, value)
                             self.model.sipcallid(pbx, uniqueid, value)
-                            self.view.refresh()
+                            self.view.display()
                     else:
                         pass
                 else:

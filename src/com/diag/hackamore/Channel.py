@@ -69,6 +69,6 @@ class Channel():
     def leave(self, conference):
         self.conference = None
         
-    def dump(self):
+    def display(self):
         print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
 
