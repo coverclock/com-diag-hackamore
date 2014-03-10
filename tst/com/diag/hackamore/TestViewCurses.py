@@ -9,6 +9,7 @@ import logging
 import socket
 import threading
 import time
+import os
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
@@ -32,7 +33,6 @@ ready = None
 READLINE = 512
 RECV = 512
 LIMIT = 3
-DELAY=0.1
 
 class Producer(threading.Thread):
     
@@ -110,14 +110,19 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Curses(self):
+    def test010ViewCurses(self):
         global address
         global port
         global ready
+        if "TERM" not in os.environ:
+            print("Bypassing test with curses.")
+            return
+        print "TERM=" + os.environ["TERM"]
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, delay = DELAY)
+        thread = Server(TYPESCRIPT, delay = 0.01)
+        #thread = Server(TYPESCRIPT)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
@@ -125,15 +130,14 @@ class Test(unittest.TestCase):
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
         self.assertIsNotNone(source)
-        sources = [ ]
-        sources.append(source)
-        self.assertEquals(len(sources), 1)
-        mutex = threading.Condition()
+        sources = [ source ]
         model = com.diag.hackamore.ModelStandard.ModelStandard()
+        mutex = threading.Condition()
         serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model, mutex)
-        view = com.diag.hackamore.ViewCurses.ViewCurses(model = model)
+        view = com.diag.hackamore.ViewCurses.ViewCurses(model)
         serializedview = com.diag.hackamore.ViewSerializer.ViewSerializer(view, mutex)
-        controller = com.diag.hackamore.Controller.Controller(model = serializedmodel, view = serializedview)
+        controller = com.diag.hackamore.Controller.Controller(serializedmodel, serializedview)
+        self.assertEquals(len(sources), 1)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()

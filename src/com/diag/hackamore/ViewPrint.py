@@ -81,41 +81,40 @@ class ViewPrint(View):
         self.sn = self.sn + 1
 
     def refresh(self):
-        with self.model.mutex:
-            print "VIEW"
-            if self.model.channels:
-                print "", "CHANNELS"
-                for pbx in self.model.channels:
-                    print "", "", "SOURCE", pbx
-                    channels = self.model.channels[pbx]
-                    for channel in channels:
-                        chan = channels[channel]
-                        chan.dump()
-            if self.model.bridges:
-                print "", "BRIDGES"
-                for pbx in self.model.bridges:
-                    print "", "", "SOURCE", pbx
-                    bridges = self.model.bridges[pbx]
-                    for conference in bridges:
-                        print "", "", "", "BRIDGE", conference
-                        bridge = bridges[conference]
-                        for uniqueid in bridge:
-                            chan = bridge[uniqueid]
-                            chan.dump()
-            if self.model.trunks:
-                print "", "TRUNKS"
-                for sipcallid in self.model.trunks:
-                    print "", "", "ID", sipcallid
-                    chan = self.model.trunks[sipcallid]
+        print "VIEW"
+        if self.model.channels:
+            print "", "CHANNELS"
+            for pbx in self.model.channels:
+                print "", "", "SOURCE", pbx
+                channels = self.model.channels[pbx]
+                for channel in channels:
+                    chan = channels[channel]
                     chan.dump()
-            if self.model.calls:
-                print "", "CALLS"
-                for call in self.model.calls:
-                    print "", "", "CALL", hex(id(call))
-                    for chan in call:
+        if self.model.calls:
+            print "", "CALLS"
+            for call in self.model.calls:
+                print "", "", "CALL", hex(id(call))
+                for chan in call:
+                    chan.dump()
+        if self.model.bridges:
+            print "", "BRIDGES"
+            for pbx in self.model.bridges:
+                print "", "", "SOURCE", pbx
+                bridges = self.model.bridges[pbx]
+                for conference in bridges:
+                    print "", "", "", "BRIDGE", conference
+                    bridge = bridges[conference]
+                    for uniqueid in bridge:
+                        chan = bridge[uniqueid]
                         chan.dump()
-            if self.model.numbers:
-                print "", "NUMBERS"
-                for channel in self.model.numbers:
-                    calleridnum = self.model.numbers[channel]
-                    print "", "", "NUMBER", calleridnum, channel
+        if self.model.trunks:
+            print "", "TRUNKS"
+            for sipcallid in self.model.trunks:
+                print "", "", "ID", sipcallid
+                chan = self.model.trunks[sipcallid]
+                chan.dump()
+        if self.model.numbers:
+            print "", "NUMBERS"
+            for channel in self.model.numbers:
+                calleridnum = self.model.numbers[channel]
+                print "", "", "NUMBER", calleridnum, channel
