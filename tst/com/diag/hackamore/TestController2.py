@@ -12,8 +12,9 @@ import time
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
-import com.diag.hackamore.ModelDefault
-import com.diag.hackamore.ViewPrint
+import com.diag.hackamore.ModelSerializer
+import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.ViewCurses
 import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import SERVER
@@ -108,14 +109,14 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Print(self):
+    def test010Curses(self):
         global address
         global port
         global ready
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT)
+        thread = Server(TYPESCRIPT, delay = DELAY)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
@@ -126,9 +127,10 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        model = com.diag.hackamore.ModelDefault.ModelDefault()
-        view = com.diag.hackamore.ViewPrint.ViewPrint(model = model)
-        controller = com.diag.hackamore.Controller.Controller(model = model, view = view)
+        model = com.diag.hackamore.ModelStandard.ModelStandard()
+        serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model)
+        view = com.diag.hackamore.ViewCurses.ViewCurses(model = model)
+        controller = com.diag.hackamore.Controller.Controller(model = serializedmodel, view = view)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()

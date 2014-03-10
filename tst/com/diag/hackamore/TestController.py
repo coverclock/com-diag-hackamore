@@ -12,7 +12,8 @@ import threading
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
-import com.diag.hackamore.ModelDefault
+import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.Controller
 
 from com.diag.hackamore.Credentials import USERNAME
@@ -131,7 +132,7 @@ class Test(unittest.TestCase):
         controller.loop(inputs, inputs)
         self.assertEquals(len(inputs), 1)
         
-    def test030Passive(self):
+    def test030Log(self):
         global address
         global port
         global ready
@@ -159,7 +160,7 @@ class Test(unittest.TestCase):
         self.assertEquals(len(sources), 1)
         thread.join()
 
-    def test040Active(self):
+    def test040Print(self):
         global address
         global port
         global ready
@@ -182,8 +183,9 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        model = com.diag.hackamore.ModelDefault.ModelDefault()
-        controller = com.diag.hackamore.Controller.Controller(model = model)
+        model = com.diag.hackamore.ModelStandard.ModelStandard()
+        view = com.diag.hackamore.ViewPrint.ViewPrint(model = model)
+        controller = com.diag.hackamore.Controller.Controller(model = model, view = view)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()

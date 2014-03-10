@@ -4,8 +4,6 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import sys
-
 from View import View
 
 import Event
@@ -84,7 +82,7 @@ class ViewPrint(View):
 
     def refresh(self):
         with self.model.mutex:
-            print "STATE"
+            print "VIEW"
             if self.model.channels:
                 print "", "CHANNELS"
                 for pbx in self.model.channels:
