@@ -4,6 +4,8 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+from printf import printf
+
 IDLE = 0
 CALLING = 1
 CALLED = 2
@@ -11,7 +13,15 @@ TRUNK = 3
 
 ROLE = ( "IDLE", "CALLING", "CALLED", "TRUNK" )
 
+#####
+##### PRIVATE
+#####
+
 class Channel():
+    
+    #####
+    ##### CTOR/DTOR
+    #####
 
     def __init__(self, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc):
         self.pbx = pbx
@@ -30,6 +40,10 @@ class Channel():
 
     def __repr__(self):
         return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.calleridnum) + "," + str(self.sipcallid) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
+
+    #####
+    ##### PUBLIC
+    #####
 
     def newstate(self, channelstate, channelstatedesc):
         self.channelstate = channelstate
@@ -68,7 +82,7 @@ class Channel():
 
     def leave(self, conference):
         self.conference = None
-        
-    def display(self):
-        print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
 
+    def display(self):
+        #print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
+        printf("    CHANNEL %-8s %-16s %-64s %-8s %-8s %-8s %-8s %-10s\n", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.conference, hex(id(self.call)) if self.call != None else self.call)
