@@ -14,6 +14,7 @@ import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelSerializer
 import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.ViewSerializer
 import com.diag.hackamore.ViewCurses
 import com.diag.hackamore.Controller
 
@@ -127,10 +128,12 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
+        mutex = threading.Condition()
         model = com.diag.hackamore.ModelStandard.ModelStandard()
-        serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model)
+        serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model, mutex)
         view = com.diag.hackamore.ViewCurses.ViewCurses(model = model)
-        controller = com.diag.hackamore.Controller.Controller(model = serializedmodel, view = view)
+        serializedview = com.diag.hackamore.ViewSerializer.ViewSerializer(view, mutex)
+        controller = com.diag.hackamore.Controller.Controller(model = serializedmodel, view = serializedview)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
