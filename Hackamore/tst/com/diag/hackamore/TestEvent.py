@@ -12,6 +12,8 @@ import com.diag.hackamore.Event
 import com.diag.hackamore.File
 import com.diag.hackamore.Multiplex
 
+from com.diag.hackamore.stdio import printf
+
 from Parameters import TYPESCRIPT
 
 class Test(unittest.TestCase):
@@ -78,7 +80,6 @@ class Test(unittest.TestCase):
             event = message.event
             self.assertIsNotNone(event)
             self.assertTrue(event)
-            self.assertIn(com.diag.hackamore.Event.SOURCE, event)
             pbx = event[com.diag.hackamore.Event.SOURCE]
             if com.diag.hackamore.Event.END in event:
                 temporary = multiplex.query(pbx)
@@ -112,14 +113,14 @@ class Test(unittest.TestCase):
                         channel2 = event[com.diag.hackamore.Event.CHANNEL2]
                         uniqueid1 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID1] )
                         uniqueid2 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID2] )
-                        print(com.diag.hackamore.Event.BRIDGE, callerid1, callerid2, channel1, channel2, uniqueid1, uniqueid2)
+                        printf("%s %s %s %s %s %s %s\n", com.diag.hackamore.Event.BRIDGE, callerid1, callerid2, channel1, channel2, uniqueid1, uniqueid2)
                         counter[com.diag.hackamore.Event.BRIDGE] = counter[com.diag.hackamore.Event.BRIDGE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEEND:
                     if not com.diag.hackamore.Event.CONFERENCE in event:
                         pass
                     else:
                         conference = event[com.diag.hackamore.Event.CONFERENCE]
-                        print(com.diag.hackamore.Event.CONFBRIDGEEND, conference)
+                        printf("%s %s\n", com.diag.hackamore.Event.CONFBRIDGEEND, conference)
                         counter[com.diag.hackamore.Event.CONFBRIDGEEND] = counter[com.diag.hackamore.Event.CONFBRIDGEEND] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGEJOIN:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -132,7 +133,7 @@ class Test(unittest.TestCase):
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         conference = event[com.diag.hackamore.Event.CONFERENCE]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.CONFBRIDGEJOIN, channel, conference, uniqueid)
+                        printf("%s %s %s %s\n", com.diag.hackamore.Event.CONFBRIDGEJOIN, channel, conference, uniqueid)
                         counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] = counter[com.diag.hackamore.Event.CONFBRIDGEJOIN] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGELEAVE:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -145,14 +146,14 @@ class Test(unittest.TestCase):
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         conference = event[com.diag.hackamore.Event.CONFERENCE]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.CONFBRIDGELEAVE, channel, conference, uniqueid)
+                        printf("%s %s %s %s\n", com.diag.hackamore.Event.CONFBRIDGELEAVE, channel, conference, uniqueid)
                         counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] = counter[com.diag.hackamore.Event.CONFBRIDGELEAVE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.CONFBRIDGESTART:
                     if not com.diag.hackamore.Event.CONFERENCE in event:
                         pass
                     else:
                         conference = event[com.diag.hackamore.Event.CONFERENCE]
-                        print(com.diag.hackamore.Event.CONFBRIDGESTART, conference)
+                        printf("%s %s\n", com.diag.hackamore.Event.CONFBRIDGESTART, conference)
                         counter[com.diag.hackamore.Event.CONFBRIDGESTART] = counter[com.diag.hackamore.Event.CONFBRIDGESTART] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.DIAL:
                     if not com.diag.hackamore.Event.SUBEVENT in event:
@@ -172,7 +173,7 @@ class Test(unittest.TestCase):
                         destination = event[com.diag.hackamore.Event.DESTINATION]
                         destuniqueid = ( pbx, event[com.diag.hackamore.Event.DESTUNIQUEID] )
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDUC] )
-                        print(com.diag.hackamore.Event.DIAL, channel, destination, destuniqueid, uniqueid)
+                        printf("%s %s %s %s %s\n", com.diag.hackamore.Event.DIAL, channel, destination, destuniqueid, uniqueid)
                         counter[com.diag.hackamore.Event.DIAL] = counter[com.diag.hackamore.Event.DIAL] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.HANGUP:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -182,7 +183,7 @@ class Test(unittest.TestCase):
                     else:
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.HANGUP, channel, uniqueid)
+                        printf("%s %s %s\n", com.diag.hackamore.Event.HANGUP, channel, uniqueid)
                         counter[com.diag.hackamore.Event.HANGUP] = counter[com.diag.hackamore.Event.HANGUP] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.LOCALBRIDGE:
                     if not com.diag.hackamore.Event.CHANNEL1 in event:
@@ -198,7 +199,7 @@ class Test(unittest.TestCase):
                         channel2 = event[com.diag.hackamore.Event.CHANNEL2]
                         uniqueid1 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID1] )
                         uniqueid2 = ( pbx, event[com.diag.hackamore.Event.UNIQUEID2] )
-                        print(com.diag.hackamore.Event.LOCALBRIDGE, channel1, channel2, uniqueid1, uniqueid2)
+                        printf("%s %s %s %s %s\n", com.diag.hackamore.Event.LOCALBRIDGE, channel1, channel2, uniqueid1, uniqueid2)
                         counter[com.diag.hackamore.Event.LOCALBRIDGE] = counter[com.diag.hackamore.Event.LOCALBRIDGE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWCHANNEL:
                     if not com.diag.hackamore.Event.CALLERIDNUM in event:
@@ -217,7 +218,7 @@ class Test(unittest.TestCase):
                         channelstate = event[com.diag.hackamore.Event.CHANNELSTATE]
                         channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.NEWCHANNEL, channel, calleridnum, channelstate, channelstatedesc, uniqueid)
+                        printf("%s %s %s %s %s %s\n", com.diag.hackamore.Event.NEWCHANNEL, channel, calleridnum, channelstate, channelstatedesc, uniqueid)
                         counter[com.diag.hackamore.Event.NEWCHANNEL] = counter[com.diag.hackamore.Event.NEWCHANNEL] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.NEWSTATE:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -233,7 +234,7 @@ class Test(unittest.TestCase):
                         channelstate = event[com.diag.hackamore.Event.CHANNELSTATE]
                         channelstatedesc = event[com.diag.hackamore.Event.CHANNELSTATEDESC]
                         uniqueid = ( name, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.NEWSTATE, channel, channelstate, channelstatedesc, uniqueid)
+                        printf("%s %s %s %s %s\n", com.diag.hackamore.Event.NEWSTATE, channel, channelstate, channelstatedesc, uniqueid)
                         counter[com.diag.hackamore.Event.NEWSTATE] = counter[com.diag.hackamore.Event.NEWSTATE] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.RENAME:
                     if not com.diag.hackamore.Event.CHANNEL in event:
@@ -246,7 +247,7 @@ class Test(unittest.TestCase):
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         newname = event[com.diag.hackamore.Event.NEWNAME]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
-                        print(com.diag.hackamore.Event.RENAME, channel, newname, destuniqueid, uniqueid)
+                        printf("%s %s %s %s %s\n", com.diag.hackamore.Event.RENAME, channel, newname, destuniqueid, uniqueid)
                         counter[com.diag.hackamore.Event.RENAME] = counter[com.diag.hackamore.Event.RENAME] + 1
                 elif event[com.diag.hackamore.Event.EVENT] == com.diag.hackamore.Event.VARSET:
                     if not com.diag.hackamore.Event.VARIABLE in event:
@@ -263,7 +264,7 @@ class Test(unittest.TestCase):
                         channel = event[com.diag.hackamore.Event.CHANNEL]
                         uniqueid = ( pbx, event[com.diag.hackamore.Event.UNIQUEIDLC] )
                         value = event[com.diag.hackamore.Event.VALUE]
-                        print(com.diag.hackamore.Event.SIPCALLID, channel, uniqueid, value)
+                        printf("%s %s %s %s\n", com.diag.hackamore.Event.SIPCALLID, channel, uniqueid, value)
                         counter[com.diag.hackamore.Event.SIPCALLID] = counter[com.diag.hackamore.Event.SIPCALLID] + 1
                 else:
                     pass

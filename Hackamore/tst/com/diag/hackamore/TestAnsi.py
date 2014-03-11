@@ -9,6 +9,8 @@ import os
 import curses.ascii
 import sys
 
+from com.diag.hackamore.stdio import printf
+
 class Test(unittest.TestCase):
 
     def setUp(self):
@@ -20,16 +22,16 @@ class Test(unittest.TestCase):
 
     def testName(self):
         if "TERM" not in os.environ:
-            print("Bypassing test using ANSI escape sequences.")
+            printf("Bypassing test using ANSI escape sequences.\n")
             return
-        print "TERM=" + os.environ["TERM"]
-        print "BEFORE"
+        printf("TERM=%s\n", os.environ["TERM"])
+        printf("BEFORE\n")
         clear = chr(curses.ascii.ESC) + "[2J"
         home = chr(curses.ascii.ESC) + "[1;1H"
         sys.stdout.write(clear)
         sys.stdout.write(home)
         sys.stdout.flush()
-        print "AFTER"
+        printf("AFTER\n")
 
 if __name__ == "__main__":
     unittest.main()
