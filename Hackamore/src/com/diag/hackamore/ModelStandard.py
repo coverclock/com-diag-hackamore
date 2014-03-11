@@ -33,8 +33,12 @@ class ModelStandard(Model):
             if uniqueid in channels:
                 chan = channels[uniqueid]
                 if chan.calleridnum != None:
-                    if chan.channel in self.numbers:
-                        del self.numbers[chan.channel]
+                    if pbx in self.numbers:
+                        numbers = self.numbers[pbx]
+                        if chan.channel in numbers:
+                            del numbers[chan.channel]
+                        if not numbers:
+                            del self.numbers[pbx]
                 if chan.call != None:
                     chan.call.remove(chan)
                     if not chan.call:
@@ -175,7 +179,10 @@ class ModelStandard(Model):
         elif not calleridnum:
             pass
         else:
-            self.numbers[channel] = calleridnum
+            if not pbx in self.numbers:
+                self.numbers[pbx] = { }
+            numbers = self.numbers[pbx]
+            numbers[channel] = calleridnum
     
     def newstate(self, pbx, uniqueid, channelstate, channelstatedesc):
         if pbx in self.channels:
@@ -191,9 +198,11 @@ class ModelStandard(Model):
                 chan = channels[uniqueid]
                 chan.rename(newname)
                 if chan.calleridnum == None or not chan.calleridnum:
-                    if chan.channel in self.numbers:
-                        calleridnum = self.numbers[chan.channel]
-                        chan.dial(calleridnum)
+                    if pbx in self.numbers:
+                        numbers = self.numbers[pbx]
+                        if chan.channel in numbers:
+                            calleridnum = numbers[chan.channel]
+                            chan.dial(calleridnum)
 
     def sipcallid(self, pbx, uniqueid, value):
         if pbx in self.channels:

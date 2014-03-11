@@ -18,7 +18,7 @@ class Model:
         self.bridges = { }      # Channel = self.bridges[pbx][conference][uniqueid]
         self.trunks = { }       # Channel = self.trunks[sipcallid]
         self.calls = [ ]        # Channel = self.calls[0:-1][0:-1]
-        self.numbers = { }      # calleridnum = self.numbers[channel]
+        self.numbers = { }      # calleridnum = self.numbers[pbx][channel]
 
     def __del__(self):
         pass
