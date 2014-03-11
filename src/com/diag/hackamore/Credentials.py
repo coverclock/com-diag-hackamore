@@ -8,13 +8,13 @@ import os
 
 DOTFILE=".com_diag_hackamore"
 
-def credential(keyword):
+def credentialfile(path, keyword):
     try:
         return os.environ[keyword].strip()
     except Exception:
         pass
     try:
-        for line in open(os.environ["HOME"] + "/" + DOTFILE):
+        for line in open(path):
             pair = line.split("=", 1)
             if pair[0].strip() == keyword:
                 return pair[1].strip()
@@ -22,6 +22,16 @@ def credential(keyword):
         pass
     return ""
 
-SERVER = credential("COM_DIAG_HACKAMORE_SERVER")
-USERNAME = credential("COM_DIAG_HACKAMORE_USERNAME")
-SECRET = credential("COM_DIAG_HACKAMORE_SECRET")
+def credentialhome(path, keyword):
+    return credentialfile(os.environ["HOME"] + "/" + path, keyword)    
+
+def credential(keyword):
+    return credentialhome(DOTFILE, keyword)
+
+COM_DIAG_HACKAMORE_SERVER = "COM_DIAG_HACKAMORE_SERVER"
+COM_DIAG_HACKAMORE_USERNAME = "COM_DIAG_HACKAMORE_USERNAME"
+COM_DIAG_HACKAMORE_SECRET = "COM_DIAG_HACKAMORE_SECRET"
+
+SERVER = credential(COM_DIAG_HACKAMORE_SERVER)
+USERNAME = credential(COM_DIAG_HACKAMORE_USERNAME)
+SECRET = credential(COM_DIAG_HACKAMORE_SECRET)
