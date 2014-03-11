@@ -115,6 +115,9 @@ class ViewPrint(View):
                 chan.display()
         if self.model.numbers:
             print "", "NUMBERS"
-            for channel in self.model.numbers:
-                calleridnum = self.model.numbers[channel]
-                print "", "", "NUMBER", calleridnum, channel
+            for pbx in self.model.numbers:
+                print "", "", "SOURCE", pbx
+                numbers = self.model.numbers[pbx]
+                for channel in numbers:
+                    calleridnum = numbers[channel]
+                    print "", "", "", "NUMBER", calleridnum, channel
