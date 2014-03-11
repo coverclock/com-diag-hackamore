@@ -12,8 +12,9 @@ import View
 
 class Controller:
 
-    def __init__(self, model = None, view = None, multiplex = None, logger = None):
+    def __init__(self, model = None, view = None, multiplex = None, tracer = None, logger = None):
         self.logger = Logger.logger() if logger == None else logger
+        self.tracer = tracer
         self.model = Model.Model(logger = self.logger) if model == None else model
         self.view = View.View(model = self.model, logger = self.logger) if view == None else view
         self.multiplex = Multiplex.Multiplex(logger = self.logger) if multiplex == None else multiplex
@@ -36,12 +37,16 @@ class Controller:
                 break
             messages = self.multiplex.multiplex()
             for message in messages:
+                if self.tracer != None:
+                    message.trace(self.tracer)
                 event = message.event
                 pbx = event[Event.SOURCE]
                 if Event.END in event:
-                    self.view.end(pbx)
-                    self.model.end(pbx)
-                    self.view.display()
+                    events = event[Event.END]
+                    if events == "1":
+                        self.view.end(pbx)
+                        self.model.end(pbx)
+                        self.view.display()
                     source = self.multiplex.query(pbx)
                     source.close()
                     self.multiplex.unregister(source)
