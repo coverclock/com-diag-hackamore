@@ -15,6 +15,8 @@ import com.diag.hackamore.File
 import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Event
 
+from com.diag.hackamore.stdio import printf
+
 from com.diag.hackamore.Credentials import USERNAME
 from com.diag.hackamore.Credentials import SECRET
 
@@ -47,10 +49,10 @@ class Producer(threading.Thread):
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
-            print("Producer=" + str(port))
+            printf("Producer=%s\n", str(port))
             ready.notifyAll()
         sock2, consumer = sock.accept()
-        print("Consumer=" + str(consumer))
+        printf("Consumer=%s\n", str(consumer))
         stream = open(self.path, "r")
         if stream != None:
             while True:
@@ -102,7 +104,7 @@ class Test(unittest.TestCase):
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
-        print(str(multiplex))
+        printf("%s\n", str(multiplex))
         name1 = name + "-1"
         source1 = com.diag.hackamore.File.File(name1, SAMPLE)
         self.assertIsNotNone(source1)
@@ -127,7 +129,7 @@ class Test(unittest.TestCase):
         self.assertTrue(source4.open())
         multiplex.register(source4)
         self.assertTrue(multiplex.active())
-        print(str(multiplex))
+        printf("%s\n", str(multiplex))
         counter = { }
         counter[name1] = 0
         counter[name2] = 0
@@ -137,7 +139,7 @@ class Test(unittest.TestCase):
             messages = multiplex.multiplex()
             for message in messages:
                 self.assertIsNotNone(message)
-                print(str(message))
+                printf("%s\n", str(message))
                 event = message.event
                 self.assertIsNotNone(event)
                 self.assertTrue(event)
@@ -153,7 +155,7 @@ class Test(unittest.TestCase):
                     multiplex.unregister(source)
                     messages.close()
         self.assertFalse(multiplex.active())
-        print(str(multiplex))
+        printf("%s\n", str(multiplex))
         self.assertEquals(counter[name1], 5)
         self.assertEquals(counter[name2], 5)
         self.assertEquals(counter[name3], 358)

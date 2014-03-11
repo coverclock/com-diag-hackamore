@@ -23,6 +23,8 @@ from com.diag.hackamore.Credentials import SERVER
 from com.diag.hackamore.Credentials import USERNAME
 from com.diag.hackamore.Credentials import SECRET
 
+from com.diag.hackamore.stdio import printf
+
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
 
@@ -115,9 +117,9 @@ class Test(unittest.TestCase):
         global port
         global ready
         if "TERM" not in os.environ:
-            print("Bypassing test with curses.")
+            printf("Bypassing test with curses.\n")
             return
-        print "TERM=" + os.environ["TERM"]
+        printf("TERM=%s\n", os.environ["TERM"])
         name = self.id()
         address = ""
         port = 0

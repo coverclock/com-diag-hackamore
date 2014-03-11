@@ -15,6 +15,8 @@ import com.diag.hackamore.Socket
 import com.diag.hackamore.End
 import com.diag.hackamore.Multiplex
 
+from com.diag.hackamore.stdio import printf
+
 from com.diag.hackamore.Credentials import SERVER
 from com.diag.hackamore.Credentials import USERNAME
 from com.diag.hackamore.Credentials import SECRET
@@ -45,7 +47,7 @@ class Refuser(threading.Thread):
         sock.bind(("", 0))
         with ready:
             address, port2 = sock.getsockname()
-            print("Refuser=" + str(port2))
+            printf("Refuser=%s\n", str(port2))
             sock.close()
             port = port2
             ready.notifyAll()
@@ -66,7 +68,7 @@ class Binder(threading.Thread):
         sock.bind(("", 0))
         with ready:
             address, port = sock.getsockname()
-            print("Binder=" + str(port))
+            printf("Binder=%s\n", str(port))
             ready.notifyAll()
         with done:
             while not complete:
@@ -87,7 +89,7 @@ class Listener(threading.Thread):
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
-            print("Listener=" + str(port))
+            printf("Listener=%s\n", str(port))
             ready.notifyAll()
         with done:
             while not complete:
@@ -108,10 +110,10 @@ class Accepter(threading.Thread):
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
-            print("Accepter=" + str(port))
+            printf("Accepter=%s\n", str(port))
             ready.notifyAll()
         sock2, client = sock.accept()
-        print("Requester=" + str(client))
+        printf("Requester=%s\n", str(client))
         with done:
             while not complete:
                 done.wait()
@@ -136,10 +138,10 @@ class Producer(threading.Thread):
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
-            print("Producer=" + str(port))
+            printf("Producer=%s\n", str(port))
             ready.notifyAll()
         sock2, consumer = sock.accept()
-        print("Consumer=" + str(consumer))
+        printf("Consumer=%s\n", str(consumer))
         stream = open(self.path, "r")
         if stream != None:
             while True:
@@ -177,7 +179,7 @@ class Server(threading.Thread):
         sock.listen(socket.SOMAXCONN)
         with ready:
             address, port = sock.getsockname()
-            print("Server=" + str(port))
+            printf("Server=%s\n", str(port))
             ready.notifyAll()
         sock2 = None
         while True:
@@ -190,7 +192,7 @@ class Server(threading.Thread):
                     break
                 proceed = False
             sock2, consumer = sock.accept()
-            print("Client=" + str(consumer))
+            printf("Client=%s\n", str(consumer))
             stream = open(self.path, "r")
             if stream != None:
                 while True:
@@ -215,78 +217,78 @@ class Test(unittest.TestCase):
     
     def test010Assemble(self):
         source = com.diag.hackamore.Socket.Socket("", "", "", "", 0)
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 0)
         self.assertEqual(len(source.queue), 0)
         source.assemble("OneOne: ")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 0)
         source.assemble("AlphaAlpha")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 2)
         self.assertEqual(len(source.queue), 0)
         source.assemble("\r\n")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 1)
         source.assemble("OneTwo: ")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 2)
         self.assertEqual(len(source.queue), 1)
         source.assemble("AlphaBeta\r\n")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 2)
         source.assemble("OneThree: AlphaGamma\r\n")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 3)
         source.assemble("OneFour: AlphaDelta\r")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 20)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 3)
         source.assemble("\nOneFive: AlphaEpsilon\r\n")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 5)        
         source.assemble("\r\n")
-        print("PREFIX=\"" + str(source.prefix) + "\"")
-        print("PARTIAL=" + str(source.partial))
-        print("QUEUE=" + str(source.queue))
+        printf("PREFIX=\"%s\"\n", str(source.prefix))
+        printf("PARTIAL=%s\n", str(source.partial))
+        printf("QUEUE=%s\n", str(source.queue))
         self.assertEqual(len(source.prefix), 0)
         self.assertEqual(len(source.partial), 1)
         self.assertEqual(len(source.queue), 6)
         event = source.get(True)
         self.assertIsNotNone(event)
-        print("EVENT=" + str(event))
+        printf("EVENT=%s", str(event))
         self.assertIn("OneOne", event)
         self.assertEqual(event["OneOne"], "AlphaAlpha")
         self.assertIn("OneTwo", event)
@@ -1097,7 +1099,7 @@ class Test(unittest.TestCase):
             self.assertEquals(event[com.diag.hackamore.Event.SOURCE], name)
             self.assertIn(com.diag.hackamore.Event.TIME, event)
             self.assertTrue(event[com.diag.hackamore.Event.TIME])
-            #del event[com.diag.hackamore.Source.TIME]; sorted(event, key=event.get); print("EVENT " + str(events) + " " + str(event))
+            #del event[com.diag.hackamore.Source.TIME]; sorted(event, key=event.get); print "EVENT", events, event
             if com.diag.hackamore.Event.END in event:
                 self.assertEquals(event[com.diag.hackamore.Event.END], str(events))
                 break
@@ -1114,7 +1116,7 @@ class Test(unittest.TestCase):
     
     def test120Live(self):
         if not SERVER:
-            print("Bypassing test with live server.")
+            printf("Bypassing test with live server.\n")
             return
         global address
         global port
