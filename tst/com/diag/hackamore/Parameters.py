@@ -10,3 +10,5 @@ PORT = com.diag.hackamore.Socket.PORT
 LOCALHOST = "127.0.0.1"
 SAMPLE = "sample.txt"
 TYPESCRIPT = "typescript.txt"
+TRACE = "trace.txt"
+TRACELET = "tracelet.txt"

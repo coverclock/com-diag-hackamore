@@ -18,10 +18,9 @@ class Controller:
         self.model = Model.Model(logger = self.logger) if model == None else model
         self.view = View.View(model = self.model, logger = self.logger) if view == None else view
         self.multiplex = Multiplex.Multiplex(logger = self.logger) if multiplex == None else multiplex
-        self.logger.info("Controller: INIT. %s", str(self))
         
     def __del__(self):
-        self.logger.info("Controller: FINI. %s", str(self))
+        pass
 
     def __repr__(self):
         return "Controller(" + str(self.multiplex) + ")"

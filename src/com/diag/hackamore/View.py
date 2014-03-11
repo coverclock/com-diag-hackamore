@@ -16,10 +16,9 @@ class View:
     def __init__(self, model, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.model = model
-        self.logger.info("View: INIT. %s", str(self))
 
     def __del__(self):
-        self.logger.info("View: FINI. %s", str(self))
+        pass
 
     def __repr__(self):
         return "View(" + str(self.model) + ")"
