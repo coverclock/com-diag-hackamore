@@ -28,11 +28,9 @@ class Socket(Source):
         self.partial = [ ]
         self.queue = [ ]
         self.socket = None
-        self.logger.info("Socket: INIT. %s", str(self))
 
     def __del__(self):
         self.close()
-        self.logger.info("Socket: FINI. %s", str(self))
 
     def __repr__(self):
         return Source.__repr__(self) + ".Socket(" + str(self.host) + "," + str(self.port) + ")"

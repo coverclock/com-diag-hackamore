@@ -12,35 +12,41 @@ from End import End
 READLINE = 512
 OPEN = "rb"
 
-class File(Source):
+class Trace(Source):
 
     def __init__(self, pbx, path, bufsize = READLINE, logger = None):
         Source.__init__(self, pbx, logger = logger)
         self.path = path
+        self.active = False
         self.eof = False
         self.file = None
         self.bufsize = bufsize
 
     def __del__(self):
-        self.close()
+        self.force()
 
     def __repr__(self):
-        return Source.__repr__(self) + ".File(" + str(self.path) + ")"
+        return Source.__repr__(self) + ".Trace(" + str(self.path) + ")"
 
     def open(self):
         result = False
-        if self.eof:
+        if self.active:
+            pass
+        elif self.eof:
             pass
         elif self.file != None:
-            pass
+            self.active = True
+            result = True
         else:
             try:
                 self.file = open(self.path, OPEN)
             except Exception as exception:
-                self.logger.error("File.open: FAILED! %s %s", str(self), str(exception))
+                self.logger.error("Trace.open: FAILED! %s %s", str(self), str(exception))
             else:
-                self.logger.info("File.open: OPENED. %s", str(self))
+                self.logger.info("Trace.open: OPENED. %s", str(self))
                 Source.open(self)
+                self.active = True
+                self.eof = False
                 result = True
             finally:
                 pass
@@ -48,7 +54,14 @@ class File(Source):
                 
     def close(self):
         result = False
-        if self.file != None:
+        if not self.active:
+            pass
+        elif self.file == None:
+            pass
+        elif not self.eof:
+            self.active = False
+            result = True
+        else:
             try:
                 self.file.close()
             except Exception as exception:
@@ -56,6 +69,7 @@ class File(Source):
             else:
                 self.logger.info("File.close: CLOSED. %s", str(self))
             finally:
+                self.active = False
                 self.eof = True
                 self.file = None
                 Source.close(self)
@@ -63,36 +77,56 @@ class File(Source):
         return result
  
     def fileno(self):
-        return self.file.fileno() if self.file != None else -1
+        return self.file.fileno() if (self.file != None) and self.active else -1
 
     def read(self, multiplex = None):
         line = None
-        if self.file != None:
+        if not self.active:
+            pass
+        elif self.file == None:
+            pass
+        else:
             try:
                 line = self.file.readline(self.bufsize)
             except Exception as exception:
-                self.logger.error("File.read: FAILED! %s %s", str(self), str(exception))
+                self.logger.error("Trace.read: FAILED! %s %s", str(self), str(exception))
+                self.eof = True
                 raise exception
             else:
                 if line == None:
                     pass
                 elif not line:
-                    self.logger.info("File.read: END. %s", str(self))
+                    self.logger.info("Trace.read: END. %s", str(self))
+                    self.eof = True
                     exception = End
                     raise exception
                 elif len(line) < 2:
-                    self.logger.warning("File.read: SHORT? %s", str(self))
+                    self.logger.warning("Trace.read: SHORT? %s", str(self))
                     line = None
                 elif line[-1] != '\n':
-                    self.logger.warning("File.read: LINEFEED? %s", str(self))
+                    self.logger.warning("Trace.read: LINEFEED? %s", str(self))
                     line = None
                 elif line[-2] != '\r':
-                    self.logger.warning("File.read: CARRIAGERETURN? %s", str(self))
+                    self.logger.warning("Trace.read: CARRIAGERETURN? %s", str(self))
                     line = None
                 else:
                     line = line[0:-2]
                     if self.logger.isEnabledFor(logging.DEBUG):
-                        self.logger.debug("File.read: READ: %s \"%s\"", str(self), str(line))
+                        self.logger.debug("Trace.read: READ: %s \"%s\"", str(self), str(line))
             finally:
                 pass
         return line
+    
+    def force(self):
+        self.active = True
+        self.eof = True
+        return self.close()
+                
+    def initialize(self):
+        pass       
+    
+    def finalize(self):
+        pass
+        
+    def terminate(self):
+        pass

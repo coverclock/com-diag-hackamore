@@ -18,10 +18,9 @@ class Multiplex:
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.sources = { }
-        self.logger.info("Multiplex: INIT. %s", str(self))
         
     def __del__(self):
-        self.logger.info("Multiplex: FINI. %s", str(self))
+        pass
 
     def __repr__(self):
         return "Multiplex(" + str(self.sources) + ")"

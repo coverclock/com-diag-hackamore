@@ -21,10 +21,10 @@ class Source:
         self.username = username
         self.secret = secret
         self.count = 0
-        self.event = { }
-        self.event[Event.SOURCE] = self.pbx
         self.state = False
         self.authenticated = False
+        self.event = { }
+        self.initialize()
         
     def __del__(self):
         if self.state:
@@ -82,6 +82,15 @@ class Source:
             else:
                 self.authenticated = False
                 self.logger.info("Source:authentication: DEAUTHENTICATED. %s", str(self))
+                
+    def initialize(self):
+        self.event[Event.SOURCE] = self.pbx          
+    
+    def finalize(self):
+        self.event[Event.TIME] = str(time.time())
+        
+    def terminate(self):
+        self.event[Event.END] = str(self.count)
 
     def get(self, multiplex = None):
         event = None
@@ -90,27 +99,27 @@ class Source:
                 line = self.read(multiplex)
             except Exception:
                 self.count = self.count + 1
-                self.event[Event.TIME] = str(time.time())
-                self.event[Event.END] = str(self.count)
+                self.terminate()
+                self.finalize()
                 event = self.event
                 if self.logger.isEnabledFor(logging.DEBUG):
                     self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
                 if self.logger.isEnabledFor(logging.INFO):
                     self.logger.info("Source.get: END: %s %d", str(self), self.count)
                 self.event = { }
-                self.event[Event.SOURCE] = self.pbx          
+                self.initialize()
             else:
                 if line == None:
                     break
                 elif not line:
                     self.count = self.count + 1
-                    self.event[Event.TIME] = str(time.time())
+                    self.finalize()
                     event = self.event
                     if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug("Source.get: GET: %s %s", str(self), str(event))
                     self.authentication(event)
                     self.event = { }
-                    self.event[Event.SOURCE] = self.pbx
+                    self.initialize()
                 else:
                     data = line.split(": ", 1)
                     if not data:
