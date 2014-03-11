@@ -118,6 +118,7 @@ class Test(unittest.TestCase):
             print("Bypassing test with curses.")
             return
         print "TERM=" + os.environ["TERM"]
+        name = self.id()
         address = ""
         port = 0
         ready = threading.Condition()
@@ -135,7 +136,8 @@ class Test(unittest.TestCase):
         serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model, mutex)
         view = com.diag.hackamore.ViewCurses.ViewCurses(model)
         serializedview = com.diag.hackamore.ViewSerializer.ViewSerializer(view, mutex)
-        controller = com.diag.hackamore.Controller.Controller(serializedmodel, serializedview)
+        tracer = open("trace-" + name + ".txt" , "w")
+        controller = com.diag.hackamore.Controller.Controller(serializedmodel, serializedview, tracer = tracer)
         self.assertEquals(len(sources), 1)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)

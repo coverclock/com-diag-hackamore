@@ -8,3 +8,6 @@ import sys
 
 def printf(fmt, *args):
     sys.stdout.write(fmt % args)
+
+def fprintf(stream, fmt, *args):
+    stream.write(fmt % args)

@@ -6,6 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import Logger
 
+from stdio import fprintf
+
 # These symbols are keywords specific to the Hackamore application.
 
 END = "END"
@@ -69,3 +71,9 @@ class Event:
 
     def __repr__(self):
         return "Event(" + str(self.event) + ")"
+
+    def trace(self, stream):
+        for keyword in self.event:
+            value = self.event[keyword]
+            fprintf(stream, "%s: %s\r\n", keyword, value)
+        fprintf(stream, "\r\n")
