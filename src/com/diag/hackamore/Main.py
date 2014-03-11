@@ -5,7 +5,9 @@ Licensed under the terms in the README.txt file.
 """
 
 import threading
+import time
 
+import com.diag.hackamore.Logger
 import com.diag.hackamore.Credentials
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
@@ -15,6 +17,7 @@ import com.diag.hackamore.ViewSerializer
 import com.diag.hackamore.Controller
 
 def main():
+    logger = com.diag.hackamore.Logger.logger()
     sources = [ ]
     #####
     name1 = com.diag.hackamore.Credentials.credential(com.diag.hackamore.Credentials.COM_DIAG_HACKAMORE_SERVER)
@@ -30,7 +33,11 @@ def main():
     view = com.diag.hackamore.ViewCurses.ViewCurses(model)
     serializedview = com.diag.hackamore.ViewSerializer.ViewSerializer(view, mutex)
     controller = com.diag.hackamore.Controller.Controller(serializedmodel, serializedview)
-    controller.loop(sources, sources)
+    logger.info("Main.main: STARTING.")
+    while True:
+        controller.loop(sources, sources)
+        time.sleep(2.0)
+        logger.info("Main.main: RESTARTING.")
 
 if __name__ == "__main__":
     main()
