@@ -16,9 +16,8 @@ import com.diag.hackamore.ModelStandard
 import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.Controller
 
-from com.diag.hackamore.Credentials import USERNAME
-from com.diag.hackamore.Credentials import SECRET
-
+from Parameters import USERNAME
+from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
 

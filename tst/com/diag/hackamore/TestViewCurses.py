@@ -19,12 +19,11 @@ import com.diag.hackamore.ViewSerializer
 import com.diag.hackamore.ViewCurses
 import com.diag.hackamore.Controller
 
-from com.diag.hackamore.Credentials import SERVER
-from com.diag.hackamore.Credentials import USERNAME
-from com.diag.hackamore.Credentials import SECRET
-
 from com.diag.hackamore.stdio import printf
 
+from Parameters import SERVER
+from Parameters import USERNAME
+from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
 

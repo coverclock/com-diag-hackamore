@@ -17,10 +17,9 @@ import com.diag.hackamore.Multiplex
 
 from com.diag.hackamore.stdio import printf
 
-from com.diag.hackamore.Credentials import SERVER
-from com.diag.hackamore.Credentials import USERNAME
-from com.diag.hackamore.Credentials import SECRET
-
+from Parameters import SERVER
+from Parameters import USERNAME
+from Parameters import SECRET
 from Parameters import PORT
 from Parameters import LOCALHOST
 from Parameters import SAMPLE
