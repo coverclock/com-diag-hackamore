@@ -124,6 +124,281 @@ class Test(unittest.TestCase):
         number = numbers["chan02"]
         self.assertIsNotNone(number)
         self.assertEquals(number, "02")
+        #####
+        #####
+        #####
+        model.newchannel("pbx2", "uid03", "chan03", "03", "3", "down")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 0)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 1)
+        self.assertIn("uid03", channels)
+        chan = channels["uid03"]
+        self.assertIsNotNone(chan)
+        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan.pbx, "pbx2")
+        self.assertEquals(chan.uniqueid, "uid03")
+        self.assertEquals(chan.calleridnum, "03")
+        self.assertIsNone(chan.sipcallid)
+        self.assertIsNone(chan.conference)
+        self.assertEquals(chan.channel, "chan03")
+        self.assertEquals(chan.channelstate, "3")
+        self.assertEquals(chan.channelstatedesc, "down")
+        self.assertEquals(chan.role, com.diag.hackamore.Channel.IDLE)
+        self.assertIsNone(chan.call)
+        #####
+        self.assertIn("pbx2", model.numbers)
+        numbers = model.numbers["pbx2"]
+        self.assertIsNotNone(numbers)
+        self.assertEquals(len(numbers), 1)
+        self.assertIn("chan03", numbers)
+        number = numbers["chan03"]
+        self.assertIsNotNone(number)
+        self.assertEquals(number, "03")
+        #####
+        #####
+        #####
+        model.dial("pbx1", "uid01", "uid02")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 0)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        self.assertIn("uid01", channels)
+        self.assertIn("uid02", channels)
+        chan1 = channels["uid01"]
+        self.assertIsNotNone(chan1)
+        self.assertEquals(chan1.role, com.diag.hackamore.Channel.CALLING)
+        self.assertIsNone(chan1.call)
+        #####
+        chan2 = channels["uid02"]
+        self.assertIsNotNone(chan2)
+        self.assertEquals(chan2.role, com.diag.hackamore.Channel.CALLED)
+        self.assertIsNone(chan2.call)
+        #####
+        #####
+        #####
+        model.bridge("pbx1", "uid01", "uid02")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        #####
+        self.assertIn("uid01", channels)
+        chan1 = channels["uid01"]
+        self.assertIsNotNone(chan1)
+        self.assertEquals(chan1.role, com.diag.hackamore.Channel.CALLING)
+        self.assertIsNotNone(chan1.call)
+        call1 = chan1.call
+        #####
+        self.assertIn("uid02", channels)
+        chan2 = channels["uid02"]
+        self.assertIsNotNone(chan2)
+        self.assertEquals(chan2.role, com.diag.hackamore.Channel.CALLED)
+        self.assertIsNotNone(chan2.call)
+        call2 = chan2.call
+        self.assertIs(call1, call2)
+        #####
+        for call in model.calls:
+            if call is call1:
+                self.assertEquals(len(call), 2)
+                self.assertIn(chan1, call)
+                self.assertIn(chan2, call)
+        #####
+        #####
+        #####
+        model.confbridgestart("pbx1", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 1)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.bridges)
+        bridges = model.bridges["pbx1"]
+        self.assertIsNotNone(bridges)
+        self.assertEquals(len(bridges), 1)
+        self.assertIn("99", bridges)
+        bridge = bridges["99"]
+        self.assertIsNotNone(bridge)
+        self.assertEqual(len(bridge), 0)
+        #####
+        #####
+        #####
+        model.confbridgejoin("pbx1", "uid01", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 1)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.bridges)
+        bridges = model.bridges["pbx1"]
+        self.assertIsNotNone(bridges)
+        self.assertEquals(len(bridges), 1)
+        self.assertIn("99", bridges)
+        bridge = bridges["99"]
+        self.assertIsNotNone(bridge)
+        self.assertEqual(len(bridge), 1)
+        self.assertIn("uid01", bridge)
+        chan1 = bridge["uid01"]
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIn("uid01", channels)
+        chan2 = channels["uid01"]
+        self.assertIs(chan1, chan2)
+        #####
+        model.confbridgejoin("pbx1", "uid02", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 1)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.bridges)
+        bridges = model.bridges["pbx1"]
+        self.assertIsNotNone(bridges)
+        self.assertEquals(len(bridges), 1)
+        self.assertIn("99", bridges)
+        bridge = bridges["99"]
+        self.assertIsNotNone(bridge)
+        self.assertEqual(len(bridge), 2)
+        self.assertIn("uid01", bridge)
+        chan1 = bridge["uid01"]
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIn("uid01", channels)
+        chan2 = channels["uid01"]
+        self.assertIs(chan1, chan2)
+        self.assertIn("uid02", bridge)
+        chan3 = bridge["uid02"]
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIn("uid02", channels)
+        chan4 = channels["uid02"]
+        self.assertIs(chan3, chan4)
+        #####
+        #####
+        #####
+        model.confbridgeleave("pbx1", "uid01", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 1)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.bridges)
+        bridges = model.bridges["pbx1"]
+        self.assertIsNotNone(bridges)
+        self.assertEquals(len(bridges), 1)
+        self.assertIn("99", bridges)
+        bridge = bridges["99"]
+        self.assertIsNotNone(bridge)
+        self.assertEqual(len(bridge), 1)
+        self.assertIn("uid02", bridge)
+        chan1 = bridge["uid02"]
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIn("uid02", channels)
+        chan2 = channels["uid02"]
+        self.assertIs(chan1, chan2)
+        #####
+        #####
+        #####
+        model.confbridgeleave("pbx1", "uid02", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 1)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.bridges)
+        bridges = model.bridges["pbx1"]
+        self.assertIsNotNone(bridges)
+        self.assertEquals(len(bridges), 1)
+        self.assertIn("99", bridges)
+        bridge = bridges["99"]
+        self.assertIsNotNone(bridge)
+        self.assertEqual(len(bridge), 0)
+        #####
+        #####
+        #####
+        model.confbridgeend("pbx1", "99")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        #####
+        #####
+        model.hangup("pbx1", "uid01")
+        #####
+        self.assertEquals(len(model.channels), 2)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 2)
+        #####
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 1)
+        self.assertIn("uid02", channels)
+        #####
+        self.assertIn("pbx1", model.channels)
+        channels = model.channels["pbx1"]
+        self.assertIn("uid02", channels)
+        chan1 = channels["uid02"]
+        self.assertIsNotNone(chan1)
+        self.assertIsNotNone(chan1.call)
+        call1 = chan1.call
+        #####
+        for call in model.calls:
+            if call is call1:
+                self.assertEquals(len(call), 1)
+                self.assertIn(chan1, call)
+        #####
+        #####
+        #####
+        model.hangup("pbx1", "uid02")
+        #####
+        self.assertEquals(len(model.channels), 1)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 0)
+        self.assertEquals(len(model.numbers), 1)
+        #####
+        self.assertNotIn("pbx1", model.channels)
+        #####
+        #####
+        #####
 
 if __name__ == "__main__":
     unittest.main()

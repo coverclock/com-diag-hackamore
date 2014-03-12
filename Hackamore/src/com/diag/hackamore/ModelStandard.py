@@ -130,7 +130,7 @@ class ModelStandard(Model):
                 bridge = bridges[conference]
                 if uniqueid in bridge:
                     chan = bridge[uniqueid]
-                    chan.leave(conference)
+                    chan.leave()
                     del bridge[uniqueid]
     
     def confbridgestart(self, pbx, conference):
