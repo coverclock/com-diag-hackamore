@@ -10,7 +10,6 @@ import logging
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Event
 import com.diag.hackamore.Source
-import com.diag.hackamore.Multiplex
 
 class Test(unittest.TestCase):
 
