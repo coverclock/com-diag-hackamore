@@ -42,6 +42,13 @@ class Test(unittest.TestCase):
         dot.close()  
         self.assertIsNotNone(com.diag.hackamore.Credentials.credentialfile(path, keyword))
         self.assertEquals(com.diag.hackamore.Credentials.credentialfile(path, keyword), value)
+        dot = open(path, "w")
+        dot.write(" # Test!\n")
+        dot.write(" " + keyword + " =\n")
+        dot.flush()
+        dot.close()  
+        self.assertIsNotNone(com.diag.hackamore.Credentials.credentialfile(path, keyword))
+        self.assertEquals(com.diag.hackamore.Credentials.credentialfile(path, keyword), "")
 
 if __name__ == "__main__":
     unittest.main()
