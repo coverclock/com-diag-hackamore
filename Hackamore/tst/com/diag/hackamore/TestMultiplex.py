@@ -17,9 +17,8 @@ import com.diag.hackamore.Event
 
 from com.diag.hackamore.stdio import printf
 
-from com.diag.hackamore.Credentials import USERNAME
-from com.diag.hackamore.Credentials import SECRET
-
+from Parameters import USERNAME
+from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import SAMPLE
 from Parameters import TYPESCRIPT

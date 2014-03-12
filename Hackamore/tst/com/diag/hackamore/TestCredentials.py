@@ -21,9 +21,9 @@ class Test(unittest.TestCase):
         self.assertNotEqual(com.diag.hackamore.Credentials.credential("HOME"), "")
         self.assertIsNotNone(com.diag.hackamore.Credentials.credential("PATH"))
         self.assertNotEqual(com.diag.hackamore.Credentials.credential("PATH"), "")
-        self.assertIsNotNone(com.diag.hackamore.Credentials.SERVER)
-        self.assertIsNotNone(com.diag.hackamore.Credentials.USERNAME)
-        self.assertIsNotNone(com.diag.hackamore.Credentials.SERVER)
+        self.assertIsNone(com.diag.hackamore.Credentials.credential("COM_DIAG_HACKAMORE_FOO"))
+        self.assertIsNotNone(com.diag.hackamore.Credentials.credential("COM_DIAG_HACKAMORE_FOO", "COM_DIAG_HACKAMORE_BAR"))
+        self.assertEquals(com.diag.hackamore.Credentials.credential("COM_DIAG_HACKAMORE_FOO", "COM_DIAG_HACKAMORE_BAR"), "COM_DIAG_HACKAMORE_BAR")
 
 if __name__ == "__main__":
     unittest.main()
