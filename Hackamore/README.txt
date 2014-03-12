@@ -53,8 +53,8 @@ The unit tests for this project have been run on Python 2.7.5 under MacOS
 This software is an original work of its author(s).
 
 If you want to run any of the unit tests that execute against a live Asterisk
-server, those unit tests need to know your server's hostname or IP address and
-the username and secret that you administered in your
+server, those unit tests need to know your server's hostname or IP address, AMI
+port (if not 5038), and the username and secret that you administered in your
 
     /etc/asterisk/manager.conf
 
@@ -62,6 +62,7 @@ file. You can either define these in your environment as the values of the
 variables
     
     COM_DIAG_HACKAMORE_SERVER,
+    COM_DIAG_HACKAMORE_PORT,
     COM_DIAG_HACKAMORE_USERNAME, and
     COM_DIAG_HACKAMORE_SECRET
     
@@ -80,6 +81,21 @@ application instead of embedding this sensitive information in your Python
 program or in (for example) your Eclipse project metadata. If the value of
 COM_DIAG_HACKAMORE_SERVER is not defined or is an empty string, the unit tests
 which run against a live server will automatically be bypassed.
+
+Similarly, there is a prototype Hackamore main program that extracts the same
+information for one or more Asterisk servers from the same dotfile in your home
+directory. Here is an example.
+
+    COM_DIAG_HACKAMORE_NAME1=PBX1
+    COM_DIAG_HACKAMORE_SERVER1=pbx1.mydomain.com
+    COM_DIAG_HACKAMORE_PORT1=5038
+    COM_DIAG_HACKAMORE_USERNAME1=admin
+    COM_DIAG_HACKAMORE_SECRET1=password
+    COM_DIAG_HACKAMORE_NAME2=PBX2
+    COM_DIAG_HACKAMORE_SERVER2=pbx2.mydomain.com
+    COM_DIAG_HACKAMORE_PORT2=5038
+    COM_DIAG_HACKAMORE_USERNAME2=admin
+    COM_DIAG_HACKAMORE_SECRET2=password
 
 ----------------------------------------------------------------------
 
