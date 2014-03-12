@@ -217,8 +217,8 @@ class Test(unittest.TestCase):
         self.assertEquals(chan2.role, com.diag.hackamore.Channel.CALLED)
         self.assertIsNotNone(chan2.call)
         call2 = chan2.call
-        self.assertIs(call1, call2)
         #####
+        self.assertIs(call1, call2)
         for call in model.calls:
             if call is call1:
                 self.assertEquals(len(call), 2)
@@ -399,6 +399,135 @@ class Test(unittest.TestCase):
         #####
         #####
         #####
+        model.newchannel("pbx2", "uid04", "chan04", "04", "1", "up")
+        #####
+        self.assertEquals(len(model.channels), 1)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 0)
+        self.assertEquals(len(model.numbers), 1)
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        self.assertIn("uid04", channels)
+        chan = channels["uid04"]
+        self.assertIsNotNone(chan)
+        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan.pbx, "pbx2")
+        self.assertEquals(chan.uniqueid, "uid04")
+        self.assertEquals(chan.calleridnum, "04")
+        self.assertIsNone(chan.sipcallid)
+        self.assertIsNone(chan.conference)
+        self.assertEquals(chan.channel, "chan04")
+        self.assertEquals(chan.channelstate, "1")
+        self.assertEquals(chan.channelstatedesc, "up")
+        self.assertEquals(chan.role, com.diag.hackamore.Channel.IDLE)
+        self.assertIsNone(chan.call)
+        #####
+        self.assertIn("pbx2", model.numbers)
+        numbers = model.numbers["pbx2"]
+        self.assertIsNotNone(numbers)
+        self.assertEquals(len(numbers), 2)
+        self.assertIn("chan04", numbers)
+        number = numbers["chan04"]
+        self.assertIsNotNone(number)
+        self.assertEquals(number, "04")
+        #####
+        #####
+        #####
+        model.localbridge("pbx2", "uid03", "uid04")
+        #####
+        self.assertEquals(len(model.channels), 1)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 1)
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        #####
+        self.assertIn("uid03", channels)
+        chan1 = channels["uid03"]
+        self.assertIsNotNone(chan1)
+        self.assertEquals(chan1.role, com.diag.hackamore.Channel.TRUNK)
+        self.assertIsNotNone(chan1.call)
+        call1 = chan1.call
+        #####
+        self.assertIn("uid04", channels)
+        chan2 = channels["uid04"]
+        self.assertIsNotNone(chan2)
+        self.assertEquals(chan2.role, com.diag.hackamore.Channel.TRUNK)
+        self.assertIsNotNone(chan2.call)
+        call2 = chan2.call
+        #####
+        self.assertIs(call1, call2)
+        #####
+        for call in model.calls:
+            if call is call1:
+                self.assertEquals(len(call), 2)
+                self.assertIn(chan1, call)
+                self.assertIn(chan2, call)
+        #####
+        #####
+        #####
+        model.newstate("pbx2", "uid03", "0", "up")
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        self.assertIn("uid03", channels)
+        chan = channels["uid03"]
+        self.assertIsNotNone(chan)
+        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan.channelstate, "0")
+        self.assertEquals(chan.channelstatedesc, "up")
+        #####
+        self.assertEquals(chan.channel, "chan03")
+        #####
+        #####
+        #####
+        model.rename("pbx2", "uid03", "chan13")
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        self.assertIn("uid03", channels)
+        chan = channels["uid03"]
+        self.assertIsNotNone(chan)
+        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan.channelstate, "0")
+        self.assertEquals(chan.channelstatedesc, "up")
+        self.assertEquals(chan.channel, "chan13")
+        #####
+        self.assertIsNone(chan.sipcallid)
+        #####
+        #####
+        #####
+        model.sipcallid("pbx2", "uid03", "sipcallid03")
+        #####
+        self.assertIn("pbx2", model.channels)
+        channels = model.channels["pbx2"]
+        self.assertIsNotNone(channels)
+        self.assertEquals(len(channels), 2)
+        self.assertIn("uid03", channels)
+        chan = channels["uid03"]
+        self.assertIsNotNone(chan)
+        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan.channelstate, "0")
+        self.assertEquals(chan.channelstatedesc, "up")
+        self.assertEquals(chan.channel, "chan13")
+        self.assertIsNotNone(chan.sipcallid)
+        self.assertEquals(chan.sipcallid, "sipcallid03")
+        #####
+        #####
+        #####
+        
 
 if __name__ == "__main__":
     unittest.main()
