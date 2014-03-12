@@ -9,12 +9,15 @@ import logging
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Event
+import com.diag.hackamore.File
+import com.diag.hackamore.Controller
 import com.diag.hackamore.Trace
 import com.diag.hackamore.Multiplex
 import com.diag.hackamore.End
 
 from Parameters import TRACELET
 from Parameters import TRACE
+from Parameters import TYPESCRIPT
 
 class Test(unittest.TestCase):
 
@@ -404,7 +407,50 @@ class Test(unittest.TestCase):
                 break
         self.assertEquals(events, 716) # 1 response, 356 events, 1 end
         self.assertTrue(source.close())
-
+ 
+    def test050WriteRead(self):
+        name = self.id()
+        source = com.diag.hackamore.File.File(name, TYPESCRIPT)
+        self.assertIsNotNone(source)
+        inputs = [ ]
+        inputs.append(source)
+        outputs = [ ]
+        self.assertEquals(len(inputs), 1)
+        self.assertEquals(len(outputs), 0)
+        trace = "trace-" + name + ".txt"
+        tracer = open(trace, "w")
+        self.assertIsNotNone(tracer)
+        controller = com.diag.hackamore.Controller.Controller(tracer = tracer)
+        controller.loop(inputs, outputs)
+        self.assertEquals(len(inputs), 0)
+        self.assertEquals(len(outputs), 1)
+        tracer.close()
+        events = 0
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        self.assertIsNotNone(multiplex)
+        multiplex.deregister()
+        self.assertFalse(multiplex.active())
+        source = com.diag.hackamore.Trace.Trace(name, trace)
+        self.assertFalse(multiplex.active())
+        self.assertTrue(source.open())
+        self.assertFalse(multiplex.active())
+        multiplex.register(source)
+        self.assertTrue(multiplex.active())
+        for message in multiplex.multiplex():
+            self.assertIsNotNone(message)
+            event = message.event
+            self.assertIsNotNone(event)
+            events = events + 1
+            self.assertTrue(event)
+            self.assertIn(com.diag.hackamore.Event.SOURCE, event)
+            self.assertTrue(event[com.diag.hackamore.Event.SOURCE])
+            self.assertIn(com.diag.hackamore.Event.TIME, event)
+            self.assertTrue(event[com.diag.hackamore.Event.TIME])
+            if com.diag.hackamore.Event.END in event:
+                self.assertEquals(event[com.diag.hackamore.Event.END], str(events))
+                break
+        self.assertEquals(events, 358) # 1 response, 356 events, 1 end
+        self.assertTrue(source.close())
 
 if __name__ == "__main__":
     unittest.main()
