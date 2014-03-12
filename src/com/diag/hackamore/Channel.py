@@ -80,7 +80,7 @@ class Channel():
     def join(self, conference):
         self.conference = conference
 
-    def leave(self, conference):
+    def leave(self):
         self.conference = None
 
     def display(self):
