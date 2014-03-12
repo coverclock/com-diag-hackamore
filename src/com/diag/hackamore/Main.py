@@ -24,26 +24,16 @@ def main():
     while True:
         names = prefix + "NAME" + str(index)
         name = com.diag.hackamore.Credentials.credential(names)
-        if not name:
+        if name == None:
             break
         servers = prefix + "SERVER" + str(index)
-        server = com.diag.hackamore.Credentials.credential(servers)
-        if not server:
-            server = com.diag.hackamore.Socket.HOST
+        server = com.diag.hackamore.Credentials.credential(servers, com.diag.hackamore.Socket.HOST)
         ports = prefix + "PORT" + str(index)
-        port = com.diag.hackamore.Credentials.credential(ports)
-        if not port:
-            port = com.diag.hackamore.Socket.PORT
-        else:
-            port = int(port)
+        port = int(com.diag.hackamore.Credentials.credential(ports, str(com.diag.hackamore.Socket.PORT)))
         usernames = prefix + "USERNAME" + str(index)
-        username = com.diag.hackamore.Credentials.credential(usernames)
-        if not username:
-            break
+        username = com.diag.hackamore.Credentials.credential(usernames, "")
         secrets = prefix + "SECRET" + str(index)
-        secret = com.diag.hackamore.Credentials.credential(secrets)
-        if not secret:
-            break
+        secret = com.diag.hackamore.Credentials.credential(secrets, "")
         logger.info("Main.main: %s=\"%s\" %s=\"%s\" %s=\"%s\" %s=\"%s\"", names, name, servers, server, usernames, username, secrets, secret)
         source = com.diag.hackamore.Socket.Socket(name, username, secret, server, port)
         sources.append(source)
