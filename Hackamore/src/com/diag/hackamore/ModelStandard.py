@@ -151,7 +151,8 @@ class ModelStandard(Model):
     def end(self, pbx):
         if pbx in self.channels:
             channels = self.channels[pbx]
-            for uniqueid in channels:
+            uniqueids = channels.keys()
+            for uniqueid in uniqueids:
                 self.remove(pbx, uniqueid)
 
     def hangup(self, pbx, uniqueid):
@@ -196,13 +197,21 @@ class ModelStandard(Model):
             channels = self.channels[pbx]
             if uniqueid in channels:
                 chan = channels[uniqueid]
+                oldname = chan.channel
                 chan.rename(newname)
                 if chan.calleridnum == None or not chan.calleridnum:
                     if pbx in self.numbers:
                         numbers = self.numbers[pbx]
-                        if chan.channel in numbers:
-                            calleridnum = numbers[chan.channel]
+                        if newname in numbers:
+                            calleridnum = numbers[newname]
                             chan.dial(calleridnum)
+                else:
+                    if pbx in self.numbers:
+                        numbers = self.numbers[pbx]
+                        if oldname in numbers:
+                            calleridnum = numbers[oldname]
+                            del numbers[oldname]
+                            numbers[newname] = calleridnum                   
 
     def sipcallid(self, pbx, uniqueid, value):
         if pbx in self.channels:

@@ -38,6 +38,7 @@ class Test(unittest.TestCase):
 
     def testSanity(self):
         model = com.diag.hackamore.ModelStandard.ModelStandard()
+        #####
         self.assertIsNotNone(model.channels)
         self.assertIsNotNone(model.bridges)
         self.assertIsNotNone(model.trunks)
@@ -505,7 +506,18 @@ class Test(unittest.TestCase):
         self.assertEquals(chan.channelstatedesc, "up")
         self.assertEquals(chan.channel, "chan13")
         #####
+        self.assertIn("pbx2", model.numbers)
+        numbers = model.numbers["pbx2"]
+        self.assertIsNotNone(numbers)
+        self.assertEquals(len(numbers), 2)
+        self.assertNotIn("chan03", numbers)
+        self.assertIn("chan13", numbers)
+        number = numbers["chan13"]
+        self.assertIsNotNone(number)
+        self.assertEquals(number, "03")
+        #####
         self.assertIsNone(chan.sipcallid)
+        self.assertEquals(len(model.trunks), 0)
         #####
         #####
         #####
@@ -516,18 +528,35 @@ class Test(unittest.TestCase):
         self.assertIsNotNone(channels)
         self.assertEquals(len(channels), 2)
         self.assertIn("uid03", channels)
-        chan = channels["uid03"]
-        self.assertIsNotNone(chan)
-        self.assertIsInstance(chan, com.diag.hackamore.Channel.Channel)
-        self.assertEquals(chan.channelstate, "0")
-        self.assertEquals(chan.channelstatedesc, "up")
-        self.assertEquals(chan.channel, "chan13")
-        self.assertIsNotNone(chan.sipcallid)
-        self.assertEquals(chan.sipcallid, "sipcallid03")
+        chan1 = channels["uid03"]
+        self.assertIsNotNone(chan1)
+        self.assertIsInstance(chan1, com.diag.hackamore.Channel.Channel)
+        self.assertEquals(chan1.channelstate, "0")
+        self.assertEquals(chan1.channelstatedesc, "up")
+        self.assertEquals(chan1.channel, "chan13")
+        self.assertIsNotNone(chan1.sipcallid)
+        self.assertEquals(chan1.sipcallid, "sipcallid03")
+        #####
+        self.assertEquals(len(model.trunks), 1)
+        self.assertIn("sipcallid03", model.trunks)
+        chan2 = model.trunks["sipcallid03"]
+        self.assertIs(chan1, chan2)
+        #####
+        self.assertEquals(len(model.channels), 1)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 1)
+        self.assertEquals(len(model.calls), 1)
+        self.assertEquals(len(model.numbers), 1)
         #####
         #####
         #####
-        
+        model.end("pbx2")
+        #####
+        self.assertEquals(len(model.channels), 0)
+        self.assertEquals(len(model.bridges), 0)
+        self.assertEquals(len(model.trunks), 0)
+        self.assertEquals(len(model.calls), 0)
+        self.assertEquals(len(model.numbers), 0)
 
 if __name__ == "__main__":
     unittest.main()
