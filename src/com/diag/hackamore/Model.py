@@ -24,7 +24,7 @@ class Model:
         pass
 
     def __repr__(self):
-        return "Model()"
+        return "Model(" + hex(id(self)) + ")"
     
     #####
     ##### PUBLIC
