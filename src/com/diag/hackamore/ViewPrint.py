@@ -4,9 +4,11 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-from View import View
-
 import Event
+
+from View import View
+from Channel import ROLE
+from stdio import printf
 
 class ViewPrint(View):
 
@@ -23,6 +25,14 @@ class ViewPrint(View):
 
     def __repr__(self):
         return View.__repr__(self) + ".ViewPrint()"
+
+    #####
+    ##### PRIVATE
+    #####
+
+    def channel(self, chan):
+        #print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
+        printf("    CHANNEL %-8s %-16s %-64s %-8s %-8s %-8s %-8s %-10s\n", chan.pbx, chan.uniqueid, chan.channel, chan.calleridnum if chan.calleridnum else None, ROLE[chan.role], chan.channelstatedesc, chan.conference, hex(id(chan.call)) if chan.call != None else None)
 
     #####
     ##### PUBLIC
@@ -81,43 +91,43 @@ class ViewPrint(View):
         self.sn = self.sn + 1
 
     def display(self):
-        print "VIEW"
+        printf("VIEW\n")
         if self.model.channels:
-            print "", "CHANNELS"
+            printf(" CHANNELS\n")
             for pbx in self.model.channels:
-                print "", "", "SOURCE", pbx
+                printf("  SOURCE %s\n", pbx)
                 channels = self.model.channels[pbx]
                 for channel in channels:
                     chan = channels[channel]
-                    chan.display()
+                    self.channel(chan)
         if self.model.calls:
-            print "", "CALLS"
+            printf(" CALLS\n")
             for call in self.model.calls:
-                print "", "", "CALL", hex(id(call))
+                printf("  CALL 0x%x\n", id(call))
                 for chan in call:
-                    chan.display()
+                    self.channel(chan)
         if self.model.bridges:
-            print "", "BRIDGES"
+            printf(" BRIDGES\n")
             for pbx in self.model.bridges:
-                print "", "", "SOURCE", pbx
+                printf("  SOURCE %s\n", pbx)
                 bridges = self.model.bridges[pbx]
                 for conference in bridges:
-                    print "", "", "", "BRIDGE", conference
+                    printf("   BRIDGE %s\n", conference)
                     bridge = bridges[conference]
                     for uniqueid in bridge:
                         chan = bridge[uniqueid]
-                        chan.display()
+                        self.channel(chan)
         if self.model.trunks:
-            print "", "TRUNKS"
+            printf(" TRUNKS\n")
             for sipcallid in self.model.trunks:
-                print "", "", "ID", sipcallid
+                printf("  ID %s\n", sipcallid)
                 chan = self.model.trunks[sipcallid]
-                chan.display()
+                self.channel(chan)
         if self.model.numbers:
-            print "", "NUMBERS"
+            printf(" NUMBERS\n")
             for pbx in self.model.numbers:
-                print "", "", "SOURCE", pbx
+                printf("  SOURCE %s\n", pbx)
                 numbers = self.model.numbers[pbx]
                 for channel in numbers:
                     calleridnum = numbers[channel]
-                    print "", "", "", "NUMBER", calleridnum, channel
+                    printf("   NUMBER %-8s %-64s\n", calleridnum, channel)

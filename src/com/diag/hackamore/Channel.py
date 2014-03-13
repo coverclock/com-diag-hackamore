@@ -4,8 +4,6 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-from stdio import printf
-
 IDLE = 0
 CALLING = 1
 CALLED = 2
@@ -82,7 +80,3 @@ class Channel():
 
     def leave(self):
         self.conference = None
-
-    def display(self):
-        #print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
-        printf("    CHANNEL %-8s %-16s %-64s %-8s %-8s %-8s %-8s %-10s\n", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.conference, hex(id(self.call)) if self.call != None else self.call)
