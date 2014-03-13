@@ -397,6 +397,7 @@ class Test(unittest.TestCase):
         self.assertEquals(len(model.numbers), 1)
         #####
         self.assertNotIn("pbx1", model.channels)
+        self.assertIn("pbx2", model.channels)
         #####
         #####
         #####
