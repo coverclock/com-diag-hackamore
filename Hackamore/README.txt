@@ -45,12 +45,8 @@ This is the Digital Aggregates Corporation Hackamore package. Hackamore is a
 framework and application written in Python that maintains a dynamic model of
 the call states of one or more Asterisk PBXes using the Asterisk Management
 Interface (AMI). It was inspired by prior work done in C by Mark Jackson at
-Aircell Business Aviation LLC. Hackamore is a work in progress.
-
-The unit tests for this project have been run on Python 2.7.5 under MacOS
-"Mavericks", and on Python 2.7.3 under Ubuntu 12.04 "precise".
-
-This software is an original work of its author(s).
+Aircell Business Aviation Services LLC. Hackamore is a work in progress.
+This software is an original work of its author.
 
 If you want to run any of the unit tests that execute against a live Asterisk
 server, those unit tests need to know your server's hostname or IP address, AMI
@@ -78,13 +74,14 @@ form where the keywords are the same as the environmental variable names above.
 Note that this capability is not part of the unit test modules but part of the
 Hackamore framework itself. So you can use this capability in your own Hackamore
 application instead of embedding this sensitive information in your Python
-program or in (for example) your Eclipse project metadata. If the value of
+program or in your Eclipse project metadata. If the value of the variable
 COM_DIAG_HACKAMORE_SERVER is not defined or is an empty string, the unit tests
 which run against a live server will automatically be bypassed.
 
 Similarly, there is a prototype Hackamore main program that extracts the same
 information for one or more Asterisk servers from the same dotfile in your home
-directory. Here is an example.
+directory. The dotfile would contains lines of the form shown in the examples
+below.
 
     COM_DIAG_HACKAMORE_NAME1=PBX1
     COM_DIAG_HACKAMORE_SERVER1=pbx1.mydomain.com
