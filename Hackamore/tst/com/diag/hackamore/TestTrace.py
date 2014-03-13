@@ -6,6 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import unittest
 import logging
+import tempfile
+import os
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Event
@@ -417,7 +419,7 @@ class Test(unittest.TestCase):
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        trace = "trace-" + name + ".txt"
+        fd, trace = tempfile.mkstemp()
         tracer = open(trace, "w")
         self.assertIsNotNone(tracer)
         controller = com.diag.hackamore.Controller.Controller(tracer = tracer)
@@ -451,6 +453,7 @@ class Test(unittest.TestCase):
                 break
         self.assertEquals(events, 358) # 1 response, 356 events, 1 end
         self.assertTrue(source.close())
+        os.remove(trace)
 
 if __name__ == "__main__":
     unittest.main()
