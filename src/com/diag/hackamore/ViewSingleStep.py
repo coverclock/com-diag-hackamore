@@ -16,8 +16,6 @@ class ViewSingleStep(ViewCurses):
 
     def __init__(self, model, logger = None):
         ViewCurses.__init__(self, model, logger = logger)
-        sys.stdout.write(self.erase)
-        sys.stdout.write(self.home)
 
     def __del__(self):
         pass

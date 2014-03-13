@@ -6,6 +6,7 @@ Licensed under the terms in the README.txt file.
 
 import unittest
 import os
+import tempfile
 
 import com.diag.hackamore.Credentials
 
@@ -34,7 +35,7 @@ class Test(unittest.TestCase):
         self.assertEquals(com.diag.hackamore.Credentials.credential(keyword), value)
         keyword = name + "_CAT"
         value = name + "_LOL"
-        path = "./dot-" + name + ".txt"
+        fd, path = tempfile.mkstemp()
         dot = open(path, "w")
         dot.write("# Test!\n")
         dot.write(" " + keyword + " = " + value + " # Cheezburger?\n")
@@ -49,6 +50,7 @@ class Test(unittest.TestCase):
         dot.close()  
         self.assertIsNotNone(com.diag.hackamore.Credentials.credentialfile(path, keyword))
         self.assertEquals(com.diag.hackamore.Credentials.credentialfile(path, keyword), "")
+        os.remove(path)
 
 if __name__ == "__main__":
     unittest.main()
