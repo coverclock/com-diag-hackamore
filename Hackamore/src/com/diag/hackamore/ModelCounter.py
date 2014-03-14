@@ -35,7 +35,7 @@ class ModelCounter(Model):
         pass
 
     def __repr__(self):
-        return Model.__repr__(self) + "ModelCounter()"
+        return Model.__repr__(self) + ".ModelCounter()"
     
     #####
     ##### PUBLIC

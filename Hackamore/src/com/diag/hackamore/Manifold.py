@@ -292,7 +292,8 @@ class Manifold:
 
     def process(self, event):
         if Event.END in event:
-            self.table[Event.END](event)
+            if Event.END in self.table:
+                self.table[Event.END](event)
         elif Event.EVENT in event:
             name = event[Event.EVENT]
             if name in self.table:
