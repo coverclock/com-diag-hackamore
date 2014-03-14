@@ -21,7 +21,7 @@ class ModelStandard(Model):
         pass
 
     def __repr__(self):
-        return Model.__repr__(self) + "ModelStandard()"
+        return Model.__repr__(self) + ".ModelStandard()"
 
     #####
     ##### PRIVATE
