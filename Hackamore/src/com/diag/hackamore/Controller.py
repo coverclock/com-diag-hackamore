@@ -6,26 +6,19 @@ Licensed under the terms in the README.txt file.
 
 import Logger
 import Event
-import Multiplex
-import Manifold
-import Model
-import View
 
 class Controller:
 
-    def __init__(self, model = None, view = None, manifold = None, multiplex = None, tracer = None, logger = None):
+    def __init__(self, multiplex, manifold, logger = None):
         self.logger = Logger.logger() if logger == None else logger
-        self.tracer = tracer
-        self.multiplex = Multiplex.Multiplex(logger = self.logger) if multiplex == None else multiplex
-        self.model = Model.Model(logger = self.logger) if model == None else model
-        self.view = View.View(model = self.model, logger = self.logger) if view == None else view
-        self.manifold = Manifold.Manifold(model = self.model, view = self.view, logger = self.logger) if manifold == None else manifold
+        self.multiplex = multiplex
+        self.manifold = manifold
         
     def __del__(self):
         pass
 
     def __repr__(self):
-        return "Controller(" + str(self.model) + "," + str(self.view) + "," + str(self.manifold) + "," + str(self.multiplex) + ")"
+        return "Controller(" + str(self.multiplex) + "," + str(self.manifold) + ")"
 
     def loop(self, inputs, outputs):
         self.logger.info("Controller.loop: STARTING. %s", str(self))
@@ -38,8 +31,6 @@ class Controller:
                 break
             messages = self.multiplex.multiplex()
             for message in messages:
-                if self.tracer != None:
-                    message.trace(self.tracer)
                 event = message.event
                 if not Event.END in event:
                     self.manifold.process(event)

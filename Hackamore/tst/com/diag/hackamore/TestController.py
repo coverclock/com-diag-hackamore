@@ -14,6 +14,8 @@ import com.diag.hackamore.File
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
 import com.diag.hackamore.ViewPrint
+import com.diag.hackamore.Manifold
+import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Controller
 
 from Parameters import USERNAME
@@ -111,7 +113,11 @@ class Test(unittest.TestCase):
         outputs = [ ]
         self.assertEquals(len(inputs), 1)
         self.assertEquals(len(outputs), 0)
-        controller = com.diag.hackamore.Controller.Controller()
+        model = com.diag.hackamore.Model.Model()
+        view = com.diag.hackamore.View.View(model)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(inputs, outputs)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
@@ -127,7 +133,11 @@ class Test(unittest.TestCase):
         inputs = [ ]
         inputs.append(source)
         self.assertEquals(len(inputs), 1)
-        controller = com.diag.hackamore.Controller.Controller()
+        model = com.diag.hackamore.Model.Model()
+        view = com.diag.hackamore.View.View(model)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(inputs, inputs)
         self.assertEquals(len(inputs), 1)
         
@@ -154,7 +164,11 @@ class Test(unittest.TestCase):
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
-        controller = com.diag.hackamore.Controller.Controller()
+        model = com.diag.hackamore.Model.Model()
+        view = com.diag.hackamore.View.View(model)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
@@ -184,7 +198,9 @@ class Test(unittest.TestCase):
         self.assertEquals(len(sources), 1)
         model = com.diag.hackamore.ModelStandard.ModelStandard()
         view = com.diag.hackamore.ViewPrint.ViewPrint(model = model)
-        controller = com.diag.hackamore.Controller.Controller(model = model, view = view)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()

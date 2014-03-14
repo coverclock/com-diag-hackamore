@@ -12,9 +12,12 @@ import os
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Event
 import com.diag.hackamore.File
+import com.diag.hackamore.Model
+import com.diag.hackamore.View
+import com.diag.hackamore.Manifold
+import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Controller
 import com.diag.hackamore.Trace
-import com.diag.hackamore.Multiplex
 import com.diag.hackamore.End
 
 from Parameters import TRACELET
@@ -422,7 +425,11 @@ class Test(unittest.TestCase):
         fd, trace = tempfile.mkstemp()
         tracer = open(trace, "w")
         self.assertIsNotNone(tracer)
-        controller = com.diag.hackamore.Controller.Controller(tracer = tracer)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        model = com.diag.hackamore.Model.Model()
+        view = com.diag.hackamore.View.View(model)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view, tracer = tracer)
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(inputs, outputs)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
@@ -449,9 +456,8 @@ class Test(unittest.TestCase):
             self.assertIn(com.diag.hackamore.Event.TIME, event)
             self.assertTrue(event[com.diag.hackamore.Event.TIME])
             if com.diag.hackamore.Event.END in event:
-                self.assertEquals(event[com.diag.hackamore.Event.END], str(events))
                 break
-        self.assertEquals(events, 358) # 1 response, 356 events, 1 end
+        self.assertEquals(events, 235) # 234 manifold events, 1 manifold end
         self.assertTrue(source.close())
         os.remove(trace)
 

@@ -14,6 +14,8 @@ import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
 import com.diag.hackamore.ViewSingleStep
+import com.diag.hackamore.Manifold
+import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Controller
 
 from Parameters import SERVER
@@ -124,7 +126,9 @@ class Test(unittest.TestCase):
         sources = [ source ]
         model = com.diag.hackamore.ModelStandard.ModelStandard()
         view = com.diag.hackamore.ViewSingleStep.ViewSingleStep(model)
-        controller = com.diag.hackamore.Controller.Controller(model, view)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         self.assertEquals(len(sources), 1)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)

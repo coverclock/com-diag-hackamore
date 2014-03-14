@@ -6,8 +6,8 @@ Licensed under the terms in the README.txt file.
 
 import Logger
 import Event
-import Model
-import View
+
+from stdio import fprintf
 
 class Manifold:
 
@@ -15,10 +15,11 @@ class Manifold:
     ##### CTOR/DTOR
     #####
 
-    def __init__(self, model = None, view = None, logger = None):
+    def __init__(self, model, view, tracer = None, logger = None):
         self.logger = Logger.logger() if logger == None else logger
-        self.model = Model.Model(logger = self.logger) if model == None else model
-        self.view = View.View(model = self.model, logger = self.logger) if view == None else view
+        self.tracer = tracer
+        self.model = model
+        self.view = view
         self.table = { }
         self.table[Event.BRIDGE]            = self.bridge
         self.table[Event.CONFBRIDGEEND]     = self.confbridgeend
@@ -286,6 +287,12 @@ class Manifold:
             self.model.sipcallid(pbx, uniqueid, value)
             self.view.display()
 
+    def trace(self, event):
+        for keyword in event:
+            value = event[keyword]
+            fprintf(self.tracer, "%s: %s\r\n", keyword, value)
+        fprintf(self.tracer, "\r\n")
+
     #####
     ##### PUBLIC
     #####
@@ -293,10 +300,14 @@ class Manifold:
     def process(self, event):
         if Event.END in event:
             if Event.END in self.table:
+                if self.tracer != None:
+                    self.trace(event)
                 self.table[Event.END](event)
         elif Event.EVENT in event:
             name = event[Event.EVENT]
             if name in self.table:
+                if self.tracer != None:
+                    self.trace(event)
                 self.table[name](event)
         else:
             pass
