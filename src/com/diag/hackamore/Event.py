@@ -71,9 +71,3 @@ class Event:
 
     def __repr__(self):
         return "Event(" + str(self.event) + ")"
-
-    def trace(self, stream):
-        for keyword in self.event:
-            value = self.event[keyword]
-            fprintf(stream, "%s: %s\r\n", keyword, value)
-        fprintf(stream, "\r\n")

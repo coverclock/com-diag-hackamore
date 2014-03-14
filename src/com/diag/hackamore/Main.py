@@ -12,6 +12,8 @@ import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
 import com.diag.hackamore.ViewCurses
 import com.diag.hackamore.Controller
+import com.diag.hackamore.Manifold
+import com.diag.hackamore.Multiplex
 
 def main():
     logger = com.diag.hackamore.Logger.logger()
@@ -37,7 +39,9 @@ def main():
         index = index + 1
     model = com.diag.hackamore.ModelStandard.ModelStandard()
     view = com.diag.hackamore.ViewCurses.ViewCurses(model)
-    controller = com.diag.hackamore.Controller.Controller(model, view)
+    manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+    multiplex = com.diag.hackamore.Multiplex.Multiplex()
+    controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
     logger.info("Main.main: STARTING.")
     while sources:
         controller.loop(sources, sources)
