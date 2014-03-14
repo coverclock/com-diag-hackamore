@@ -4,16 +4,13 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import threading
 import time
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Credentials
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
-import com.diag.hackamore.ModelSerializer
 import com.diag.hackamore.ViewCurses
-import com.diag.hackamore.ViewSerializer
 import com.diag.hackamore.Controller
 
 def main():
@@ -39,11 +36,8 @@ def main():
         sources.append(source)
         index = index + 1
     model = com.diag.hackamore.ModelStandard.ModelStandard()
-    mutex = threading.Condition()
-    serializedmodel = com.diag.hackamore.ModelSerializer.ModelSerializer(model, mutex)
     view = com.diag.hackamore.ViewCurses.ViewCurses(model)
-    serializedview = com.diag.hackamore.ViewSerializer.ViewSerializer(view, mutex)
-    controller = com.diag.hackamore.Controller.Controller(serializedmodel, serializedview)
+    controller = com.diag.hackamore.Controller.Controller(model, view)
     logger.info("Main.main: STARTING.")
     while sources:
         controller.loop(sources, sources)
