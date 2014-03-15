@@ -78,7 +78,7 @@ program or in your Eclipse project metadata. If the value of the variable
 COM_DIAG_HACKAMORE_SERVER is not defined or is an empty string, the unit tests
 which run against a live server will automatically be bypassed.
 
-Similarly, there is a prototype Hackamore main program that extracts the same
+Similarly, there are prototype Hackamore main programs that extracts the same
 information for one or more Asterisk servers from the same dotfile in your home
 directory. The dotfile would contains lines of the form shown in the examples
 below.
@@ -93,6 +93,16 @@ below.
     COM_DIAG_HACKAMORE_PORT2=5038
     COM_DIAG_HACKAMORE_USERNAME2=admin
     COM_DIAG_HACKAMORE_SECRET2=password
+
+The two main programs are
+
+    src/com/diag/hackamore/Main, and
+    src/com/diag/hackamore/Mains
+
+in which Main is single threaded, multiplexes the AMI sockets using the
+select(2) system call, and updates a common model, and Mains is multi-threaded,
+processes each AMI socket from a different thread, and updates a common model
+by serializing access to it.
 
 ----------------------------------------------------------------------
 
