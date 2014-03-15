@@ -5,6 +5,7 @@ Licensed under the terms in the README.txt file.
 """
 
 import time
+import os
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Credentials
@@ -33,12 +34,12 @@ def main():
         username = com.diag.hackamore.Credentials.credential(usernames, "")
         secrets = prefix + "SECRET" + str(index)
         secret = com.diag.hackamore.Credentials.credential(secrets, "")
-        logger.info("Main.main: %s=\"%s\" %s=\"%s\" %s=\"%s\" %s=\"%s\"", names, name, servers, server, usernames, username, secrets, secret)
+        logger.info("Mains.main: %s=\"%s\" %s=\"%s\" %s=%d %s=\"%s\" %s=\"%s\"", names, name, servers, server, ports, port, usernames, username, secrets, secret)
         source = com.diag.hackamore.Socket.Socket(name, username, secret, server, port)
         sources.append(source)
         index = index + 1
     model = com.diag.hackamore.ModelStandard.ModelStandard()
-    view = com.diag.hackamore.ViewCurses.ViewCurses(model)
+    view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
     manifold = com.diag.hackamore.Manifold.Manifold(model, view)
     multiplex = com.diag.hackamore.Multiplex.Multiplex()
     controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)

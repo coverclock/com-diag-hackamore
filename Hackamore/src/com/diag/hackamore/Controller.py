@@ -23,10 +23,12 @@ class Controller:
     def loop(self, inputs, outputs):
         self.logger.info("Controller.loop: STARTING. %s", str(self))
         while True:
-            for source in inputs:
-                if source.open():
-                    inputs.remove(source)
-                    self.multiplex.register(source)
+            if inputs:
+                sources = [ source for source in inputs ]
+                for source in sources:
+                    if source.open():
+                        self.multiplex.register(source)
+                        inputs.remove(source)
             if not self.multiplex.active():
                 break
             messages = self.multiplex.multiplex()
@@ -48,7 +50,7 @@ class Controller:
                     pbx = event[Event.SOURCE]
                     source = self.multiplex.query(pbx)
                     source.close()
-                    self.multiplex.unregister(source)
                     outputs.append(source)
+                    self.multiplex.unregister(source)
                     messages.close()
         self.logger.info("Controller.loop: STOPPING. %s", str(self))
