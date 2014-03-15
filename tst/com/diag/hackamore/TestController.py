@@ -12,7 +12,9 @@ import threading
 import com.diag.hackamore.Logger
 import com.diag.hackamore.File
 import com.diag.hackamore.Socket
+import com.diag.hackamore.Model
 import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.View
 import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.Manifold
 import com.diag.hackamore.Multiplex
@@ -22,10 +24,6 @@ from Parameters import USERNAME
 from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
-
-address = None
-port = None
-ready = None
 
 READLINE = 512
 RECV = 512
@@ -68,18 +66,18 @@ class Server(threading.Thread):
         threading.Thread.__init__(self)
         self.path = path
         self.limit = limit
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
     
     def run(self):
-        global address
-        global port
-        global ready
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            ready.notifyAll()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            self.ready.notifyAll()
         producers = [ ]
         while self.limit > 0:
             sock2, farend = sock.accept()
@@ -100,7 +98,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Rinse(self):
+    def test010Singleton(self):
         name = self.id()
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
@@ -122,7 +120,7 @@ class Test(unittest.TestCase):
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 1)
 
-    def test020Repeat(self):
+    def test020Serial(self):
         name = self.id()
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
@@ -142,24 +140,18 @@ class Test(unittest.TestCase):
         self.assertEquals(len(inputs), 1)
         
     def test030Log(self):
-        global address
-        global port
-        global ready
         name = self.id()
-        address = ""
-        port = 0
-        ready = threading.Condition()
         thread = Server(TYPESCRIPT, LIMIT)
         self.assertIsNotNone(thread)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
@@ -174,36 +166,71 @@ class Test(unittest.TestCase):
         thread.join()
 
     def test040Print(self):
-        global address
-        global port
-        global ready
         name = self.id()
-        address = ""
-        port = 0
-        ready = threading.Condition()
         thread = Server(TYPESCRIPT)
         self.assertIsNotNone(thread)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
         logger = logging.getLogger(name)
         logger.setLevel(logging.INFO)
         console = logging.StreamHandler()
         logger.addHandler(console)
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port, logger = logger)
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port, logger = logger)
         self.assertIsNotNone(source)
         sources = [ ]
         sources.append(source)
         self.assertEquals(len(sources), 1)
         model = com.diag.hackamore.ModelStandard.ModelStandard()
-        view = com.diag.hackamore.ViewPrint.ViewPrint(model = model)
+        view = com.diag.hackamore.ViewPrint.ViewPrint(model)
         manifold = com.diag.hackamore.Manifold.Manifold(model, view)
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
         controller.loop(sources, sources)
         self.assertEquals(len(sources), 1)
         thread.join()
+
+    def test050Parallel(self):
+        inputs = [ ]
+        outputs = [ ]
+        thread1 = Server(TYPESCRIPT)
+        self.assertIsNotNone(thread1)
+        thread1.start()
+        with thread1.ready:
+            while thread1.port == None:
+                thread1.ready.wait()
+        thread2 = Server(TYPESCRIPT)
+        self.assertIsNotNone(thread2)
+        thread2.start()
+        with thread2.ready:
+            while thread2.port == None:
+                thread2.ready.wait()
+        thread3 = Server(TYPESCRIPT)
+        self.assertIsNotNone(thread3)
+        thread3.start()
+        with thread3.ready:
+            while thread3.port == None:
+                thread3.ready.wait()
+        source1 = com.diag.hackamore.Socket.Socket("PBX1", USERNAME, SECRET, LOCALHOST, thread1.port)
+        self.assertIsNotNone(source1)
+        inputs.append(source1)
+        source2 = com.diag.hackamore.Socket.Socket("PBX2", USERNAME, SECRET, LOCALHOST, thread2.port)
+        self.assertIsNotNone(source2)
+        inputs.append(source2)
+        source3 = com.diag.hackamore.Socket.Socket("PBX3", USERNAME, SECRET, LOCALHOST, thread3.port)
+        self.assertIsNotNone(source3)
+        inputs.append(source3)
+        model = com.diag.hackamore.Model.Model()
+        view = com.diag.hackamore.View.View(model)
+        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+        multiplex = com.diag.hackamore.Multiplex.Multiplex()
+        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
+        self.assertEquals(len(inputs), 3)
+        self.assertEquals(len(outputs), 0)
+        controller.loop(inputs, outputs)
+        self.assertEquals(len(inputs), 0)
+        self.assertEquals(len(outputs), 3)
 
 if __name__ == "__main__":
     unittest.main()
