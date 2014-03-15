@@ -16,6 +16,17 @@ import com.diag.hackamore.Controller
 import com.diag.hackamore.Manifold
 import com.diag.hackamore.Multiplex
 
+def body(manifold, inputs, outputs, logger = None):
+    logger = com.diag.hackamore.Logger.logger() if logger == None else logger
+    multiplex = com.diag.hackamore.Multiplex.Multiplex()
+    controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
+    logger.info("Main.body: STARTING.")
+    while inputs:
+        controller.loop(inputs, outputs)
+        time.sleep(2.0)
+        logger.info("Main.body: RESTARTING.")
+    logger.info("Main.body: STOPPING.")
+
 def main():
     logger = com.diag.hackamore.Logger.logger()
     sources = [ ]
@@ -41,14 +52,7 @@ def main():
     model = com.diag.hackamore.ModelStandard.ModelStandard()
     view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
     manifold = com.diag.hackamore.Manifold.Manifold(model, view)
-    multiplex = com.diag.hackamore.Multiplex.Multiplex()
-    controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
-    logger.info("Main.main: STARTING.")
-    while sources:
-        controller.loop(sources, sources)
-        time.sleep(2.0)
-        logger.info("Main.main: RESTARTING.")
-    logger.info("Main.main: STOPPING.")
+    body(manifold, sources, sources)
 
 if __name__ == "__main__":
     main()

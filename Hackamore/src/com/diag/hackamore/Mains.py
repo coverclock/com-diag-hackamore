@@ -23,11 +23,12 @@ TIMEOUT = 1.0
 
 class Producer(threading.Thread):
     
-    def __init__(self, sources, controller, logger):
+    def __init__(self, inputs, outputs, controller, logger):
         threading.Thread.__init__(self)
         self.logger = logger
         self.controller = controller
-        self.sources = sources
+        self.inputs = inputs
+        self.outputs = outputs
 
     def __del__(self):
         pass
@@ -37,49 +38,64 @@ class Producer(threading.Thread):
     
     def run(self):
         self.logger.info("Producer.run: STARTING. %s", str(self))
-        while self.sources:
-            self.controller.loop(self.sources, self.sources)
+        while self.inputs:
+            self.controller.loop(self.inputs, self.outputs)
             time.sleep(2.0)
             self.logger.info("Producer.run: RESTARTING. %s", str(self))
         self.logger.info("Producer.run: STOPPING. %s", str(self))
 
-def main():
-    logger = com.diag.hackamore.Logger.logger()
-    model = com.diag.hackamore.ModelStandard.ModelStandard()
-    view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
-    manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+def body(manifold, inputs, outputs, logger = None):
+    logger = com.diag.hackamore.Logger.logger() if logger == None else logger
     serializer = com.diag.hackamore.Serializer.Serializer(manifold)
     producers = [ ]
-    index = 1
-    while True:
-        names = PREFIX + "NAME" + str(index)
-        name = com.diag.hackamore.Credentials.credential(names)
-        if name == None:
-            break
-        servers = PREFIX + "SERVER" + str(index)
-        server = com.diag.hackamore.Credentials.credential(servers, com.diag.hackamore.Socket.HOST)
-        ports = PREFIX + "PORT" + str(index)
-        port = int(com.diag.hackamore.Credentials.credential(ports, str(com.diag.hackamore.Socket.PORT)))
-        usernames = PREFIX + "USERNAME" + str(index)
-        username = com.diag.hackamore.Credentials.credential(usernames, "")
-        secrets = PREFIX + "SECRET" + str(index)
-        secret = com.diag.hackamore.Credentials.credential(secrets, "")
-        logger.info("Mains.main: %s=\"%s\" %s=\"%s\" %s=%d %s=\"%s\" %s=\"%s\"", names, name, servers, server, ports, port, usernames, username, secrets, secret)
-        source = com.diag.hackamore.Socket.Socket(name, username, secret, server, port)
-        sources = [ source ]
+    while inputs:
+        source = inputs.pop(0)
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         controller = com.diag.hackamore.Controller.Controller(multiplex, serializer)
-        producer = Producer(sources, controller, logger)
+        sources = [ source ]
+        if id(inputs) == id(outputs):
+            sinks = sources
+        else:
+            sinks = [ ]
+        producer = Producer(sources, sinks, controller, logger)
         producers.append(producer)
-        index = index + 1
     for producer in producers:
         producer.start()
     while producers:
-        for producer in producers:
+        threads = [ producer for producer in producers ]
+        for producer in threads:
             producer.join(TIMEOUT)
             if not producer.isAlive():
                 producers.remove(producer)
-                break
+                for source in producer.outputs:
+                    outputs.append(source)
+
+def main():
+    logger = com.diag.hackamore.Logger.logger()
+    sources = [ ]
+    prefix = "COM_DIAG_HACKAMORE_"
+    index = 1
+    while True:
+        names = prefix + "NAME" + str(index)
+        name = com.diag.hackamore.Credentials.credential(names)
+        if name == None:
+            break
+        servers = prefix + "SERVER" + str(index)
+        server = com.diag.hackamore.Credentials.credential(servers, com.diag.hackamore.Socket.HOST)
+        ports = prefix + "PORT" + str(index)
+        port = int(com.diag.hackamore.Credentials.credential(ports, str(com.diag.hackamore.Socket.PORT)))
+        usernames = prefix + "USERNAME" + str(index)
+        username = com.diag.hackamore.Credentials.credential(usernames, "")
+        secrets = prefix + "SECRET" + str(index)
+        secret = com.diag.hackamore.Credentials.credential(secrets, "")
+        logger.info("Mains.main: %s=\"%s\" %s=\"%s\" %s=%d %s=\"%s\" %s=\"%s\"", names, name, servers, server, ports, port, usernames, username, secrets, secret)
+        source = com.diag.hackamore.Socket.Socket(name, username, secret, server, port)
+        sources.append(source)
+        index = index + 1
+    model = com.diag.hackamore.ModelStandard.ModelStandard()
+    view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
+    manifold = com.diag.hackamore.Manifold.Manifold(model, view)
+    body(manifold, sources, sources)
 
 if __name__ == "__main__":
     main()

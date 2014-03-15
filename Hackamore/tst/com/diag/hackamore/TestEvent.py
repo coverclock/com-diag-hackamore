@@ -9,15 +9,6 @@ import logging
 
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Event
-import com.diag.hackamore.File
-import com.diag.hackamore.Multiplex
-import com.diag.hackamore.Manifold
-import com.diag.hackamore.ModelCounter
-import com.diag.hackamore.View
-
-from com.diag.hackamore.stdio import printf
-
-from Parameters import TYPESCRIPT
 
 class Test(unittest.TestCase):
 

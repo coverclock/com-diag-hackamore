@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010Process(self):
+    def test010Sanity(self):
         name = self.id()
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
@@ -65,8 +65,7 @@ class Test(unittest.TestCase):
                 multiplex.unregister(source)
                 self.assertFalse(multiplex.active())
                 messages.close()
-        while serializer.backlog():
-            time.sleep(0.1)
+        serializer.wait()
         self.assertFalse(multiplex.active())
         self.assertTrue(model.counter[com.diag.hackamore.Event.BRIDGE])
         self.assertTrue(model.counter[com.diag.hackamore.Event.CONFBRIDGEEND])
