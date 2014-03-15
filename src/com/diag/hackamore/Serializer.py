@@ -40,6 +40,7 @@ class Processor(threading.Thread):
                 if self.serializer.logger.isEnabledFor(logging.DEBUG):
                     self.serializer.logger.debug("Processor.run: DEQUEUE. %s", str(self))
                 self.serializer.manifold.process(event)
+                self.serializer.mutex.notifyAll()
 
 class Serializer:
 
@@ -83,6 +84,11 @@ class Serializer:
     def backlog(self):
         with self.mutex:
             return len(self.queue)
+        
+    def wait(self):
+        with self.mutex:
+            while self.queue and not self.complete:
+                self.mutex.wait()
 
     def process(self, event):
         if Event.END in event:

@@ -16,11 +16,10 @@ class Test(unittest.TestCase):
     def setUp(self):
         pass
 
-
     def tearDown(self):
         pass
 
-    def testName(self):
+    def testAnsi(self):
         if "TERM" not in os.environ:
             printf("Bypassing test using ANSI escape sequences.\n")
             return

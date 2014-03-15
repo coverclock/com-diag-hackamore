@@ -14,11 +14,13 @@ import com.diag.hackamore.File
 import com.diag.hackamore.Socket
 import com.diag.hackamore.Model
 import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.ModelCounter
 import com.diag.hackamore.View
 import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.Manifold
 import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Controller
+import com.diag.hackamore.Event
 
 from Parameters import USERNAME
 from Parameters import SECRET
@@ -221,7 +223,7 @@ class Test(unittest.TestCase):
         source3 = com.diag.hackamore.Socket.Socket("PBX3", USERNAME, SECRET, LOCALHOST, thread3.port)
         self.assertIsNotNone(source3)
         inputs.append(source3)
-        model = com.diag.hackamore.Model.Model()
+        model = com.diag.hackamore.ModelCounter.ModelCounter()
         view = com.diag.hackamore.View.View(model)
         manifold = com.diag.hackamore.Manifold.Manifold(model, view)
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
@@ -231,6 +233,7 @@ class Test(unittest.TestCase):
         controller.loop(inputs, outputs)
         self.assertEquals(len(inputs), 0)
         self.assertEquals(len(outputs), 3)
+        self.assertEquals(model.counter[com.diag.hackamore.Event.END], 3)
 
 if __name__ == "__main__":
     unittest.main()
