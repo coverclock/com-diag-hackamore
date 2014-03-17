@@ -108,7 +108,7 @@ class Multiplex:
         should not be closed until the END Event is consumed. The END Event is
         automatically placed at the end of the queue of unconsumed Events when
         the far end closes the Socket.
-        @param tiemout is an optional select(2) timeout value in seconds.
+        @param timeout is an optional select(2) timeout value in seconds.
         """
         candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]
         effective = 0.0
