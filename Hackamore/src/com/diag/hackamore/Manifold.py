@@ -10,12 +10,24 @@ import Event
 from stdio import fprintf
 
 class Manifold:
+    """
+    A Manifold maps each Event to the individual functions calls in a Model
+    and View. There may be more than one kind of Manifold, each kind handles
+    the specific kinds of Models and Views for which it was designed.
+    """
 
     #####
     ##### CTOR/DTOR
     #####
 
     def __init__(self, model, view, tracer = None, logger = None):
+        """
+        Constructor.
+        @param model is the Model associated with this Manifold.
+        @param view is the View associated with this Manifold.
+        @param tracer is an optional writeable object to which a Trace is generated.
+        @param logger is an optional Logger.
+        """
         self.logger = Logger.logger() if logger == None else logger
         self.tracer = tracer
         self.model = model
@@ -298,6 +310,11 @@ class Manifold:
     #####
 
     def process(self, event):
+        """
+        Process a dictionary from an Event by extracting the necessary
+        keyword:value pairs from the dictionary for those Events that are
+        supported and passing them along to the Model and the View.
+        """
         if Event.END in event:
             if Event.END in self.table:
                 if self.tracer != None:

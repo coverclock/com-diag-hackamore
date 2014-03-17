@@ -9,6 +9,11 @@ import Event
 from Model import Model
 
 class ModelCounter(Model):
+    """
+    ModelCounter is a kind of Model that just counts how many of each Event
+    occurs. It does not make any changes to the dynamic call state in the base
+    class. It is mostly used for unit testing.
+    """
     
     #####
     ##### CTOR/DTOR

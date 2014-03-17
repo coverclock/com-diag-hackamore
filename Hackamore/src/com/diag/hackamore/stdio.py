@@ -6,8 +6,21 @@ Licensed under the terms in the README.txt file.
 
 import sys
 
-def printf(fmt, *args):
-    sys.stdout.write(fmt % args)
-
 def fprintf(stream, fmt, *args):
-    stream.write(fmt % args)
+    """
+    Format and print an argument list to the specified stream.
+    @param stream is the output stream.
+    @param fmt is the format string.
+    @param args is the argument list.
+    @return the value returned by write().
+    """
+    return  stream.write(fmt % args)
+
+def printf(fmt, *args):
+    """
+    Format and print an argument list to the Standard Output stream.
+    @param fmt is the format string.
+    @param args is the argument list.
+    @return the value returned by write().
+    """
+    return sys.stdout.write(fmt % args)

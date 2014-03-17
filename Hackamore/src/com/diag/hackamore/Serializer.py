@@ -10,12 +10,25 @@ import threading
 import Event
 
 class Processor(threading.Thread):
+    """
+    A Processor is a Thread that removes unconsumed Events from the queue in the
+    Serializer and passes them to a Manifold for processing. There is one
+    Processor (and hence one Thread) per Serializer. Access to the queue in the
+    Serializer is serialized by a mutex.  Several Controllers, each receiving
+    Events from one or more Sources via its own Multiplex, can feed these
+    Events to a common Serializer (and hence a common Manifold, Model, and
+    View).
+    """
 
     #####
     ##### CTOR/DTOR
     #####
 
     def __init__(self, serializer):
+        """
+        Constructor.
+        @param serializer is the Serializer that this Processor services.
+        """
         threading.Thread.__init__(self)
         self.serializer = serializer
 
@@ -43,12 +56,26 @@ class Processor(threading.Thread):
                 self.serializer.mutex.notifyAll()
 
 class Serializer:
+    """
+    A Serializer receives unconsumed Events from one or more Controllers and
+    queues those Events on a queue for asynchronous processing by its Processor.
+    There is one Processor (and hence one Thread) per Serializer. Access to the
+    queue in the Serializer is serialized by a mutex.  Several Controllers, each
+    receiving Events from one or more Sources via its own Multiplex, can feed
+    these Events to a common Serializer (and hence a common Manifold, Model, and
+    View).
+    """
 
     #####
     ##### CTOR/DTOR
     #####
 
     def __init__(self, manifold, logger = None):
+        """
+        Constructor.
+        @param manifold is the Manifold associated with this Serializer.
+        @param logger is an optional Logger.
+        """
         self.manifold = manifold
         self.logger = logger if logger != None else self.manifold.logger
         self.mutex = threading.Condition()
@@ -82,15 +109,27 @@ class Serializer:
     #####
 
     def backlog(self):
+        """
+        Return the number of Events queued.
+        @return the number of Events queued.
+        """
         with self.mutex:
             return len(self.queue)
         
     def wait(self):
+        """
+        Block the caller until the queue is empty or until the Serializer has
+        been told to exit.
+        """
         with self.mutex:
             while self.queue and not self.complete:
                 self.mutex.wait()
 
     def process(self, event):
+        """
+        Process an event by enqueueing it on the queue for asynchronous
+        processing by the associated Processor.
+        """
         if Event.END in event:
             if Event.END in self.manifold.table:
                 self.enqueue(event)

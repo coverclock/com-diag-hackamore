@@ -76,7 +76,7 @@ class Event:
         """
         Constructor.
         @param event is the dictionary containing the AMI message.
-        @param logger is an optional logger.
+        @param logger is an optional Logger.
         """
         self.logger = Logger.logger() if logger == None else logger
         self.event = event

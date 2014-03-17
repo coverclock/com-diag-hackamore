@@ -1112,49 +1112,6 @@ class Test(unittest.TestCase):
             complete = True
             done.notifyAll()
         thread.join()
-    
-    def test120Live(self):
-        if not SERVER:
-            printf("Bypassing test with live server.\n")
-            return
-        global address
-        global port
-        global ready
-        global complete
-        global done
-        name = self.id()
-        multiplex = com.diag.hackamore.Multiplex.Multiplex()
-        self.assertIsNotNone(multiplex)
-        self.assertFalse(multiplex.active())
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, SERVER, PORT)
-        self.assertIsNotNone(source)
-        self.assertIsNotNone(source.pbx, None)
-        self.assertEquals(source.pbx, name)
-        self.assertIsNotNone(source.host, None)
-        self.assertEquals(source.host, SERVER)
-        self.assertIsNotNone(source.port, None)
-        self.assertEquals(source.port, PORT)
-        self.assertIsNone(source.socket)
-        self.assertIsNone(source.socket)
-        self.assertTrue(source.open())
-        self.assertIsNotNone(source.socket)
-        self.assertFalse(multiplex.active())
-        multiplex.register(source)
-        self.assertTrue(multiplex.active())
-        for message in multiplex.multiplex():
-            self.assertIsNotNone(message)
-            event = message.event
-            self.assertIsNotNone(event)
-            self.assertTrue(event)
-            if (com.diag.hackamore.Event.RESPONSE in event) and (event[com.diag.hackamore.Event.RESPONSE] == com.diag.hackamore.Event.SUCCESS):
-                source.logout()
-            if com.diag.hackamore.Event.END in event:
-                break
-        self.assertTrue(source.close())
-        self.assertIsNone(source.socket)
-        self.assertTrue(multiplex.active())
-        multiplex.unregister(source)
-        self.assertFalse(multiplex.active())
 
 if __name__ == "__main__":
     unittest.main()

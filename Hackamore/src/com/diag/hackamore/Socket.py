@@ -39,7 +39,7 @@ class Socket(Source):
         @param port is the port number of the AMI on the PBX.
         @param timeout is an optional connection timeout value in seconds.
         @param bufsize is an optional receive buffer size in bytes.
-        @param logger is an optional logger used to log messages.
+        @param logger is an optional Logger used to log messages.
         """
         Source.__init__(self, pbx, username, secret, logger = logger)
         self.host = host

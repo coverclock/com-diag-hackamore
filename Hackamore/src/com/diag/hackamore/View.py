@@ -8,12 +8,25 @@ import Logger
 import Event
 
 class View:
+    """
+    View describes how individual Events and the dynamic call state is displayed
+    as Events alter the dynamic call state. It is not concerned with how those
+    Events are received (that's the Controller) nor how they alter the dynamic
+    call state (that's the Model). There can be more than one kind of View. This
+    particular View just logs each individual Event and does not display the
+    dynamic call state at all.
+    """
 
     #####
     ##### CTOR/DTOR
     #####
 
     def __init__(self, model, logger = None):
+        """
+        Constructor.
+        @param model is the Model associated with this View.
+        @param logger is an optional Logger used to log Events.
+        """
         self.logger = Logger.logger() if logger == None else logger
         self.model = model
 
