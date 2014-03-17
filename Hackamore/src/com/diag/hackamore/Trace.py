@@ -13,8 +13,25 @@ READLINE = 512
 OPEN = "rb"
 
 class Trace(Source):
+    """
+    Trace describes a Source that is like a File. But unlike a File, a Trace
+    can be closed and reopened to pick up reading where it left off. Also,
+    Traces already contain the SOURCE and TIME entries for each event, and an
+    END event, and so these are not generated as the Trace is processed. 
+    """
+    
+    #####
+    ##### CTOR/DTOR
+    #####
 
     def __init__(self, pbx, path, bufsize = READLINE, logger = None):
+        """
+        Constructor.
+        @param pbx is the name of the source.
+        @param path is the pathname to the file in the file system.
+        @param bufsize is an optional read buffer size in bytes.
+        @param logger is an optional logger used to log messages.
+        """
         Source.__init__(self, pbx, logger = logger)
         self.path = path
         self.active = False
@@ -27,6 +44,23 @@ class Trace(Source):
 
     def __repr__(self):
         return Source.__repr__(self) + ".Trace(" + str(self.path) + ")"
+
+    #####
+    ##### PROTECTED
+    #####
+
+    def initialize(self):
+        pass       
+    
+    def finalize(self):
+        pass
+        
+    def terminate(self):
+        pass
+
+    #####
+    ##### PUBLIC
+    #####
 
     def open(self):
         result = False
@@ -116,17 +150,12 @@ class Trace(Source):
             finally:
                 pass
         return line
-    
+
     def force(self):
+        """
+        Force a real close (whatever that means on the underlying platform).
+        @return True is successful, False otherwise.
+        """
         self.active = True
         self.eof = True
         return self.close()
-                
-    def initialize(self):
-        pass       
-    
-    def finalize(self):
-        pass
-        
-    def terminate(self):
-        pass
