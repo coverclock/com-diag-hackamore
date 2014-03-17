@@ -33,6 +33,7 @@ CUR_DIR				:=	$(shell pwd)
 SRC_DIR				=	src
 TST_DIR				=	tst
 TMP_DIR				=	/var/tmp
+DOC_DIR				=	doc
 
 ########## Distribution
 

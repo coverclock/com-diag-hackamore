@@ -13,8 +13,24 @@ READLINE = 512
 OPEN = "rb"
 
 class File(Source):
+    """
+    File describes a Source that is a file (whatever that is) in a file system
+    (ditto) on the underlying platform that can be accessed sequentially as a
+    input/output resource.
+    """
+
+    #####
+    ##### CTOR/DTOR
+    #####
 
     def __init__(self, pbx, path, bufsize = READLINE, logger = None):
+        """
+        Constructor.
+        @param pbx is the name of the source.
+        @param path is the pathname to the file in the file system.
+        @param bufsize is an optional read buffer size in bytes.
+        @param logger is an optional logger used to log messages.
+        """
         Source.__init__(self, pbx, logger = logger)
         self.path = path
         self.eof = False
@@ -26,6 +42,10 @@ class File(Source):
 
     def __repr__(self):
         return Source.__repr__(self) + ".File(" + str(self.path) + ")"
+
+    #####
+    ##### PUBLIC
+    #####
 
     def open(self):
         result = False
@@ -66,6 +86,10 @@ class File(Source):
         return self.file.fileno() if self.file != None else -1
 
     def read(self, multiplex = None):
+        """
+        Open a File Source.
+        @param multiplex references a Multiplex.
+        """
         line = None
         if self.file != None:
             try:
