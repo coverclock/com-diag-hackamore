@@ -16,9 +16,9 @@ class ViewCurses(ViewPrint):
     and its effect on the Model.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, model, logger = None):
         ViewPrint.__init__(self, model, logger = logger)
@@ -31,9 +31,9 @@ class ViewCurses(ViewPrint):
     def __repr__(self):
         return ViewPrint.__repr__(self) + ".ViewCurses()"
     
-    #####
-    ##### PROTECTED
-    #####
+    #
+    # PROTECTED
+    #
         
     def before(self):
         sys.stdout.write(self.erase)
@@ -46,9 +46,9 @@ class ViewCurses(ViewPrint):
     def after(self):
         sys.stdout.flush()
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
     
     def bridge(self, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2):
         self.before()

@@ -19,9 +19,9 @@ class Controller:
     keep Events from Sources humming along to the Model and View.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, multiplex, manifold, logger = None):
         """
@@ -39,9 +39,9 @@ class Controller:
     def __repr__(self):
         return "Controller(" + str(self.multiplex) + "," + str(self.manifold) + ")"
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def loop(self, inputs, outputs):
         """

@@ -20,9 +20,9 @@ class Trace(Source):
     END event, and so these are not generated as the Trace is processed. 
     """
     
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, pbx, path, bufsize = READLINE, logger = None):
         """
@@ -45,9 +45,9 @@ class Trace(Source):
     def __repr__(self):
         return Source.__repr__(self) + ".Trace(" + str(self.path) + ")"
 
-    #####
-    ##### PROTECTED
-    #####
+    #
+    # PROTECTED
+    #
 
     def initialize(self):
         pass       
@@ -58,9 +58,9 @@ class Trace(Source):
     def terminate(self):
         pass
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def open(self):
         result = False

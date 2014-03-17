@@ -15,9 +15,9 @@ class ModelCounter(Model):
     class. It is mostly used for unit testing.
     """
     
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, logger = None):
         Model.__init__(self, logger)
@@ -42,9 +42,9 @@ class ModelCounter(Model):
     def __repr__(self):
         return Model.__repr__(self) + ".ModelCounter()"
     
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
     
     def bridge(self, pbx, uniqueid1, uniqueid2):
         self.counter[Event.BRIDGE] = self.counter[Event.BRIDGE] + 1

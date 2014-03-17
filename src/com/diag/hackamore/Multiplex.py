@@ -24,9 +24,9 @@ class Multiplex:
     of Sources who have Events ready to be received.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
@@ -38,9 +38,9 @@ class Multiplex:
     def __repr__(self):
         return "Multiplex(" + str(self.sources) + ")"
 
-    #####
-    #####  PUBLIC
-    #####
+    #
+    #  PUBLIC
+    #
     
     def register(self, source):
         """

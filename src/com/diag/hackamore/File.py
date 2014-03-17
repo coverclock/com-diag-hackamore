@@ -19,9 +19,9 @@ class File(Source):
     input/output resource.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, pbx, path, bufsize = READLINE, logger = None):
         """
@@ -43,9 +43,9 @@ class File(Source):
     def __repr__(self):
         return Source.__repr__(self) + ".File(" + str(self.path) + ")"
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def open(self):
         result = False

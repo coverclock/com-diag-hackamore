@@ -25,9 +25,9 @@ class Socket(Source):
     domain name. 
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, pbx, username, secret, host = HOST, port = PORT, timeout = CONNECT, bufsize = RECV, logger = None):
         """
@@ -58,9 +58,9 @@ class Socket(Source):
     def __repr__(self):
         return Source.__repr__(self) + ".Socket(" + str(self.host) + "," + str(self.port) + ")"
 
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
     
     def assemble(self, fragment):
         """
@@ -91,9 +91,9 @@ class Socket(Source):
         #self.logger.debug("Socket.assemble:PARTIAL=" + str(self.partial))
         #self.logger.debug("Socket.assemble:QUEUE=" + str(self.queue))
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
  
     def open(self):
         result = False

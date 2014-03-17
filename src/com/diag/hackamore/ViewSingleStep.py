@@ -10,14 +10,14 @@ from ViewCurses import ViewCurses
 
 class ViewSingleStep(ViewCurses):
     """
-    ViewSingleStep is a kind of ViewCurses that waits for the user to hit
-    a key before processing to the next display of an Event and its associated
-    changes to the Model.
+    ViewSingleStep is a kind of ViewPrint (even though it derives from
+    ViewCurses) that waits for the user to hit the return key before proceeding
+    to the next display of an Event and its associated changes to the Model.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, model, logger = None):
         ViewCurses.__init__(self, model, logger = logger)
@@ -28,9 +28,9 @@ class ViewSingleStep(ViewCurses):
     def __repr__(self):
         return ViewCurses.__repr__(self) + ".ViewSingleStep()"
          
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
         
     def before(self):
         pass
@@ -44,7 +44,3 @@ class ViewSingleStep(ViewCurses):
         sys.stdout.write(">")
         sys.stdout.flush()
         sys.stdin.readline()
-
-    #####
-    ##### PUBLIC
-    #####

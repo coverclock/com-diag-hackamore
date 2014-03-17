@@ -10,9 +10,9 @@ class End(Exception):
     when a File reaches end of file, or the far end closes a Socket.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self):
         Exception.__init__(self)

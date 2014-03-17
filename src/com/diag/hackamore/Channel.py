@@ -11,9 +11,9 @@ TRUNK = 3
 
 ROLE = ( "IDLE", "CALLING", "CALLED", "TRUNK" )
 
-#####
-##### PRIVATE
-#####
+#
+# PRIVATE
+#
 
 class Channel():
     """
@@ -23,9 +23,9 @@ class Channel():
     connects them together to achieve an end-to-end call.
     """
     
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, pbx, uniqueid, channel, calleridnum, channelstate, channelstatedesc):
         """
@@ -54,9 +54,9 @@ class Channel():
     def __repr__(self):
         return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.calleridnum) + "," + str(self.sipcallid) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def newstate(self, channelstate, channelstatedesc):
         """

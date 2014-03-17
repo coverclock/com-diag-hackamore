@@ -68,9 +68,9 @@ class Event:
     generate.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, event, logger = None):
         """
