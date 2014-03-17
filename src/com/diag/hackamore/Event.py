@@ -6,8 +6,6 @@ Licensed under the terms in the README.txt file.
 
 import Logger
 
-from stdio import fprintf
-
 # These symbols are keywords specific to the Hackamore application.
 
 END = "END"
@@ -61,8 +59,25 @@ SIPCALLID = "SIPCALLID"
 SUCCESS = "Success"
 
 class Event:
+    """
+    Event describes a message from an AMI Source. It contains the dictionary
+    containing the keyword:value pairs from the message itself, and a
+    reference to the logger that may be associated with the Source of the
+    message. This latter  field is provided so that different Sources may have
+    different logging levels that are inherited by the Events that they
+    generate.
+    """
+
+    #####
+    ##### CTOR/DTOR
+    #####
 
     def __init__(self, event, logger = None):
+        """
+        Constructor.
+        @param event is the dictionary containing the AMI message.
+        @param logger is an optional logger.
+        """
         self.logger = Logger.logger() if logger == None else logger
         self.event = event
 

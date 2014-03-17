@@ -14,6 +14,7 @@ import os
 import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
+import com.diag.hackamore.ViewPrint
 import com.diag.hackamore.ViewCurses
 import com.diag.hackamore.Manifold
 import com.diag.hackamore.Multiplex
@@ -111,14 +112,12 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010ViewCurses(self):
+    def test010View(self):
         global address
         global port
         global ready
-        if "TERM" not in os.environ:
-            printf("Bypassing test with curses.\n")
-            return
-        printf("TERM=%s\n", os.environ["TERM"])
+        if "TERM" in os.environ:
+            printf("TERM=%s\n", os.environ["TERM"])
         address = ""
         port = 0
         ready = threading.Condition()
@@ -132,7 +131,7 @@ class Test(unittest.TestCase):
         self.assertIsNotNone(source)
         sources = [ source ]
         model = com.diag.hackamore.ModelStandard.ModelStandard()
-        view = com.diag.hackamore.ViewCurses.ViewCurses(model)
+        view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
         manifold = com.diag.hackamore.Manifold.Manifold(model, view)
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
