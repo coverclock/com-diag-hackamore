@@ -16,9 +16,9 @@ class ViewPrint(View):
     associated Model on the Standard Output stream.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, model, logger = None):
         View.__init__(self, model, logger = logger)
@@ -30,17 +30,17 @@ class ViewPrint(View):
     def __repr__(self):
         return View.__repr__(self) + ".ViewPrint()"
 
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
 
     def channel(self, chan):
         #print "", "", "", "", "CHANNEL", self.pbx, self.uniqueid, self.channel, self.calleridnum if self.calleridnum else None, ROLE[self.role], self.channelstatedesc, self.sipcallid, self.conference, hex(id(self.call)) if self.call != None else self.call
         printf("    CHANNEL %-8s %-16s %-64s %-8s %-8s %-8s %-8s %-10s\n", chan.pbx, chan.uniqueid, chan.channel, chan.calleridnum if chan.calleridnum else None, ROLE[chan.role], chan.channelstatedesc, chan.conference, hex(id(chan.call)) if chan.call != None else None)
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
     
     def bridge(self, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2):
         print "EVENT", self.sn, Event.BRIDGE, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2

@@ -17,9 +17,9 @@ class Model:
     parameters do not change the database; that's up to derived classes.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, logger = None):
         """
@@ -39,9 +39,9 @@ class Model:
     def __repr__(self):
         return "Model(" + hex(id(self)) + ")"
     
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
     
     def bridge(self, pbx, uniqueid1, uniqueid2):
         pass

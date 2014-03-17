@@ -20,9 +20,9 @@ class Processor(threading.Thread):
     View).
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, serializer):
         """
@@ -38,9 +38,9 @@ class Processor(threading.Thread):
     def __repr__(self):
         return "Thread(" + threading.Thread.__repr__(self) + ").Processor()"
 
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
 
     def run(self):
         while True:
@@ -66,9 +66,9 @@ class Serializer:
     View).
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, manifold, logger = None):
         """
@@ -93,9 +93,9 @@ class Serializer:
     def __repr__(self):
         return "Serializer(" + str(self.manifold) + "," + str(self.processor) + "," + str(self.backlog()) + ")"
 
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
 
     def enqueue(self, event):
         with self.mutex:
@@ -104,9 +104,9 @@ class Serializer:
                 self.logger.debug("Serializer.enqueue: ENQUEUE. %s", str(self))
             self.mutex.notifyAll()
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def backlog(self):
         """

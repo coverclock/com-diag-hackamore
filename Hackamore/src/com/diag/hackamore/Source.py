@@ -23,9 +23,9 @@ class Source:
     stripped off.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, pbx, username = USERNAME, secret = SECRET, logger = None):
         """
@@ -52,9 +52,9 @@ class Source:
     def __repr__(self):
         return "Source(" + str(self.pbx) + ")"
     
-    #####
-    ##### PROTECTED
-    #####
+    #
+    # PROTECTED
+    #
 
     def read(self, multiplexing = False):
         """
@@ -126,9 +126,9 @@ class Source:
         """
         self.event[Event.END] = str(self.count)
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def open(self):
         """

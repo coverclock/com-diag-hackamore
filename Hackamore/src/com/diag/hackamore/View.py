@@ -17,9 +17,9 @@ class View:
     dynamic call state at all.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, model, logger = None):
         """
@@ -36,9 +36,9 @@ class View:
     def __repr__(self):
         return "View(" + str(self.model) + ")"
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
     
     def bridge(self, pbx, uniqueid1, channel1, callerid1, uniqueid2, channel2, callerid2):
         self.logger.debug("View: EVENT: %s %s %s %s %s %s %s %s", str(Event.BRIDGE), str(pbx), str(uniqueid1), str(channel1), str(callerid1), str(uniqueid2), str(channel2), str(callerid2))

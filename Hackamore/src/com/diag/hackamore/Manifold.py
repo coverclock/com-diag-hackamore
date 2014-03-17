@@ -16,9 +16,9 @@ class Manifold:
     the specific kinds of Models and Views for which it was designed.
     """
 
-    #####
-    ##### CTOR/DTOR
-    #####
+    #
+    # CTOR/DTOR
+    #
 
     def __init__(self, model, view, tracer = None, logger = None):
         """
@@ -53,9 +53,9 @@ class Manifold:
     def __repr__(self):
         return "Manifold(" + str(self.model) + "," + str(self.view) + ")"
 
-    #####
-    ##### PRIVATE
-    #####
+    #
+    # PRIVATE
+    #
     
     def bridge(self, event):
         if not Event.SOURCE in event:
@@ -305,9 +305,9 @@ class Manifold:
             fprintf(self.tracer, "%s: %s\r\n", keyword, value)
         fprintf(self.tracer, "\r\n")
 
-    #####
-    ##### PUBLIC
-    #####
+    #
+    # PUBLIC
+    #
 
     def process(self, event):
         """
