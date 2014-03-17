@@ -27,6 +27,7 @@ class Controller:
         """
         Constructor.
         @param multiplex is the Multiplex used to multiplex Sources.
+        @param manifold is the Manifold used to feed the Model and View.
         @param logger is an optional Logger used to log messages.
         """
         self.logger = Logger.logger() if logger == None else logger

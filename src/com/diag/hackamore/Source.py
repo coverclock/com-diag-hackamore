@@ -177,7 +177,7 @@ class Source:
         """
         pass
 
-    def get(self, multiplex = None):
+    def get(self, multiplexing = None):
         """
         Return a complete AMI message in the form of a dictionary, or None
         if no such message is yet available.
@@ -187,7 +187,7 @@ class Source:
         event = None
         while event == None:
             try:
-                line = self.read(multiplex)
+                line = self.read(multiplexing)
             except Exception:
                 self.count = self.count + 1
                 self.terminate()
