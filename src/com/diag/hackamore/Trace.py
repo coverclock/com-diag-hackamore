@@ -30,7 +30,7 @@ class Trace(Source):
         @param pbx is the name of the source.
         @param path is the pathname to the file in the file system.
         @param bufsize is an optional read buffer size in bytes.
-        @param logger is an optional logger used to log messages.
+        @param logger is an optional Logger used to log messages.
         """
         Source.__init__(self, pbx, logger = logger)
         self.path = path

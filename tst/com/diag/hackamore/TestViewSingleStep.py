@@ -108,7 +108,7 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test010ViewCurses(self):
+    def test010ViewSingleStep(self):
         global address
         global port
         global ready

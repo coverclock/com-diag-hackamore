@@ -10,6 +10,11 @@ import sys
 from ViewPrint import ViewPrint
 
 class ViewCurses(ViewPrint):
+    """
+    ViewCurses is a kind of ViewPrint that clears the display and rehomes its
+    cursor using standard ANSI escape sequence just before displaying an Event
+    and its effect on the Model.
+    """
 
     #####
     ##### CTOR/DTOR
@@ -27,7 +32,7 @@ class ViewCurses(ViewPrint):
         return ViewPrint.__repr__(self) + ".ViewCurses()"
     
     #####
-    ##### PRIVATE
+    ##### PROTECTED
     #####
         
     def before(self):

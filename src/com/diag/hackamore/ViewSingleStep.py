@@ -9,6 +9,11 @@ import sys
 from ViewCurses import ViewCurses
 
 class ViewSingleStep(ViewCurses):
+    """
+    ViewSingleStep is a kind of ViewCurses that waits for the user to hit
+    a key before processing to the next display of an Event and its associated
+    changes to the Model.
+    """
 
     #####
     ##### CTOR/DTOR

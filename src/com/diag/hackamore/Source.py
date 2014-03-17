@@ -33,7 +33,7 @@ class Source:
         @param pbx is the name of the source.
         @param username is the username used to authenticate with the source.
         @param secret is the secret used to authenticate with the source.
-        @param logger is an optional logger used to log messages.
+        @param logger is an optional Logger used to log messages.
         """
         self.logger = Logger.logger() if logger == None else logger
         self.pbx = pbx

@@ -11,6 +11,10 @@ from Channel import ROLE
 from stdio import printf
 
 class ViewPrint(View):
+    """
+    ViewPrint is a kind of View that displays each Event and its effect on the
+    associated Model on the Standard Output stream.
+    """
 
     #####
     ##### CTOR/DTOR

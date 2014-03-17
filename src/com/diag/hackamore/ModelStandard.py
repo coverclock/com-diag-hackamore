@@ -9,6 +9,13 @@ from Model import Model
 import Channel
 
 class ModelStandard(Model):
+    """
+    ModelStandard is a kind of Model that implements the default modifications
+    to the dynamic call state in the base class for every Event that it is
+    given. It tries hard to be forgiving about being given Events that apply to
+    Channels that were created before it was instantiated. (It generally ignores
+    such Events.)
+    """
     
     #####
     ##### CTOR/DTOR

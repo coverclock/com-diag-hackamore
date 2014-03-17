@@ -7,12 +7,25 @@ Licensed under the terms in the README.txt file.
 import Logger
 
 class Model:
-    
+    """
+    Model describes how Events received from one or more AMI Sources affect
+    the dynamic call state maintained by Hackamore. Model is not concerned
+    with how those Events are received (that's the Controller), nor with how
+    they are displayed (that's the View). There can be more than one kind of
+    Model. This particular Model is just a container database that is the
+    dynamic call state. Its individual methods which represent events and their
+    parameters do not change the database; that's up to derived classes.
+    """
+
     #####
     ##### CTOR/DTOR
     #####
 
     def __init__(self, logger = None):
+        """
+        Constructor.
+        @param logger is an optional logger which derived classes may use.
+        """
         self.logger = Logger.logger() if logger == None else logger
         self.channels = { }     # Channel = self.channels[pbx][uniqueid]
         self.bridges = { }      # Channel = self.bridges[pbx][conference][uniqueid]
