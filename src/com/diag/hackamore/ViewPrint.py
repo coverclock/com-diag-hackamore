@@ -34,11 +34,11 @@ class ViewPrint(View):
     # PRIVATE
     #
 
-    def printline(self, label, pbx, uniqueid, channel, calleridnum, role, channelstatedesc, conference, call):
-        printf("%s %-16s %-16s %-64s %-8s %-8s %-8s %-8s %-10s\n", label, pbx, uniqueid, channel, calleridnum, role, channelstatedesc, conference, call)
+    def printline(self, label, pbx, uniqueid, channel, calleridnum, role, channelstatedesc, conference, call, sipcallid):
+        printf("%s %-16s %-16s %-64s %-8s %-8s %-8s %-8s %-10s %s\n", label, pbx, uniqueid, channel, calleridnum, role, channelstatedesc, conference, call, sipcallid)
 
     def printchannel(self, chan):
-        self.printline("    ", chan.pbx, chan.uniqueid, chan.channel, chan.calleridnum if chan.calleridnum else None, ROLE[chan.role], chan.channelstatedesc, chan.conference, hex(id(chan.call)) if chan.call != None else None)
+        self.printline("    ", chan.pbx, chan.uniqueid, chan.channel, chan.calleridnum if chan.calleridnum else None, ROLE[chan.role], chan.channelstatedesc, chan.conference, hex(id(chan.call)) if chan.call != None else None, chan.sipcallid)
 
     #
     # PUBLIC
@@ -97,7 +97,7 @@ class ViewPrint(View):
         self.sn = self.sn + 1
 
     def display(self):
-        self.printline("VIEW", "SOURCE", "UNIQUEID", "CHANNEL", "CALLERID", "ROLE", "STATE", "BRIDGE", "CALL")
+        self.printline("VIEW", "SOURCE", "UNIQUEID", "CHANNEL", "CALLERID", "ROLE", "STATE", "BRIDGE", "CALL", "SIPCALLID")
         if self.model.channels:
             printf(" CHANNELS\n")
             for pbx in self.model.channels:
@@ -106,9 +106,8 @@ class ViewPrint(View):
                     chan = channels[channel]
                     self.printchannel(chan)
         if self.model.calls:
-            printf(" CALLS\n")
             for call in self.model.calls:
-                printf("  CALL\n")
+                printf(" CALL\n")
                 for chan in call:
                     self.printchannel(chan)
         if self.model.bridges:
@@ -116,7 +115,6 @@ class ViewPrint(View):
             for pbx in self.model.bridges:
                 bridges = self.model.bridges[pbx]
                 for conference in bridges:
-                    printf("   %s\n", conference)
                     bridge = bridges[conference]
                     for uniqueid in bridge:
                         chan = bridge[uniqueid]
@@ -124,7 +122,6 @@ class ViewPrint(View):
         if self.model.trunks:
             printf(" TRUNKS\n")
             for sipcallid in self.model.trunks:
-                printf("  %s\n", sipcallid)
                 chan = self.model.trunks[sipcallid]
                 self.printchannel(chan)
         if self.model.numbers:
@@ -133,4 +130,4 @@ class ViewPrint(View):
                 numbers = self.model.numbers[pbx]
                 for channel in numbers:
                     calleridnum = numbers[channel]
-                    self.printline("    ", pbx, "", channel, calleridnum, "", "", "", "")
+                    self.printline("    ", pbx, "", channel, calleridnum, "", "", "", "", "")
