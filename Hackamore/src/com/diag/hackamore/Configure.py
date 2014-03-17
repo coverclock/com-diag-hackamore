@@ -9,6 +9,18 @@ import Credentials
 import Socket
 
 def servers(logger = None):
+    """
+    Parse the .com_diag_hackamore file for the a list of servers in the form
+    of keyword=value pairs with variable names COM_DIAG_HACKAMORE_NAMEn (the
+    human-readable PBX name), COM_DIAG_HACKAMORE_SERVERn (the PBX IP address,
+    host name, or domain name, which defaults ot the local host),
+    COM_DIAG_HACKAMORE_PORTn (the AMI port number which defaults to the standard
+    AMI port), COM_DIAG_HACKAMORE_USERNAMEn (the authentication user name from
+    /etc/asterisk/manager.conf), and COM_DIAG_HACKAMORE_SECRETn (the
+    authentication secret or password from /etc/asterisk_manager.conf), where
+    "n" starts with "1" and increments for successive PBXes.
+    @return a list of Sources each of which is an unopened Socket.
+    """
     logger = Logger.logger() if logger == None else logger
     sources = [ ]
     prefix = "COM_DIAG_HACKAMORE_"
