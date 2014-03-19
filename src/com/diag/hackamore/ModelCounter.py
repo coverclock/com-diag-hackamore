@@ -99,7 +99,7 @@ class ModelCounter(Model):
     def musicoffhold(self, pbx, uniqueid):
         self.counter[Event.STOP] = self.counter[Event.STOP] + 1
 
-    def newcallerid(self, pbx, uniqueid, calleridnum):
+    def newcallerid(self, pbx, uniqueid, channel, calleridnum):
         self.counter[Event.NEWCALLERID] = self.counter[Event.NEWCALLERID] + 1
 
     def softhanguprequest(self, pbx, uniqueid, cause):
