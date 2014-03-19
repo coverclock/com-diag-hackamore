@@ -107,7 +107,7 @@ class Server(threading.Thread):
 class Test(unittest.TestCase):
 
     def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
+        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING if "TERM" in os.environ else logging.DEBUG)
 
     def tearDown(self):
         pass
