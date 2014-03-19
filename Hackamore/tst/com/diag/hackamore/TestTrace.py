@@ -457,7 +457,7 @@ class Test(unittest.TestCase):
             self.assertTrue(event[com.diag.hackamore.Event.TIME])
             if com.diag.hackamore.Event.END in event:
                 break
-        self.assertEquals(events, 235) # 234 manifold events, 1 manifold end
+        self.assertEquals(events, 253) # 252 manifold events, 1 manifold end
         self.assertTrue(source.close())
         os.remove(trace)
 
