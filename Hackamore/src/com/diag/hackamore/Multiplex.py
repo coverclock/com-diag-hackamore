@@ -31,7 +31,8 @@ class Multiplex:
     def __init__(self, logger = None):
         self.logger = Logger.logger() if logger == None else logger
         self.sources = { }
-        
+        self.effective = 0.0
+
     def __del__(self):
         pass
 
@@ -123,3 +124,6 @@ class Multiplex:
                     message = Event(event, source.logger)
                     yield message
             effective = 0.0 if active else timeout
+            if effective > self.effective:
+                self.logger.debug("Multiplex.multiplex: WAITING. %s", str(self))
+            self.effective = effective
