@@ -11,6 +11,14 @@ TRUNK = 3
 
 ROLE = ( "IDLE", "CALLING", "CALLED", "TRUNK" )
 
+IDLE = 0
+DIALING = 1
+HUNGUP = 2
+CAUSED = 3
+HELD = 4
+
+ACTIVITY = ( "IDLE", "DIALING", "HUNGUP", "CAUSED", "HELD" )
+
 #
 # PRIVATE
 #
@@ -47,12 +55,13 @@ class Channel():
         self.channelstatedesc = channelstatedesc
         self.role = IDLE
         self.call = None
+        self.activity = IDLE
             
     def __del__(self):
         pass
 
     def __repr__(self):
-        return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.calleridnum) + "," + str(self.sipcallid) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + ")"
+        return "Channel(" + str(self.pbx) + "," + str(self.uniqueid) + "," + str(self.channel) + "," + str(self.calleridnum) + "," + str(self.sipcallid) + "," + str(self.conference) + "," + str(self.channelstatedesc) + "," + str(ROLE[self.role]) + "," + str(ROLE[self.activity]) + ")"
 
     #
     # PUBLIC
@@ -142,3 +151,33 @@ class Channel():
         on.
         """
         self.conference = None
+
+    def held(self):
+        """
+        Place this channel on hold.
+        """
+        self.activity = HELD
+
+    def idled(self):
+        """
+        Take this channel off hold or otherwise make idle.
+        """
+        self.activity = IDLE
+
+    def dialing(self):
+        """
+        This channel is dialing.
+        """
+        self.activity = DIALING
+
+    def hungup(self):
+        """
+        This channel has requested to be hung up.
+        """
+        self.activity = HUNGUP
+
+    def caused(self):
+        """
+        This channel has been requested to be hung up because of a cause code.
+        """
+        self.activity = CAUSED

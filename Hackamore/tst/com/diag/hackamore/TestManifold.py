@@ -76,6 +76,11 @@ class Test(unittest.TestCase):
         self.assertTrue(model.counter[com.diag.hackamore.Event.NEWSTATE])
         self.assertTrue(model.counter[com.diag.hackamore.Event.RENAME])
         self.assertTrue(model.counter[com.diag.hackamore.Event.SIPCALLID])    
+        self.assertTrue(model.counter[com.diag.hackamore.Event.HANGUPREQUEST])    
+        self.assertTrue(model.counter[com.diag.hackamore.Event.START])    
+        self.assertTrue(model.counter[com.diag.hackamore.Event.STOP])    
+        self.assertTrue(model.counter[com.diag.hackamore.Event.NEWCALLERID])    
+        self.assertTrue(model.counter[com.diag.hackamore.Event.SOFTHANGUPREQUEST])    
 
 if __name__ == "__main__":
     unittest.main()

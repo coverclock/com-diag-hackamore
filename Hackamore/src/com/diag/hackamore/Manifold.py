@@ -12,7 +12,7 @@ from stdio import fprintf
 class Manifold:
     """
     A Manifold maps each Event to the individual functions calls in a Model
-    and View. There may be more than one kind of Manifold, each kind handles
+    and View. There may be more than one kind of Manifold, each kind handling
     the specific kinds of Models and Views for which it was designed.
     """
 
@@ -41,10 +41,14 @@ class Manifold:
         self.table[Event.DIAL]              = self.dial
         self.table[Event.END]               = self.end
         self.table[Event.HANGUP]            = self.hangup
+        self.table[Event.HANGUPREQUEST]     = self.hanguprequest
         self.table[Event.LOCALBRIDGE]       = self.localbridge
+        self.table[Event.MUSICONHOLD]       = self.musiconhold
+        self.table[Event.NEWCALLERID]       = self.newcallerid
         self.table[Event.NEWCHANNEL]        = self.newchannel
         self.table[Event.NEWSTATE]          = self.newstate
         self.table[Event.RENAME]            = self.rename
+        self.table[Event.SOFTHANGUPREQUEST] = self.softhanguprequest
         self.table[Event.VARSET]            = self.varset
 
     def __del__(self):
@@ -192,7 +196,22 @@ class Manifold:
             self.view.hangup(pbx, uniqueid, channel)
             self.model.hangup(pbx, uniqueid)
             self.view.display()
-    
+
+    def hanguprequest(self, event):
+        if not Event.SOURCE in event:
+            pass
+        elif not Event.CHANNEL in event:
+            pass
+        elif not Event.UNIQUEIDLC in event:
+            pass
+        else:
+            pbx = event[Event.SOURCE]
+            channel = event[Event.CHANNEL]
+            uniqueid = event[Event.UNIQUEIDLC]
+            self.view.hanguprequest(pbx, uniqueid, channel)
+            self.model.hanguprequest(pbx, uniqueid)
+            self.view.display()
+
     def localbridge(self, event):
         if not Event.SOURCE in event:
             pass
@@ -213,7 +232,50 @@ class Manifold:
             self.view.localbridge(pbx, uniqueid1, channel1, uniqueid2, channel2)
             self.model.localbridge(pbx, uniqueid1, uniqueid2)
             self.view.display()
-    
+
+    def musiconhold(self, event):
+        if not Event.SOURCE in event:
+            pass
+        elif not Event.CHANNEL in event:
+            pass
+        elif not Event.STATE in event:
+            pass
+        elif not Event.UNIQUEIDUC in event:
+            pass
+        else:
+            pbx = event[Event.SOURCE]
+            channel = event[Event.CHANNEL]
+            state = event[Event.STATE]
+            uniqueid  = event[Event.UNIQUEIDUC]
+            if state == Event.START:
+                self.view.musiconhold(pbx, uniqueid, channel)
+                self.model.musiconhold(pbx, uniqueid)
+                self.view.display()
+            elif state == Event.STOP:
+                self.view.musicoffhold(pbx, uniqueid, channel)
+                self.model.musicoffhold(pbx, uniqueid)
+                self.view.display()
+            else:
+                pass
+
+    def newcallerid(self, event):
+        if not Event.SOURCE in event:
+            pass
+        elif not Event.CALLERIDNUM in event:
+            pass
+        elif not Event.CHANNEL in event:
+            pass
+        elif not Event.UNIQUEIDLC in event:
+            pass
+        else:
+            pbx = event[Event.SOURCE]
+            calleridnum = event[Event.CALLERIDNUM]
+            channel = event[Event.CHANNEL]
+            uniqueid = event[Event.UNIQUEIDLC]
+            self.view.newcallerid(pbx, uniqueid, channel, calleridnum)
+            self.model.newcallerid(pbx, uniqueid, channel, calleridnum)
+            self.view.display()
+
     def newchannel(self, event):
         if not Event.SOURCE in event:
             pass
@@ -275,6 +337,24 @@ class Manifold:
             uniqueid = event[Event.UNIQUEIDLC]
             self.view.rename(pbx, uniqueid, channel, newname)
             self.model.rename(pbx, uniqueid, newname)
+            self.view.display()
+
+    def softhanguprequest(self, event):
+        if not Event.SOURCE in event:
+            pass
+        elif not Event.CAUSE in event:
+            pass
+        elif not Event.CHANNEL in event:
+            pass
+        elif not Event.UNIQUEIDLC in event:
+            pass
+        else:
+            pbx = event[Event.SOURCE]
+            cause = event[Event.CAUSE]
+            channel = event[Event.CHANNEL]
+            uniqueid = event[Event.UNIQUEIDLC]
+            self.view.softhanguprequest(pbx, uniqueid, channel, cause)
+            self.model.softhanguprequest(pbx, uniqueid, cause)
             self.view.display()
 
     def varset(self, event):

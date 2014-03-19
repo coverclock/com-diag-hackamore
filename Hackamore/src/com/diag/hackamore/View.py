@@ -81,3 +81,18 @@ class View:
 
     def display(self):
         pass
+
+    def hanguprequest(self, pbx, uniqueid, channel):
+        pass
+
+    def musiconhold(self, pbx, uniqueid, channel):
+        pass
+
+    def musicoffhold(self, pbx, uniqueid, channel):
+        pass
+
+    def newcallerid(self, pbx, uniqueid, channel, calleridnum):
+        pass
+
+    def softhanguprequest(self, pbx, uniqueid, channel, cause):
+        pass

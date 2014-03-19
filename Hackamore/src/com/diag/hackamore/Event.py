@@ -6,7 +6,7 @@ Licensed under the terms in the README.txt file.
 
 import Logger
 
-# These symbols are keywords specific to the Hackamore application.
+# These symbols are keywords specific to this framework.
 
 END = "END"
 SOURCE = "SOURCE"
@@ -18,6 +18,7 @@ BRIDGE = "Bridge"
 CALLERID1 = "CallerID1"
 CALLERID2 = "CallerID2"
 CALLERIDNUM = "CallerIDNum"
+CAUSE = "Cause"
 CHANNEL = "Channel"
 CHANNEL1 = "Channel1"
 CHANNEL2 = "Channel2"
@@ -34,6 +35,7 @@ EVENT = "Event"
 MESSAGE = "Message"
 NEWNAME = "Newname"
 RESPONSE = "Response"
+STATE = "State"
 SUBEVENT = "SubEvent"
 UNIQUEID1 = "Uniqueid1"
 UNIQUEID2 = "Uniqueid2"
@@ -51,11 +53,17 @@ DIAL = "Dial"
 ERROR = "Error"
 GOODBYE = "Goodbye"
 HANGUP = "Hangup"
+HANGUPREQUEST = "HangupRequest"
 LOCALBRIDGE = "LocalBridge"
+MUSICONHOLD = "MusicOnHold"
+NEWCALLERID = "NewCallerid"
 NEWCHANNEL = "Newchannel"
 NEWSTATE = "Newstate"
 RENAME = "Rename"
 SIPCALLID = "SIPCALLID"
+SOFTHANGUPREQUEST = "SoftHangupRequest"
+START = "Start"
+STOP = "Stop"
 SUCCESS = "Success"
 
 class Event:

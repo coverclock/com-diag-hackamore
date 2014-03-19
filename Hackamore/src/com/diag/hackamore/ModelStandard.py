@@ -102,6 +102,7 @@ class ModelStandard(Model):
             channels = self.channels[pbx]
             if uniqueid1 in channels:
                 chan1 = channels[uniqueid1]
+                chan1.idled()
                 if uniqueid2 in channels:
                     chan2 = channels[uniqueid2]
                     self.merge(chan1, chan2)
@@ -151,6 +152,7 @@ class ModelStandard(Model):
         if uniqueid in channels:
             chan = channels[uniqueid]
             chan.calling()
+            chan.dialing()
             if destuniqueid in channels:
                 dest = channels[destuniqueid]
                 dest.called()
@@ -234,3 +236,42 @@ class ModelStandard(Model):
                     chan.trunk()
                     dest.trunk()
                     self.merge(chan, dest)
+
+    def hanguprequest(self, pbx, uniqueid):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.hungup()
+
+    def musiconhold(self, pbx, uniqueid):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.held()
+
+    def musicoffhold(self, pbx, uniqueid):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.idled()
+
+    def newcallerid(self, pbx, uniqueid, channel, calleridnum):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.dial(calleridnum)
+                if not pbx in self.numbers:
+                    self.numbers[pbx] = { }
+                numbers = self.numbers[pbx]
+                numbers[channel] = calleridnum
+
+    def softhanguprequest(self, pbx, uniqueid, cause):
+        if pbx in self.channels:
+            channels = self.channels[pbx]
+            if uniqueid in channels:
+                chan = channels[uniqueid]
+                chan.caused()
