@@ -76,7 +76,7 @@ class Server(threading.Thread):
             self.ready.notifyAll()
         producers = [ ]
         while self.limit > 0:
-            sock2, farend = sock.accept()
+            sock2 = sock.accept()[0]
             producer = Producer(sock2, TYPESCRIPT)
             producer.start()
             producers.append(producer)

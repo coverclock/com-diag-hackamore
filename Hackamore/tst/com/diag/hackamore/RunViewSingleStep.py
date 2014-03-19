@@ -4,23 +4,16 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import unittest
-import logging
 import socket
 import threading
 import time
-import os
 
-import com.diag.hackamore.Logger
 import com.diag.hackamore.Socket
 import com.diag.hackamore.ModelStandard
-import com.diag.hackamore.ViewPrint
-import com.diag.hackamore.ViewCurses
+import com.diag.hackamore.ViewSingleStep
 import com.diag.hackamore.Manifold
 import com.diag.hackamore.Multiplex
 import com.diag.hackamore.Controller
-
-from com.diag.hackamore.stdio import printf
 
 from Parameters import SERVER
 from Parameters import USERNAME
@@ -104,41 +97,27 @@ class Server(threading.Thread):
             producers.remove(producer)
         sock.close()
 
-class Test(unittest.TestCase):
-
-    def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING)
-
-    def tearDown(self):
-        pass
-
-    def test010View(self):
+def main():
         global address
         global port
         global ready
-        if "TERM" in os.environ:
-            printf("TERM=%s\n", os.environ["TERM"])
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, delay = 0.01)
-        self.assertIsNotNone(thread)
+        thread = Server(TYPESCRIPT)
         thread.start()
         with ready:
             while port == 0:
                 ready.wait()
         source = com.diag.hackamore.Socket.Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
-        self.assertIsNotNone(source)
         sources = [ source ]
         model = com.diag.hackamore.ModelStandard.ModelStandard()
-        view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
+        view = com.diag.hackamore.ViewSingleStep.ViewSingleStep(model)
         manifold = com.diag.hackamore.Manifold.Manifold(model, view)
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
-        self.assertEquals(len(sources), 1)
         controller.loop(sources, sources)
-        self.assertEquals(len(sources), 1)
         thread.join()
 
 if __name__ == "__main__":
-    unittest.main()
+    main()
