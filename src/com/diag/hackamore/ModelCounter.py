@@ -35,6 +35,11 @@ class ModelCounter(Model):
         self.counter[Event.NEWSTATE] = 0
         self.counter[Event.RENAME] = 0
         self.counter[Event.SIPCALLID] = 0
+        self.counter[Event.HANGUPREQUEST] = 0
+        self.counter[Event.START] = 0
+        self.counter[Event.STOP] = 0
+        self.counter[Event.NEWCALLERID] = 0
+        self.counter[Event.SOFTHANGUPREQUEST] = 0
 
     def __del__(self):
         pass
@@ -84,3 +89,18 @@ class ModelCounter(Model):
 
     def sipcallid(self, pbx, uniqueid, value):
         self.counter[Event.SIPCALLID] = self.counter[Event.SIPCALLID] + 1
+
+    def hanguprequest(self, pbx, uniqueid):
+        self.counter[Event.HANGUPREQUEST] = self.counter[Event.HANGUPREQUEST] + 1
+
+    def musiconhold(self, pbx, uniqueid):
+        self.counter[Event.START] = self.counter[Event.START] + 1
+
+    def musicoffhold(self, pbx, uniqueid):
+        self.counter[Event.STOP] = self.counter[Event.STOP] + 1
+
+    def newcallerid(self, pbx, uniqueid, calleridnum):
+        self.counter[Event.NEWCALLERID] = self.counter[Event.NEWCALLERID] + 1
+
+    def softhanguprequest(self, pbx, uniqueid, cause):
+        self.counter[Event.SOFTHANGUPREQUEST] = self.counter[Event.SOFTHANGUPREQUEST] + 1

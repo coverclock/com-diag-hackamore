@@ -81,3 +81,19 @@ class Model:
 
     def sipcallid(self, pbx, uniqueid, value):
         pass
+
+    def hanguprequest(self, pbx, uniqueid):
+        pass
+
+    def musiconhold(self, pbx, uniqueid):
+        pass
+
+    def musicoffhold(self, pbx, uniqueid):
+        pass
+
+    def newcallerid(self, pbx, uniqueid, channel, calleridnum):
+        pass
+
+    def softhanguprequest(self, pbx, uniqueid, cause):
+        pass
+
