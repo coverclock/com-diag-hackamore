@@ -105,21 +105,45 @@ class Multiplex:
         in the underlying platform), service any pending I/O on that Source,
         and then return the next available Event from that same list of Sources.
         Because Sources may have a backlog of unconsumed Events when they are
-        terminated (for Sockets, when the far end closes the Socket), Sources
-        should not be closed until the END Event is consumed. The END Event is
-        automatically placed at the end of the queue of unconsumed Events when
-        the far end closes the Socket.
+        terminated (for Sockets, when the far end closes the underlying platform
+        socket), Sources should not be closed on the near end until the END
+        Event is consumed. The END Event is automatically placed at the end of
+        the queue of unconsumed Events when the far end closes the Socket. Note
+        that this is a generator function whose state is maintained between
+        its yielding of results to the caller.
         @param timeout is an optional select(2) timeout value in seconds.
         """
+        # Note that the relative ordering of Events between Sources cannot
+        # be guaranteed. Even if we could guarantee that we consumed all
+        # Events in the same order that they were given to us, latency in
+        # each producer Source itself prevents any strict ordering of
+        # Events in real-time. That's not a problem for an Event stream from
+        # a single Source (which arrives serialized over a single Socket)
+        # but is a problem when we are trying to draw conclusions about
+        # how multiple Sources interact with one another (for example in
+        # the setup of inter-PBX SIP trunks). I don't believe this is
+        # solvable in the general case. Hence our implementation of the
+        # model must be robust enough to at least not go off the rails if
+        # inter-PBX Events sometimes fail to correlate. 
         candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]
         effective = 0.0
         while candidates:
+            # Service all pending I/O on every open Socket. Our goal here
+            # is to consume data in the platform buffers as quickly as possible.
             for source in select.select(candidates, NONE, NONE, effective)[0]:
                 source.service()
             active = False
+            # Process queued events on every open socket. Should we process all
+            # Events on each Source before moving onto the next one, or should
+            # we round robin? There's probably no answer that will be right
+            # every time. The code below does the former. Mostly we want to
+            # stimulate the Model with each Event as quickly as possible
+            # regardless of the Source.
             for source in candidates:
-                event = source.get(self)
-                if event != None:
+                while True:
+                    event = source.get(self)
+                    if event == None:
+                        break
                     active = True
                     message = Event(event, source.logger)
                     yield message
