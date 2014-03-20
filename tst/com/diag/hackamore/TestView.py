@@ -121,7 +121,7 @@ class Test(unittest.TestCase):
         address = ""
         port = 0
         ready = threading.Condition()
-        thread = Server(TYPESCRIPT, delay = 0.01)
+        thread = Server(TYPESCRIPT, delay = 0.01 if "TERM" in os.environ else 0.0)
         self.assertIsNotNone(thread)
         thread.start()
         with ready:
