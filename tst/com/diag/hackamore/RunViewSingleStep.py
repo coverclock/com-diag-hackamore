@@ -8,12 +8,12 @@ import socket
 import threading
 import time
 
-import com.diag.hackamore.Socket
-import com.diag.hackamore.ModelStandard
-import com.diag.hackamore.ViewSingleStep
-import com.diag.hackamore.Manifold
-import com.diag.hackamore.Multiplex
-import com.diag.hackamore.Controller
+from com.diag.hackamore.Socket import Socket
+from com.diag.hackamore.ModelStandard import ModelStandard
+from com.diag.hackamore.ViewSingleStep import ViewSingleStep
+from com.diag.hackamore.Manifold import Manifold
+from com.diag.hackamore.Multiplex import Multiplex
+from com.diag.hackamore.Controller import Controller
 
 from Parameters import SERVER
 from Parameters import USERNAME
@@ -109,13 +109,13 @@ def main():
         with ready:
             while port == 0:
                 ready.wait()
-        source = com.diag.hackamore.Socket.Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
+        source = Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
         sources = [ source ]
-        model = com.diag.hackamore.ModelStandard.ModelStandard()
-        view = com.diag.hackamore.ViewSingleStep.ViewSingleStep(model)
-        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
-        multiplex = com.diag.hackamore.Multiplex.Multiplex()
-        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
+        model = ModelStandard()
+        view = ViewSingleStep(model)
+        manifold = Manifold(model, view)
+        multiplex = Multiplex()
+        controller = Controller(multiplex, manifold)
         controller.loop(sources, sources)
         thread.join()
 
