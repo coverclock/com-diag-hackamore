@@ -17,7 +17,8 @@ import Manifold
 import Multiplex
 
 def body(manifold, inputs, outputs, logger = None):
-    logger = Logger.logger() if logger == None else logger
+    if logger == None:
+        logger = Logger.logger()
     multiplex = Multiplex.Multiplex()
     controller = Controller.Controller(multiplex, manifold)
     logger.info("Main.body: STARTING.")

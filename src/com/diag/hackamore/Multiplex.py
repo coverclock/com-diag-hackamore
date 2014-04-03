@@ -11,7 +11,7 @@ import Logger
 from Event import Event
 
 SELECT = 1.0
-NONE = ( )
+EMPTY = ( )
 
 class Multiplex:
     """
@@ -95,7 +95,7 @@ class Multiplex:
         @param timeout is an optional select(2) timeout value in seconds.
         """
         candidates = [ candidate for candidate in self.sources.values() if candidate.fileno() >= 0 ]
-        for source in select.select(candidates, NONE, NONE, timeout)[0]:
+        for source in select.select(candidates, EMPTY, EMPTY, timeout)[0]:
             source.service()
     
     def multiplex(self, timeout = SELECT):
@@ -130,7 +130,7 @@ class Multiplex:
         while candidates:
             # Service all pending I/O on every open Socket. Our goal here
             # is to consume data in the platform buffers as quickly as possible.
-            for source in select.select(candidates, NONE, NONE, effective)[0]:
+            for source in select.select(candidates, EMPTY, EMPTY, effective)[0]:
                 source.service()
             active = False
             # Process queued events on every open socket. Should we process all
