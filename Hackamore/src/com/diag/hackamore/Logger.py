@@ -10,8 +10,8 @@ import threading
 NAME = "com.diag.hackamore"
 LEVEL = logging.INFO
 
-defaultlogger = None
-mutex = threading.Condition()
+__defaultlogger__ = None
+__mutex__ = threading.Condition()
 
 def logger(name = NAME, level = LEVEL, handler = None):
     """
@@ -23,11 +23,13 @@ def logger(name = NAME, level = LEVEL, handler = None):
     @param handler is the initial logging handler if the Logger is created.
     @return a Logger.
     """
-    global defaultlogger
-    with mutex:
-        if defaultlogger == None:
-            defaultlogger = logging.getLogger(name)
-            defaultlogger.setLevel(level)
-            handler = logging.StreamHandler() if handler == None else handler
-            defaultlogger.addHandler(handler)
-        return defaultlogger
+    global __defaultlogger__
+    global __mutex__
+    with __mutex__:
+        if __defaultlogger__ == None:
+            __defaultlogger__ = logging.getLogger(name)
+            __defaultlogger__.setLevel(level)
+            if handler == None:
+                handler = logging.StreamHandler()
+            __defaultlogger__.addHandler(handler)
+        return __defaultlogger__

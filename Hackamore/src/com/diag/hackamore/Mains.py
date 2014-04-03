@@ -45,7 +45,8 @@ class Producer(threading.Thread):
         self.logger.info("Producer.run: STOPPING. %s", str(self))
 
 def body(manifold, inputs, outputs, logger = None):
-    logger = Logger.logger() if logger == None else logger
+    if logger == None:
+        logger = Logger.logger()
     serializer = Serializer.Serializer(manifold)
     producers = [ ]
     while inputs:
