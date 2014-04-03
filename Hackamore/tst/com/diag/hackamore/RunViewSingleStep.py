@@ -21,10 +21,6 @@ from Parameters import SECRET
 from Parameters import LOCALHOST
 from Parameters import TYPESCRIPT
 
-address = None
-port = None
-ready = None
-
 READLINE = 512
 RECV = 512
 LIMIT = 3
@@ -73,18 +69,18 @@ class Server(threading.Thread):
         self.path = path
         self.limit = limit
         self.delay = delay
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
     
     def run(self):
-        global address
-        global port
-        global ready
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            ready.notifyAll()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            self.ready.notifyAll()
         producers = [ ]
         while self.limit > 0:
             sock2 = sock.accept()[0]
@@ -98,18 +94,12 @@ class Server(threading.Thread):
         sock.close()
 
 def main():
-        global address
-        global port
-        global ready
-        address = ""
-        port = 0
-        ready = threading.Condition()
         thread = Server(TYPESCRIPT)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = Socket(SERVER, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = Socket(SERVER, USERNAME, SECRET, LOCALHOST, thread.port)
         sources = [ source ]
         model = ModelStandard()
         view = ViewSingleStep(model)

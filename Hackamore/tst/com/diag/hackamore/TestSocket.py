@@ -25,97 +25,101 @@ from Parameters import LOCALHOST
 from Parameters import SAMPLE
 from Parameters import TYPESCRIPT
 
-address = ""
-port = 0
-ready = threading.Condition()
-
-proceed = False
-complete = False
-done = threading.Condition()
-
 class Refuser(threading.Thread):
     
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.complete = False
+        self.done = threading.Condition()
+    
     def run(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
-        with ready:
-            address, port2 = sock.getsockname()
+        with self.ready:
+            self.address, port2 = sock.getsockname()
             printf("Refuser=%s\n", str(port2))
             sock.close()
-            port = port2
-            ready.notifyAll()
-        with done:
-            while not complete:
-                done.wait()
+            self.port = port2
+            self.ready.notifyAll()
+        with self.done:
+            while not self.complete:
+                self.done.wait()
 
 class Binder(threading.Thread):
     
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.complete = False
+        self.done = threading.Condition()
+    
     def run(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
-        with ready:
-            address, port = sock.getsockname()
-            printf("Binder=%s\n", str(port))
-            ready.notifyAll()
-        with done:
-            while not complete:
-                done.wait()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            printf("Binder=%s\n", str(self.port))
+            self.ready.notifyAll()
+        with self.done:
+            while not self.complete:
+                self.done.wait()
         sock.close()
 
 class Listener(threading.Thread):
     
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.complete = False
+        self.done = threading.Condition()
+    
     def run(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            printf("Listener=%s\n", str(port))
-            ready.notifyAll()
-        with done:
-            while not complete:
-                done.wait()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            printf("Listener=%s\n", str(self.port))
+            self.ready.notifyAll()
+        with self.done:
+            while not self.complete:
+                self.done.wait()
         sock.close()
 
 class Accepter(threading.Thread):
     
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.complete = False
+        self.done = threading.Condition()
+    
     def run(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            printf("Accepter=%s\n", str(port))
-            ready.notifyAll()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            printf("Accepter=%s\n", str(self.port))
+            self.ready.notifyAll()
         sock2, client = sock.accept()
         printf("Requester=%s\n", str(client))
-        with done:
-            while not complete:
-                done.wait()
+        with self.done:
+            while not self.complete:
+                self.done.wait()
         sock2.close()
         sock.close()
 
@@ -124,21 +128,21 @@ class Producer(threading.Thread):
     def __init__(self, path):
         threading.Thread.__init__(self)
         self.path = path
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.complete = False
+        self.done = threading.Condition()
     
     def run(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            printf("Producer=%s\n", str(port))
-            ready.notifyAll()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            printf("Producer=%s\n", str(self.port))
+            self.ready.notifyAll()
         sock2, consumer = sock.accept()
         printf("Consumer=%s\n", str(consumer))
         stream = open(self.path, "r")
@@ -152,9 +156,9 @@ class Producer(threading.Thread):
                 else:
                     sock2.sendall(line)
         sock2.shutdown(socket.SHUT_WR)
-        with done:
-            while not complete:
-                done.wait()
+        with self.done:
+            while not self.complete:
+                self.done.wait()
         stream.close()
         sock2.close()
         sock.close()
@@ -164,32 +168,32 @@ class Server(threading.Thread):
     def __init__(self, path):
         threading.Thread.__init__(self)
         self.path = path
+        self.address = None
+        self.port = None
+        self.ready = threading.Condition()
+        self.proceed = False
+        self.complete = False
+        self.done = threading.Condition()
     
     def run(self):
-        global address
-        global port
-        global ready
-        global proceed
-        global complete
-        global done
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(("", 0))
         sock.listen(socket.SOMAXCONN)
-        with ready:
-            address, port = sock.getsockname()
-            printf("Server=%s\n", str(port))
-            ready.notifyAll()
+        with self.ready:
+            self.address, self.port = sock.getsockname()
+            printf("Server=%s\n", str(self.port))
+            self.ready.notifyAll()
         sock2 = None
         while True:
-            with done:
-                while not proceed and not complete:
-                    done.wait()
+            with self.done:
+                while not self.proceed and not self.complete:
+                    self.done.wait()
                 if sock2 != None:
                     sock2.close()
-                if complete:
+                if self.complete:
                     break
-                proceed = False
+                self.proceed = False
             sock2, consumer = sock.accept()
             printf("Client=%s\n", str(consumer))
             stream = open(self.path, "r")
@@ -312,27 +316,20 @@ class Test(unittest.TestCase):
         self.assertIsNone(source.socket)
 
     def test030Refuser(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Refuser()
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port, None)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket, None)
         self.assertFalse(source.open())
         self.assertIsNone(source.socket)
@@ -346,33 +343,26 @@ class Test(unittest.TestCase):
             pass
         self.assertFalse(source.close())
         self.assertIsNone(source.socket)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
         
     def test040Binder(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Binder()
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host, None)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port, None)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket, None)
         self.assertFalse(source.open())
         self.assertIsNone(source.socket, None)
@@ -386,33 +376,26 @@ class Test(unittest.TestCase):
             pass
         self.assertFalse(source.close())
         self.assertIsNone(source.socket, None)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
         
     def test050Listener(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Listener()
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source, None)
         self.assertIsNotNone(source.pbx, None)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host, None)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port, None)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket, None)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
@@ -428,33 +411,26 @@ class Test(unittest.TestCase):
         self.assertTrue(source.close())
         self.assertFalse(source.close())
         self.assertIsNone(source.socket)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
 
     def test060Accepter(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Accepter()
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
         self.assertFalse(source.open())
@@ -470,33 +446,26 @@ class Test(unittest.TestCase):
         self.assertTrue(source.close())
         self.assertFalse(source.close())
         self.assertIsNone(source.socket)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
 
     def test070Read(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Producer(SAMPLE)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
         self.assertIsNotNone(source.socket)
@@ -543,33 +512,26 @@ class Test(unittest.TestCase):
                 pass
         self.assertTrue(source.close())
         self.assertIsNone(source.socket)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
         
     def test080Get(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
-        port = 0
-        complete = False
         thread = Producer(SAMPLE)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
         self.assertIsNotNone(source.socket)
@@ -642,36 +604,29 @@ class Test(unittest.TestCase):
         self.assertEquals(events, 5)
         self.assertTrue(source.close())
         self.assertIsNone(source.socket)
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
         
     def test085Service(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
-        port = 0
-        complete = False
         thread = Producer(SAMPLE)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertFalse(multiplex.active())
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
@@ -752,36 +707,29 @@ class Test(unittest.TestCase):
         self.assertTrue(multiplex.active())
         multiplex.unregister(source)
         self.assertFalse(multiplex.active())
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
     
     def test090Multiplex(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
-        port = 0
-        complete = False
         thread = Producer(SAMPLE)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertFalse(multiplex.active())
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
@@ -860,43 +808,34 @@ class Test(unittest.TestCase):
         self.assertTrue(multiplex.active())
         multiplex.unregister(source)
         self.assertFalse(multiplex.active())
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
         
     def test100Client(self):
-        global address
-        global port
-        global ready
-        global proceed
-        global complete
-        global done
         name = self.id()
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
-        port = 0
-        proceed = False
-        complete = False
         thread = Server(SAMPLE)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertFalse(multiplex.active())
         self.assertIsNone(source.socket)
-        with done:
-            proceed = True
-            done.notifyAll()
+        with thread.done:
+            thread.proceed = True
+            thread.done.notifyAll()
         self.assertTrue(source.open())
         self.assertIsNotNone(source.socket)
         self.assertFalse(multiplex.active())
@@ -972,9 +911,9 @@ class Test(unittest.TestCase):
         self.assertTrue(source.close())
         self.assertIsNone(source.socket)        
         self.assertTrue(multiplex.active())
-        with done:
-            proceed = True
-            done.notifyAll()
+        with thread.done:
+            thread.proceed = True
+            thread.done.notifyAll()
         self.assertTrue(source.open())
         self.assertIsNotNone(source.socket)
         self.assertTrue(multiplex.active())
@@ -1050,36 +989,29 @@ class Test(unittest.TestCase):
         self.assertTrue(multiplex.active())
         multiplex.unregister(source)
         self.assertFalse(multiplex.active())
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
     
     def test110Typescript(self):
-        global address
-        global port
-        global ready
-        global complete
-        global done
         name = self.id()
         multiplex = com.diag.hackamore.Multiplex.Multiplex()
         self.assertIsNotNone(multiplex)
         self.assertFalse(multiplex.active())
-        port = 0
-        complete = False
         thread = Producer(TYPESCRIPT)
         thread.start()
-        with ready:
-            while port == 0:
-                ready.wait()
-        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, port)
+        with thread.ready:
+            while thread.port == None:
+                thread.ready.wait()
+        source = com.diag.hackamore.Socket.Socket(name, USERNAME, SECRET, LOCALHOST, thread.port)
         self.assertIsNotNone(source)
         self.assertIsNotNone(source.pbx)
         self.assertEquals(source.pbx, name)
         self.assertIsNotNone(source.host)
         self.assertEquals(source.host, LOCALHOST)
         self.assertIsNotNone(source.port)
-        self.assertEquals(source.port, port)
+        self.assertEquals(source.port, thread.port)
         self.assertFalse(multiplex.active())
         self.assertIsNone(source.socket)
         self.assertTrue(source.open())
@@ -1108,9 +1040,9 @@ class Test(unittest.TestCase):
         self.assertTrue(multiplex.active())
         multiplex.unregister(source)
         self.assertFalse(multiplex.active())
-        with done:
-            complete = True
-            done.notifyAll()
+        with thread.done:
+            thread.complete = True
+            thread.done.notifyAll()
         thread.join()
 
 if __name__ == "__main__":
