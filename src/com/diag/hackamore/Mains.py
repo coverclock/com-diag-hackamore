@@ -37,12 +37,12 @@ class Producer(threading.Thread):
         return "Thread(" + threading.Thread.__repr__(self) + ").Producer()"
     
     def run(self):
-        self.logger.info("Producer.run: STARTING. %s", str(self))
+        self.logger.info("Mains.Producer.run: STARTING. %s", str(self))
         while self.inputs:
             self.controller.loop(self.inputs, self.outputs)
             time.sleep(2.0)
-            self.logger.info("Producer.run: RESTARTING. %s", str(self))
-        self.logger.info("Producer.run: STOPPING. %s", str(self))
+            self.logger.info("Mains.Producer.run: RESTARTING. %s", str(self))
+        self.logger.info("Mains.Producer.run: STOPPING. %s", str(self))
 
 def body(manifold, inputs, outputs, logger = None):
     if logger == None:
@@ -70,6 +70,7 @@ def body(manifold, inputs, outputs, logger = None):
                 producers.remove(producer)
                 for source in producer.outputs:
                     outputs.append(source)
+    serializer.shutdown()
 
 def main():
     logger = Logger.logger()
