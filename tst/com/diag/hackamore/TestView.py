@@ -97,7 +97,6 @@ class Server(threading.Thread):
             self.limit = self.limit - 1
         for producer in producers:
             producer.join()
-            producers.remove(producer)
         sock.close()
 
 class Test(unittest.TestCase):
