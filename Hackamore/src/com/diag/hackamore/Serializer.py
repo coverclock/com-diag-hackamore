@@ -48,10 +48,11 @@ class Processor(threading.Thread):
                 while not self.serializer.queue and not self.serializer.complete:
                     self.serializer.mutex.wait()
                 if self.serializer.complete:
+                    self.serializer.logger.info("Serializer.Processor.run: COMPLETE. %s", str(self))
                     break
                 event = self.serializer.queue.pop(0)
                 if self.serializer.logger.isEnabledFor(logging.DEBUG):
-                    self.serializer.logger.debug("Processor.run: DEQUEUE. %s", str(self))
+                    self.serializer.logger.debug("Serializer.Processor.run: DEQUEUE. %s", str(self))
                 self.serializer.manifold.process(event)
                 self.serializer.mutex.notifyAll()
 
@@ -85,10 +86,7 @@ class Serializer:
         self.processor.start()
 
     def __del__(self):
-        with self.mutex:
-            self.complete = True
-            self.mutex.notifyAll()
-        self.processor.join()
+        self.shutdown()
 
     def __repr__(self):
         return "Serializer(" + str(self.manifold) + "," + str(self.processor) + "," + str(self.backlog()) + ")"
@@ -139,3 +137,9 @@ class Serializer:
                 self.enqueue(event)
         else:
             pass
+
+    def shutdown(self):
+        with self.mutex:
+            self.complete = True
+            self.mutex.notifyAll()
+        self.processor.join()
