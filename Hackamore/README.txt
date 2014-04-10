@@ -79,7 +79,9 @@ in which Main is single threaded, multiplexes the AMI sockets using the
 select(2) system call, and updates a common model, and Mains is multi-threaded,
 processes each AMI socket from a different thread, and updates a common model
 by serializing access to it. Either should work, but the latter can leverage
-multi-core servers to keep up with higher transaction rates.
+multi-core servers to keep up with higher transaction rates. Run either main
+program from a W I D E terminal window that supports ANSI control sequences
+(an xterm works just fine).
 
 ----------------------------------------------------------------------
 
