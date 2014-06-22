@@ -23,7 +23,8 @@ DATESTAMP			=	$(shell date +%Y%m%d)
 
 ########## Locators
 
-SVN_URL				=	svn://graphite/$(PROJECT)/trunk/$(TITLE)
+SVN_REPO			=	svn://graphite/$(PROJECT)
+SVN_URL				=	$(SVN_REPO)/trunk/$(TITLE)
 HTTP_URL			=	http://www.diag.com/navigation/downloads/$(TITLE).html
 GIT_URL				=	https://github.com/coverclock/com-diag-$(PROJECT).git
 
@@ -94,6 +95,8 @@ pythonpath:
 
 ########## Housekeeping
 
+.PHONY:	commit dcommit push init
+
 commit:
 	git commit .
 
@@ -103,5 +106,7 @@ dcommit:
 push:
 	git push origin master
 
-origin:
+init:
+	git svn clone -s $(SVN_REPO)
+	git svn show-ignore > .gitignore
 	git remote add origin $(GIT_URL)
