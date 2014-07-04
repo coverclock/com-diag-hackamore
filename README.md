@@ -81,9 +81,9 @@ program from a W I D E terminal window that supports ANSI control sequences
 
 CONTACT
 
-Chip Overclock
-mailto:coverclock@diag.com
-Digital Aggregates Corporation
-3440 Youngfield Street, Suite 209
-Wheat Ridge CO 80033 USA
-http://www.diag.com
+    Chip Overclock
+    mailto:coverclock@diag.com
+    Digital Aggregates Corporation
+    3440 Youngfield Street, Suite 209
+    Wheat Ridge CO 80033 USA
+    http://www.diag.com
