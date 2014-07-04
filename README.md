@@ -1,7 +1,5 @@
 Copyright 2014 Digital Aggregates Corporation, Colorado, USA.
 
-----------------------------------------------------------------------
-
 LICENSE
 
 This application and its framework are free software; you can redistribute it
@@ -19,8 +17,6 @@ Place, Suite 330, Boston, MA  02111-1307  USA
 
 Alternative commercial licensing terms may be available from the copyright
 holder. Contact the copyright holder for more information.
-
-----------------------------------------------------------------------
 
 ABSTRACT
 
@@ -82,8 +78,6 @@ by serializing access to it. Either should work, but the latter can leverage
 multi-core servers to keep up with higher transaction rates. Run either main
 program from a W I D E terminal window that supports ANSI control sequences
 (an xterm works just fine).
-
-----------------------------------------------------------------------
 
 CONTACT
 
