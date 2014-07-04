@@ -1,3 +1,6 @@
+com-diag-hackamore
+==================
+
 Copyright 2014 Digital Aggregates Corporation, Colorado, USA.
 
 LICENSE
