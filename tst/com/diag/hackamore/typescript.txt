@@ -1,0 +1,3034 @@
+Action: Login
+Username: username
+Secret: secret
+
+Response: Success
+Message: Authentication accepted
+
+Event: FullyBooted
+Privilege: system,all
+Status: Fully Booted
+
+Event: Newchannel
+Privilege: call,all
+Channel: ANALOG/1-O00000006
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+AccountCode: 
+Exten: s
+Context: incoming_analog
+Uniqueid: 1389990149.26
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1, analog off hook call, context=incoming_analog, exten=s, channel=ANALOG/1-O00000006
+Uniqueid: 1389990149.26
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
+Extension: s
+Priority: 2
+Application: Verbose
+AppData: 1,Setting DYNAMIC_FEATURES: calleronhold#calleroffhold#callerstartthreeway
+Uniqueid: 1389990149.26
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
+Extension: s
+Priority: 3
+Application: Set
+AppData: __DYNAMIC_FEATURES=calleronhold#calleroffhold#callerstartthreeway
+Uniqueid: 1389990149.26
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-O00000006
+Variable: __DYNAMIC_FEATURES
+Value: calleronhold#calleroffhold#callerstartthreeway
+Uniqueid: 1389990149.26
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-O00000006
+Context: incoming_analog
+Extension: s
+Priority: 4
+Application: WaitExten
+AppData: 10
+Uniqueid: 1389990149.26
+
+Event: HangupRequest
+Privilege: call,all
+Channel: ANALOG/1-O00000006
+Uniqueid: 1389990149.26
+
+Event: SoftHangupRequest
+Privilege: call,all
+Channel: ANALOG/1-O00000006
+Uniqueid: 1389990149.26
+Cause: 16
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/1-O00000006
+ChannelState: 0
+ChannelStateDesc: Down
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 
+ConnectedLineName: 
+Uniqueid: 1389990149.26
+
+Event: Hangup
+Privilege: call,all
+Channel: ANALOG/1-O00000006
+Uniqueid: 1389990149.26
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: Newchannel
+Privilege: call,all
+Channel: SIP/US-00000008
+ChannelState: 0
+ChannelStateDesc: Down
+CallerIDNum: 601
+CallerIDName: 601
+AccountCode: 
+Exten: 301
+Context: us_incoming
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: SIPURI
+Value: sip:601@192.168.1.220:5060
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: SIPDOMAIN
+Value: rm
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: SIPCALLID
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
+Uniqueid: 1389990159.27
+
+Event: Newstate
+Privilege: call,all
+Channel: SIP/US-00000008
+ChannelState: 4
+ChannelStateDesc: Ring
+CallerIDNum: 601
+CallerIDName: 601
+ConnectedLineNum: 
+ConnectedLineName: 
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 1
+Application: Verbose
+AppData: 1, Dialing analog at 301
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 2
+Application: Verbose
+AppData: 1,Setting DYNAMIC_FEATURES: calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 3
+Application: Set
+AppData: __DYNAMIC_FEATURES=calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: __DYNAMIC_FEATURES
+Value: calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 4
+Application: Set
+AppData: did-header=
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: did-header
+Value: 
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 5
+Application: GotoIf
+AppData: 0?setdid:checkdnd
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 7
+Application: GotoIf
+AppData: 1?notdnd:dnd
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 8
+Application: Verbose
+AppData: Attempting to call ANALOG/301
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: us_incoming
+Extension: 301
+Priority: 9
+Application: Dial
+AppData: ANALOG/301/s,90,TtHh
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALSTATUS
+Value: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALEDPEERNUMBER
+Value: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALEDPEERNAME
+Value: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: ANSWEREDTIME
+Value: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALEDTIME
+Value: 
+Uniqueid: 1389990159.27
+
+Event: Newchannel
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+ChannelState: 1
+ChannelStateDesc: Rsrvd
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+AccountCode: 
+Exten: s
+Context: incoming_analog
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDPEERNUMBER
+Value: 301/s
+Uniqueid: 1389990159.28
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+ChannelState: 5
+ChannelStateDesc: Ringing
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 601
+ConnectedLineName: 601
+Uniqueid: 1389990159.28
+
+Event: Dial
+Privilege: call,all
+SubEvent: Begin
+Channel: SIP/US-00000008
+Destination: ANALOG/1-I00000007
+CallerIDNum: 601
+CallerIDName: 601
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+UniqueID: 1389990159.27
+DestUniqueID: 1389990159.28
+Dialstring: 301/s
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 601
+ConnectedLineName: 601
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALEDPEERNAME
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALEDPEERNUMBER
+Value: 301/s
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: Newstate
+Privilege: call,all
+Channel: SIP/US-00000008
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 601
+CallerIDName: 601
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990159.27
+
+Event: NewAccountCode
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+AccountCode: 
+OldAccountCode: 
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: SIP/US-00000008
+Channel2: ANALOG/1-I00000007
+Uniqueid1: 1389990159.27
+Uniqueid2: 1389990159.28
+CallerID1: 601
+CallerID2: 301
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPVTCALLID
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPVTCALLID
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
+Uniqueid: 1389990159.28
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990164.0431579136
+SentRTP: 40160
+SentPackets: 251
+SentOctets: 40160
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0006
+TheirLastSR: 0
+DLSR: 65517.1930 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 11238
+SequenceNumberCycles: 0
+IAJitter: 1
+LastSR: 3988.2415919104
+DLSR: 0.0020(sec)
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990169.0430448640
+SentRTP: 80160
+SentPackets: 501
+SentOctets: 80160
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 261364668
+DLSR: 4.9970 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 11488
+SequenceNumberCycles: 0
+IAJitter: 1
+LastSR: 3993.1879048192
+DLSR: 0.0020(sec)
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+Digit: #
+Direction: Received
+Begin: Yes
+End: No
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+Digit: #
+Direction: Received
+Begin: No
+End: Yes
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: SIP/US-00000008
+Channel2: ANALOG/1-I00000007
+Uniqueid1: 1389990159.27
+Uniqueid2: 1389990159.28
+CallerID1: 601
+CallerID2: 301
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: SIP/US-00000008
+Channel2: ANALOG/1-I00000007
+Uniqueid1: 1389990159.27
+Uniqueid2: 1389990159.28
+CallerID1: 601
+CallerID2: 301
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPVTCALLID
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPVTCALLID
+Value: 73f63cdc2862b8d608af883f67ee51e4@192.168.1.220:5060
+Uniqueid: 1389990159.28
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+Digit: 0
+Direction: Received
+Begin: Yes
+End: No
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+Digit: 0
+Direction: Received
+Begin: No
+End: Yes
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: SIP/US-00000008
+Channel2: ANALOG/1-I00000007
+Uniqueid1: 1389990159.27
+Uniqueid2: 1389990159.28
+CallerID1: 601
+CallerID2: 301
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DYNAMIC_PEERNAME
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DYNAMIC_PEERNAME
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DYNAMIC_FEATURENAME
+Value: calleestartthreeway
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DYNAMIC_FEATURENAME
+Value: calleestartthreeway
+Uniqueid: 1389990159.27
+
+Event: MusicOnHold
+Privilege: call,all
+State: Start
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+Class: default
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_EXTEN
+Value: 
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_CONTEXT
+Value: incoming_analog
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_PRIORITY
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1,Starting Three Way Calling Routine, Initiator is ANALOG/1-I00000007, Peer is SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 2
+Application: Set
+AppData: ChanName=ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: 1-I00000007
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 3
+Application: Set
+AppData: Tech=ANALOG
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: Tech
+Value: ANALOG
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: 
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 4
+Application: Set
+AppData: Chan=1-I00000007
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: Chan
+Value: 1-I00000007
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 5
+Application: Set
+AppData: INITIATING_EXTEN=1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: INITIATING_EXTEN
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 6
+Application: Set
+AppData: CONFNO=301
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: CONFNO
+Value: 301
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 7
+Application: Set
+AppData: __THREEWAY_PEER_A=SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: __THREEWAY_PEER_A
+Value: SIP/US-00000008
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 8
+Application: ChannelRedirect
+AppData: SIP/US-00000008,p1-s2-first-conference-user,301,1
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: CHANNELREDIRECT_STATUS
+Value: SUCCESS
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 9
+Application: Set
+AppData: CHANNEL(hangup_handler_push)=p1-s2-analog-hangup-handler,s,1
+Uniqueid: 1389990159.28
+
+Event: HangupHandlerPush
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990159.28
+Handler: p1-s2-analog-hangup-handler,s,1
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-start
+Extension: s
+Priority: 10
+Application: ChannelRedirect
+AppData: ANALOG/1-I00000007,p1-s2-collect,s,1
+Uniqueid: 1389990159.28
+
+Event: Newchannel
+Privilege: call,all
+Channel: AsyncGoto/ANALOG/1-I00000007
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: s
+Context: macro-p1-s2-start
+Uniqueid: 1389990173.29
+
+Event: Masquerade
+Privilege: call,all
+Clone: ANALOG/1-I00000007
+CloneState: Up
+Original: AsyncGoto/ANALOG/1-I00000007
+OriginalState: Up
+
+Event: Rename
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Newname: ANALOG/1-I00000007<MASQ>
+Uniqueid: 1389990159.28
+
+Event: Rename
+Privilege: call,all
+Channel: AsyncGoto/ANALOG/1-I00000007
+Newname: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+
+Event: Rename
+Privilege: call,all
+Channel: ANALOG/1-I00000007<MASQ>
+Newname: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 0
+Uniqueid: 1389990173.29
+
+Event: NewCallerid
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+Uniqueid: 1389990173.29
+CID-CallingPres: 0 (Presentation Allowed, Not Screened)
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
+Variable: CHANNELREDIRECT_STATUS
+Value: SUCCESS
+Uniqueid: 1389990159.28
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
+Variable: MACRO_DEPTH
+Value: 0
+Uniqueid: 1389990159.28
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1,Now prompting for new extension to connect to
+Uniqueid: 1389990173.29
+
+Event: MusicOnHold
+Privilege: call,all
+State: Stop
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+
+Event: Hangup
+Privilege: call,all
+Channel: AsyncGoto/ANALOG/1-I00000007<ZOMBIE>
+Uniqueid: 1389990159.28
+CallerIDNum: <unknown>
+CallerIDName: <unknown>
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 2
+Application: Read
+AppData: DEST,dial,24,i,3,3
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: READSTATUS
+Value: ERROR
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990159.27
+
+Event: Dial
+Privilege: call,all
+SubEvent: End
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+DialStatus: ANSWER
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-first-conference-user
+Extension: 301
+Priority: 1
+Application: Verbose
+AppData: 1,First Conference User: Dropping SIP/US-00000008 into Conference 301
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-first-conference-user
+Extension: 301
+Priority: 2
+Application: Set
+AppData: CHANNEL(hangup_handler_push)=p1-s2-first-user-hangup-handler,s,1
+Uniqueid: 1389990159.27
+
+Event: HangupHandlerPush
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+Handler: p1-s2-first-user-hangup-handler,s,1
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-first-conference-user
+Extension: 301
+Priority: 3
+Application: ConfBridge
+AppData: 301,three-way,user-profile
+Uniqueid: 1389990159.27
+
+Event: ConfbridgeStart
+Privilege: call,all
+Conference: 301
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990174.0432336896
+SentRTP: 120136
+SentPackets: 728
+SentOctets: 116480
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 261692322
+DLSR: 4.9970 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 11715
+SequenceNumberCycles: 0
+IAJitter: 0
+LastSR: 3998.1342177280
+DLSR: 0.0010(sec)
+RTT: 1(sec)
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: 5
+Direction: Received
+Begin: Yes
+End: No
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: 5
+Direction: Received
+Begin: No
+End: Yes
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: 2
+Direction: Received
+Begin: Yes
+End: No
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: 2
+Direction: Received
+Begin: No
+End: Yes
+
+Event: Newchannel
+Privilege: call,all
+Channel: Bridge/0x3c84cc-input
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: 
+Context: 
+Uniqueid: 1389990176.30
+
+Event: Newchannel
+Privilege: call,all
+Channel: Bridge/0x3c84cc-output
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: 
+Context: 
+Uniqueid: 1389990176.31
+
+Event: MusicOnHold
+Privilege: call,all
+State: Start
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+Class: default
+
+Event: ConfbridgeJoin
+Privilege: call,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+Conference: 301
+CallerIDnum: 601
+CallerIDname: 601
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990179.0433655808
+SentRTP: 160048
+SentPackets: 957
+SentOctets: 153120
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 262019992
+DLSR: 4.9980 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 11944
+SequenceNumberCycles: 0
+IAJitter: 5
+LastSR: 4003.2684354560
+DLSR: 0.0020(sec)
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DEST
+Value: 302
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: READSTATUS
+Value: TIMEOUT
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 3
+Application: GotoIf
+AppData: 0?cancel
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 4
+Application: GotoIf
+AppData: 0?cancel
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 5
+Application: Set
+AppData: __DYNAMIC_FEATURES=callerjointhreeway
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: __DYNAMIC_FEATURES
+Value: callerjointhreeway
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-collect
+Extension: s
+Priority: 6
+Application: Dial
+AppData: Local/302@dialed_analog/n,90,gb(p1-s2-third-user-prebridge^s^1)
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALSTATUS
+Value: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDPEERNUMBER
+Value: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDPEERNAME
+Value: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ANSWEREDTIME
+Value: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDTIME
+Value: 
+Uniqueid: 1389990173.29
+
+Event: Newchannel
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+ChannelState: 0
+ChannelStateDesc: Down
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: 302
+Context: dialed_analog
+Uniqueid: 1389990179.32
+
+Event: Newchannel
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;2
+ChannelState: 4
+ChannelStateDesc: Ring
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: 302
+Context: dialed_analog
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: DIALEDPEERNUMBER
+Value: 302@dialed_analog/n
+Uniqueid: 1389990179.32
+
+Event: NewCallerid
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+CallerIDNum: s
+CallerIDName: 601
+Uniqueid: 1389990179.32
+CID-CallingPres: 0 (Presentation Allowed, Not Screened)
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: LOCAL(ARGC)
+Value: 0
+Uniqueid: 1389990179.32
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 4, Adding Hangup Handler for 3-way third user
+Uniqueid: 1389990179.32
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
+Extension: s
+Priority: 2
+Application: Set
+AppData: CHANNEL(hangup_handler_push)=p1-s2-third-user-hangup-handler,s,1
+Uniqueid: 1389990179.32
+
+Event: HangupHandlerPush
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990179.32
+Handler: p1-s2-third-user-hangup-handler,s,1
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-prebridge
+Extension: s
+Priority: 3
+Application: Return
+AppData: 
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: GOSUB_RETVAL
+Value: 
+Uniqueid: 1389990179.32
+
+Event: LocalBridge
+Privilege: call,all
+Channel1: Local/302@dialed_analog-00000002;1
+Channel2: Local/302@dialed_analog-00000002;2
+Uniqueid1: 1389990179.32
+Uniqueid2: 1389990179.33
+Context: dialed_analog
+Exten: 302
+LocalOptimization: Yes
+
+Event: Dial
+Privilege: call,all
+SubEvent: Begin
+Channel: ANALOG/1-I00000007
+Destination: Local/302@dialed_analog-00000002;1
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 601
+ConnectedLineName: 601
+UniqueID: 1389990173.29
+DestUniqueID: 1389990179.32
+Dialstring: 302@dialed_analog/n
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 1
+Application: Verbose
+AppData: 1, Dialing analog at 302
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 2
+Application: Verbose
+AppData: 1,Setting DYNAMIC_FEATURES: calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 3
+Application: Set
+AppData: __DYNAMIC_FEATURES=calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: __DYNAMIC_FEATURES
+Value: calleeonhold#calleeoffhold#calleestartthreeway
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 4
+Application: Set
+AppData: did-header=
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: did-header
+Value: 
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 5
+Application: GotoIf
+AppData: 0?setdid:checkdnd
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 7
+Application: GotoIf
+AppData: 1?notdnd:dnd
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 8
+Application: Verbose
+AppData: Attempting to call ANALOG/302
+Uniqueid: 1389990179.33
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Context: dialed_analog
+Extension: 302
+Priority: 9
+Application: Dial
+AppData: ANALOG/302/s,90,TtHh
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALSTATUS
+Value: 
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDPEERNUMBER
+Value: 
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDPEERNAME
+Value: 
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: ANSWEREDTIME
+Value: 
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDTIME
+Value: 
+Uniqueid: 1389990179.33
+
+Event: Newchannel
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+ChannelState: 1
+ChannelStateDesc: Rsrvd
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+AccountCode: 
+Exten: s
+Context: incoming_analog
+Uniqueid: 1389990179.34
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/2-I00000008
+Variable: DIALEDPEERNUMBER
+Value: 302/s
+Uniqueid: 1389990179.34
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+ChannelState: 5
+ChannelStateDesc: Ringing
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990179.34
+
+Event: Dial
+Privilege: call,all
+SubEvent: Begin
+Channel: Local/302@dialed_analog-00000002;2
+Destination: ANALOG/2-I00000008
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: s
+ConnectedLineName: 601
+UniqueID: 1389990179.33
+DestUniqueID: 1389990179.34
+Dialstring: 302/s
+
+Event: Newstate
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+ChannelState: 5
+ChannelStateDesc: Ringing
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990179.32
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990179.34
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDPEERNAME
+Value: ANALOG/2-I00000008
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDPEERNUMBER
+Value: 302/s
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: BRIDGEPEER
+Value: ANALOG/2-I00000008
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/2-I00000008
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;2
+Uniqueid: 1389990179.34
+
+Event: Newstate
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDPEERNAME
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDPEERNUMBER
+Value: 302@dialed_analog/n
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: NewAccountCode
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990179.32
+AccountCode: 
+OldAccountCode: 
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: Newstate
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;2
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: NewAccountCode
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+Uniqueid: 1389990179.34
+AccountCode: 
+OldAccountCode: 
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: Local/302@dialed_analog-00000002;2
+Channel2: ANALOG/2-I00000008
+Uniqueid1: 1389990179.33
+Uniqueid2: 1389990179.34
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: BRIDGEPEER
+Value: ANALOG/2-I00000008
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/2-I00000008
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;2
+Uniqueid: 1389990179.34
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: BRIDGEPEER
+Value: ANALOG/2-I00000008
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/2-I00000008
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;2
+Uniqueid: 1389990179.34
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990184.0428466176
+SentRTP: 200048
+SentPackets: 1207
+SentOctets: 193120
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0006
+TheirLastSR: 262347733
+DLSR: 4.9950 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 12194
+SequenceNumberCycles: 0
+IAJitter: 5
+LastSR: 4008.1879048192
+DLSR: 0.0030(sec)
+RTT: 1(sec)
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: *
+Direction: Received
+Begin: Yes
+End: No
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: *
+Direction: Received
+Begin: No
+End: Yes
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: *
+Direction: Received
+Begin: Yes
+End: No
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Link
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: BRIDGEPEER
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: BRIDGEPEER
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: DTMF
+Privilege: dtmf,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Digit: *
+Direction: Received
+Begin: No
+End: Yes
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: ANALOG/1-I00000007
+Channel2: Local/302@dialed_analog-00000002;1
+Uniqueid1: 1389990173.29
+Uniqueid2: 1389990179.32
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DYNAMIC_PEERNAME
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: DYNAMIC_PEERNAME
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DYNAMIC_FEATURENAME
+Value: callerjointhreeway
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: DYNAMIC_FEATURENAME
+Value: callerjointhreeway
+Uniqueid: 1389990179.32
+
+Event: MusicOnHold
+Privilege: call,all
+State: Start
+Channel: Local/302@dialed_analog-00000002;1
+UniqueID: 1389990179.32
+Class: default
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_EXTEN
+Value: s
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_CONTEXT
+Value: p1-s2-collect
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_PRIORITY
+Value: 6
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1,Joining Three Way Call for ANALOG/1-I00000007, Peer is Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 2
+Application: Set
+AppData: ChanName=ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: 1-I00000007
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 3
+Application: Set
+AppData: Tech=ANALOG
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: Tech
+Value: ANALOG
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ChanName
+Value: 
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 4
+Application: Set
+AppData: Chan=1-I00000007
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: Chan
+Value: 1-I00000007
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 5
+Application: Set
+AppData: INITIATING_EXTEN=1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: INITIATING_EXTEN
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 6
+Application: Set
+AppData: CONFNO=301
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: CONFNO
+Value: 301
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 7
+Application: Set
+AppData: __THREEWAY_PEER_C=Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: __THREEWAY_PEER_C
+Value: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 8
+Application: ChannelRedirect
+AppData: Local/302@dialed_analog-00000002;1,p1-s2-third-conference-user,301,1
+Uniqueid: 1389990173.29
+
+Event: Newchannel
+Privilege: call,all
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1
+ChannelState: 6
+ChannelStateDesc: Up
+CallerIDNum: 
+CallerIDName: 
+AccountCode: 
+Exten: 
+Context: dialed_analog
+Uniqueid: 1389990188.35
+
+Event: Masquerade
+Privilege: call,all
+Clone: Local/302@dialed_analog-00000002;1
+CloneState: Up
+Original: AsyncGoto/Local/302@dialed_analog-00000002;1
+OriginalState: Up
+
+Event: Rename
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Newname: Local/302@dialed_analog-00000002;1<MASQ>
+Uniqueid: 1389990179.32
+
+Event: Rename
+Privilege: call,all
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1
+Newname: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+
+Event: Rename
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1<MASQ>
+Newname: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
+Uniqueid: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: MACRO_DEPTH
+Value: 0
+Uniqueid: 1389990188.35
+
+Event: NewCallerid
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+Uniqueid: 1389990188.35
+CID-CallingPres: 0 (Presentation Allowed, Not Screened)
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: CHANNELREDIRECT_STATUS
+Value: SUCCESS
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 9
+Application: Set
+AppData: CHANNEL(hangup_handler_pop)
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: macro-p1-s2-join
+Extension: s
+Priority: 10
+Application: ConfBridge
+AppData: 301,three-way,initiator-profile
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-conference-user
+Extension: 301
+Priority: 1
+Application: Verbose
+AppData: 1,Third Conference User: Dropping Local/302@dialed_analog-00000002;1 into Conference 301
+Uniqueid: 1389990188.35
+
+Event: MusicOnHold
+Privilege: call,all
+State: Stop
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-conference-user
+Extension: 301
+Priority: 2
+Application: ConfBridge
+AppData: 301,three-way,user-profile
+Uniqueid: 1389990188.35
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990189.0431108096
+SentRTP: 240048
+SentPackets: 1457
+SentOctets: 233120
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 262675427
+DLSR: 4.9960 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 12444
+SequenceNumberCycles: 0
+IAJitter: 3
+LastSR: 4013.0268435456
+DLSR: 0.0020(sec)
+
+Event: ConfbridgeJoin
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Conference: 301
+CallerIDnum: 301
+CallerIDname: ANALOG 1
+
+Event: ConfbridgeJoin
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+Conference: 301
+CallerIDnum: 302
+CallerIDname: ANALOG 2
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990194.0430166016
+SentRTP: 280048
+SentPackets: 1707
+SentOctets: 273120
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 263003055
+DLSR: 4.9960 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 12694
+SequenceNumberCycles: 0
+IAJitter: 0
+LastSR: 4018.0536870912
+DLSR: 0.0020(sec)
+
+Event: HangupRequest
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+Uniqueid: 1389990179.34
+
+Event: Bridge
+Privilege: call,all
+Bridgestate: Unlink
+Bridgetype: core
+Channel1: Local/302@dialed_analog-00000002;2
+Channel2: ANALOG/2-I00000008
+Uniqueid1: 1389990179.33
+Uniqueid2: 1389990179.34
+CallerID1: 301
+CallerID2: 302
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: ANSWEREDTIME
+Value: 15
+Uniqueid: 1389990179.33
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALEDTIME
+Value: 19
+Uniqueid: 1389990179.33
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+ChannelState: 0
+ChannelStateDesc: Down
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+Uniqueid: 1389990179.34
+
+Event: Hangup
+Privilege: call,all
+Channel: ANALOG/2-I00000008
+Uniqueid: 1389990179.34
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;2
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990179.33
+
+Event: Dial
+Privilege: call,all
+SubEvent: End
+Channel: Local/302@dialed_analog-00000002;2
+UniqueID: 1389990179.33
+DialStatus: ANSWER
+
+Event: SoftHangupRequest
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;2
+Uniqueid: 1389990179.33
+Cause: 16
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: CHANLOCALSTATUS
+Value: ANSWER
+Uniqueid: 1389990188.35
+
+Event: Hangup
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;2
+Uniqueid: 1389990179.33
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: ConfbridgeLeave
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+Conference: 301
+CallerIDnum: 302
+CallerIDname: ANALOG 2
+
+Event: RTCPSent
+Privilege: reporting,all
+To: 192.168.1.220:15539
+OurSSRC: 197794318
+SentNTP: 1389990199.0431390720
+SentRTP: 320048
+SentPackets: 1957
+SentOctets: 313120
+ReportBlock:
+FractionLost: 0
+CumulativeLoss: 0
+IAJitter: 0.0007
+TheirLastSR: 263330717
+DLSR: 4.9970 (sec)
+
+Event: RTCPReceived
+Privilege: reporting,all
+From: 192.168.1.220:15539
+PT: 200(Sender Report)
+ReceptionReports: 1
+SenderSSRC: 0
+FractionLost: 0
+PacketsLost: 0
+HighestSequence: 12944
+SequenceNumberCycles: 0
+IAJitter: 1
+LastSR: 4023.1610612736
+DLSR: 0.0030(sec)
+
+Event: SoftHangupRequest
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+Cause: 16
+
+Event: HangupHandlerRun
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+Handler: p1-s2-third-user-hangup-handler,s,1
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: LOCAL(ARGC)
+Value: 0
+Uniqueid: 1389990188.35
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-hangup-handler
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1, HANGUP HANDLER 3rd USER!!
+Uniqueid: 1389990188.35
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Context: p1-s2-third-user-hangup-handler
+Extension: s
+Priority: 2
+Application: Return
+AppData: 
+Uniqueid: 1389990188.35
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: Local/302@dialed_analog-00000002;1
+Variable: GOSUB_RETVAL
+Value: 
+Uniqueid: 1389990188.35
+
+Event: Hangup
+Privilege: call,all
+Channel: Local/302@dialed_analog-00000002;1
+Uniqueid: 1389990188.35
+CallerIDNum: 302
+CallerIDName: ANALOG 2
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: HangupRequest
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+
+Event: ConfbridgeLeave
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Conference: 301
+CallerIDnum: 301
+CallerIDname: ANALOG 1
+
+Event: MusicOnHold
+Privilege: call,all
+State: Start
+Channel: SIP/US-00000008
+UniqueID: 1389990159.27
+Class: default
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_DEPTH
+Value: 0
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_EXTEN
+Value: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_CONTEXT
+Value: incoming_analog
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: MACRO_PRIORITY
+Value: 1
+Uniqueid: 1389990173.29
+
+Event: MusicOnHold
+Privilege: call,all
+State: Stop
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
+UniqueID: 1389990179.32
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: ANSWEREDTIME
+Value: 20
+Uniqueid: 1389990173.29
+
+Event: ConfbridgeLeave
+Privilege: call,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+Conference: 301
+CallerIDnum: 601
+CallerIDname: 601
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALEDTIME
+Value: 44
+Uniqueid: 1389990173.29
+
+Event: Hangup
+Privilege: call,all
+Channel: AsyncGoto/Local/302@dialed_analog-00000002;1<ZOMBIE>
+Uniqueid: 1389990179.32
+CallerIDNum: <unknown>
+CallerIDName: <unknown>
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+AccountCode: 
+Cause: 16
+Cause-txt: Normal Clearing
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: DIALSTATUS
+Value: ANSWER
+Uniqueid: 1389990173.29
+
+Event: Dial
+Privilege: call,all
+SubEvent: End
+Channel: ANALOG/1-I00000007
+UniqueID: 1389990173.29
+DialStatus: ANSWER
+
+Event: SoftHangupRequest
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Cause: 16
+
+Event: HangupHandlerRun
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+Handler: p1-s2-analog-hangup-handler,s,1
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: LOCAL(ARGC)
+Value: 0
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1, HANGUP HANDLER ANALOG
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
+Extension: s
+Priority: 2
+Application: ChannelRedirect
+AppData: SIP/US-00000008,p1-s2-hangup-channel,s,1
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: CHANNELREDIRECT_STATUS
+Value: SUCCESS
+Uniqueid: 1389990173.29
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Context: p1-s2-analog-hangup-handler
+Extension: s
+Priority: 3
+Application: Return
+AppData: 
+Uniqueid: 1389990173.29
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: ANALOG/1-I00000007
+Variable: GOSUB_RETVAL
+Value: 
+Uniqueid: 1389990173.29
+
+Event: Newstate
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+ChannelState: 0
+ChannelStateDesc: Down
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
+Uniqueid: 1389990173.29
+
+Event: Hangup
+Privilege: call,all
+Channel: ANALOG/1-I00000007
+Uniqueid: 1389990173.29
+CallerIDNum: 301
+CallerIDName: ANALOG 1
+ConnectedLineNum: 302
+ConnectedLineName: ANALOG 2
+AccountCode: 
+Cause: 16
+Cause-txt: Normal Clearing
+
+Event: ConfbridgeEnd
+Privilege: call,all
+Conference: 301
+
+Event: Hangup
+Privilege: call,all
+Channel: Bridge/0x3c84cc-output
+Uniqueid: 1389990176.31
+CallerIDNum: <unknown>
+CallerIDName: <unknown>
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: Hangup
+Privilege: call,all
+Channel: Bridge/0x3c84cc-input
+Uniqueid: 1389990176.30
+CallerIDNum: <unknown>
+CallerIDName: <unknown>
+ConnectedLineNum: <unknown>
+ConnectedLineName: <unknown>
+AccountCode: 
+Cause: 0
+Cause-txt: Unknown
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-hangup-channel
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: Hanging up channel SIP/US-00000008
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-hangup-channel
+Extension: s
+Priority: 2
+Application: Hangup
+AppData: 
+Uniqueid: 1389990159.27
+
+Event: SoftHangupRequest
+Privilege: call,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+Cause: 16
+
+Event: HangupHandlerRun
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+Handler: p1-s2-first-user-hangup-handler,s,1
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: LOCAL(ARGC)
+Value: 0
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-first-user-hangup-handler
+Extension: s
+Priority: 1
+Application: Verbose
+AppData: 1, HANGUP HANDLER 1st USER!!
+Uniqueid: 1389990159.27
+
+Event: Newexten
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Context: p1-s2-first-user-hangup-handler
+Extension: s
+Priority: 2
+Application: Return
+AppData: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: GOSUB_RETVAL
+Value: 
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: RTPAUDIOQOS
+Value: ssrc=197794318;themssrc=973945284;lp=0;rxjitter=0.002419;rxcount=2064;txjitter=0.000000;txcount=2174;rlp=0;rtt=0.000000
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: RTPAUDIOQOSJITTER
+Value: minrxjitter=0.000000;maxrxjitter=0.000000;avgrxjitter=0.000000;stdevrxjitter=0.000000;reported_minjitter=0.000000;reported_maxjitter=0.000000;reported_avgjitter=0.000000;reported_stdevjitter=0.000000;
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: RTPAUDIOQOSLOSS
+Value: minrxlost=0.000000;maxrxlost=0.000000;avgrxlost=0.000000;stdevrxlost=0.000000;reported_minlost=0.000000;reported_maxlost=0.000000;reported_avglost=0.000000;reported_stdevlost=0.000000;
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: RTPAUDIOQOSRTT
+Value: minrtt=0.000000;maxrtt=0.000000;avgrtt=0.000000;stdevrtt=0.000000;
+Uniqueid: 1389990159.27
+
+Event: VarSet
+Privilege: dialplan,all
+Channel: SIP/US-00000008
+Variable: RTPAUDIOQOS
+Value: ssrc=197794318;themssrc=973945284;lp=0;rxjitter=0.002419;rxcount=2064;txjitter=0.000000;txcount=2174;rlp=0;rtt=0.000000
+Uniqueid: 1389990159.27
+
+Event: Hangup
+Privilege: call,all
+Channel: SIP/US-00000008
+Uniqueid: 1389990159.27
+CallerIDNum: 601
+CallerIDName: 601
+ConnectedLineNum: 301
+ConnectedLineName: ANALOG 1
+AccountCode: 
+Cause: 16
+Cause-txt: Normal Clearing
+
