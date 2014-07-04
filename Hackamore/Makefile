@@ -107,6 +107,6 @@ push:
 	git push origin master
 
 init:
-	git svn clone -s $(SVN_REPO)
 	git svn show-ignore > .gitignore
+	git add .gitignore
 	git remote add origin $(GIT_URL)
