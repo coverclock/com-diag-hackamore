@@ -1,0 +1,5 @@
+# generic
+*.swp
+# Mac
+.DS_Store
+._*
