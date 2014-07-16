@@ -1,0 +1,8 @@
+# generic
+*.swp
+# Python
+__pycache__/
+*.py[cod]
+# Mac
+.DS_Store
+._*
