@@ -4,33 +4,24 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
-import unittest
-import logging
 import socket
 import threading
 import time
 import os
 
-import com.diag.hackamore.Logger
-import com.diag.hackamore.Socket
-import com.diag.hackamore.ModelStandard
-import com.diag.hackamore.ViewPrint
-import com.diag.hackamore.ViewCurses
-import com.diag.hackamore.Manifold
-import com.diag.hackamore.Multiplex
-import com.diag.hackamore.Controller
-
-from com.diag.hackamore.stdio import printf
-
-from Parameters import SERVER
-from Parameters import USERNAME
-from Parameters import SECRET
-from Parameters import LOCALHOST
-from Parameters import TYPESCRIPT
+import Logger
+import Socket
+import ModelStandard
+import ViewPrint
+import ViewCurses
+import Controller
+import Manifold
+import Multiplex
 
 READLINE = 512
 RECV = 512
 LIMIT = 3
+DELAY = 0.01
 
 class Producer(threading.Thread):
     
@@ -99,35 +90,30 @@ class Server(threading.Thread):
             producer.join()
         sock.close()
 
-class Test(unittest.TestCase):
+def body(manifold, inputs, outputs, logger = None):
+    if logger == None:
+        logger = Logger.logger()
+    multiplex = Multiplex.Multiplex()
+    controller = Controller.Controller(multiplex, manifold)
+    logger.info("Main.body: STARTING.")
+    while inputs:
+        controller.loop(inputs, outputs)
+        time.sleep(2.0)
+        logger.info("Main.body: RESTARTING.")
+    logger.info("Main.body: STOPPING.")
 
-    def setUp(self):
-        com.diag.hackamore.Logger.logger().setLevel(logging.WARNING if "TERM" in os.environ else logging.DEBUG)
-
-    def tearDown(self):
-        pass
-
-    def test010View(self):
-        if "TERM" in os.environ:
-            printf("TERM=%s\n", os.environ["TERM"])
-        thread = Server(TYPESCRIPT, delay = 0.01)
-        self.assertIsNotNone(thread)
-        thread.start()
-        with thread.ready:
-            while thread.port == None:
-                thread.ready.wait()
-        source = com.diag.hackamore.Socket.Socket(SERVER, USERNAME, SECRET, LOCALHOST, thread.port)
-        self.assertIsNotNone(source)
-        sources = [ source ]
-        model = com.diag.hackamore.ModelStandard.ModelStandard()
-        view = com.diag.hackamore.ViewCurses.ViewCurses(model) if "TERM" in os.environ else com.diag.hackamore.ViewPrint.ViewPrint(model)
-        manifold = com.diag.hackamore.Manifold.Manifold(model, view)
-        multiplex = com.diag.hackamore.Multiplex.Multiplex()
-        controller = com.diag.hackamore.Controller.Controller(multiplex, manifold)
-        self.assertEquals(len(sources), 1)
-        controller.loop(sources, sources)
-        self.assertEquals(len(sources), 1)
-        thread.join()
+def main():
+    thread = Server("/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-4wire-x51-5037.txt", delay = DELAY)
+    thread.start()
+    with thread.ready:
+        while thread.port == None:
+            thread.ready.wait()
+    source = Socket.Socket("", "", "", "", thread.port)
+    sources = [ source ]
+    model = ModelStandard.ModelStandard()
+    view = ViewCurses.ViewCurses(model) if "TERM" in os.environ else ViewPrint.ViewPrint(model)
+    manifold = Manifold.Manifold(model, view)
+    body(manifold, sources, sources)
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

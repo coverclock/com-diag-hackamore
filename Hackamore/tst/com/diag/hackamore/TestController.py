@@ -83,7 +83,7 @@ class Server(threading.Thread):
         producers = [ ]
         while self.limit > 0:
             sock2, farend = sock.accept()
-            producer = Producer(sock2, TYPESCRIPT)
+            producer = Producer(sock2, self.path)
             producer.start()
             producers.append(producer)
             self.limit = self.limit - 1

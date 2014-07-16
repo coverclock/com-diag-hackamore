@@ -38,7 +38,7 @@ class ViewPrint(View):
     #
 
     def printline(self, label, pbx, uniqueid, channel, calleridnum, role, activity, channelstatedesc, conference, call, sipcallid):
-        printf("%s %-16s %-16s %-64s %-8s %-8s %-8s %-8s %-8s %-10s %s\n", label, pbx, uniqueid, channel, calleridnum, role, activity, channelstatedesc, conference, call, sipcallid)
+        printf("%s %-16s %-16s %-64s %-16s %-8s %-8s %-8s %-8s %-12s %s\n", label, pbx, uniqueid, channel, calleridnum, role, activity, channelstatedesc, conference, call, sipcallid)
 
     def printchannel(self, chan):
         self.printline("    ", chan.pbx, chan.uniqueid, chan.channel, chan.calleridnum if chan.calleridnum else None, ROLE[chan.role], ACTIVITY[chan.activity], chan.channelstatedesc, chan.conference, hex(id(chan.call)) if chan.call != None else None, chan.sipcallid.split("@", 1)[0] if chan.sipcallid != None else None)

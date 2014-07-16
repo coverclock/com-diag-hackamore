@@ -47,9 +47,11 @@ class ModelStandard(Model):
                         if not numbers:
                             del self.numbers[pbx]
                 if chan.call != None:
-                    chan.call.remove(chan)
+                    if chan in chan.call:
+                        chan.call.remove(chan)
                     if not chan.call:
-                        self.calls.remove(chan.call)
+                        if chan.call in self.calls:
+                            self.calls.remove(chan.call)
                 if chan.conference != None:
                     if pbx in self.bridges:
                         bridges = self.bridges[pbx]
@@ -85,8 +87,10 @@ class ModelStandard(Model):
                 calls.append(channel)
             for channel in chan2.call:
                 calls.append(channel)
-            self.calls.remove(chan1.call)
-            self.calls.remove(chan2.call)
+            if chan1.call in self.calls:
+                self.calls.remove(chan1.call)
+            if chan2.call in self.calls:
+                self.calls.remove(chan2.call)
             chan1.call = calls
             chan2.call = calls
             self.calls.append(calls)
