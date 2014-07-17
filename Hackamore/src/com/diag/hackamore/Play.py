@@ -4,6 +4,8 @@ Copyright 2014 by the Digital Aggregates Corporation, Colorado, USA.
 Licensed under the terms in the README.txt file.
 """
 
+import sys
+import logging
 import socket
 import threading
 import time
@@ -20,8 +22,8 @@ import Multiplex
 
 READLINE = 512
 RECV = 512
-LIMIT = 3
-DELAY = 0.01
+LIMIT = 1
+DELAY = 0.0
 
 class Producer(threading.Thread):
     
@@ -96,14 +98,13 @@ def body(manifold, inputs, outputs, logger = None):
     multiplex = Multiplex.Multiplex()
     controller = Controller.Controller(multiplex, manifold)
     logger.info("Main.body: STARTING.")
-    while inputs:
-        controller.loop(inputs, outputs)
-        time.sleep(2.0)
-        logger.info("Main.body: RESTARTING.")
+    controller.loop(inputs, outputs)
     logger.info("Main.body: STOPPING.")
 
-def main():
-    thread = Server("/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-4wire-x51-5037.txt", delay = DELAY)
+def play(path):
+    logger = Logger.logger()
+    logger.setLevel(logging.DEBUG)
+    thread = Server(path, limit = LIMIT, delay = DELAY)
     thread.start()
     with thread.ready:
         while thread.port == None:
@@ -113,7 +114,14 @@ def main():
     model = ModelStandard.ModelStandard()
     view = ViewCurses.ViewCurses(model) if "TERM" in os.environ else ViewPrint.ViewPrint(model)
     manifold = Manifold.Manifold(model, view)
-    body(manifold, sources, sources)
+    body(manifold, sources, sources, logger)
+
+def main():
+    path = "/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-x200-5037.txt";
+    path = "/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-x200-5036.txt";
+    path = "/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-4wire-x51-5037.txt";
+    path = "/Volumes/Silver/src/Hackamore/hackamore-GTA/hackamore-GTA-4wire-x51-5036.txt";
+    play(path)
 
 if __name__ == "__main__":
     main()
