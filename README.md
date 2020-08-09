@@ -32,6 +32,14 @@ Interface (AMI). It was inspired by prior work done in C by Mark Jackson at
 Aircell Business Aviation Services LLC. Hackamore is a work in progress.
 This software is an original work of its author.
 
+> N.B. The AMI implementation has changed in Asterisk since I wrote this code
+> for the version of Asterisk both my client and I were running back in 2014.
+> I wouldn't expect this code to work with current Asterisk versions. Moreover,
+> I no longer have access to an Asterisk system, having decommissioned my own
+> company's PBX some time ago in favor of offloading that function to other
+> service providers. To further complicate matters, this code is written in
+> Python 2.7, which was the version being used by my client as the time.
+
 If you want to run any of the main programs that execute against a live Asterisk
 server, those programs need to know your server(s) hostname or IP address,
 AMI port (if not 5038), and the username and secret that you administered in
